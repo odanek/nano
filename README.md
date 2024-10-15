@@ -1,2 +1,3 @@
 # nano
-A tiny UI library
+
+A tiny and fast functional UI library

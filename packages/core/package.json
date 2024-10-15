@@ -1,0 +1,15 @@
+{
+  "name": "@nano-ui/core",
+  "version": "0.1.0",
+  "description": "Nano UI library",
+  "author": "Ondrej Danek",
+  "license": "MIT",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git:https://github.com/odanek/nano.git"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0"
+  }
+}

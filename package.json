@@ -1,0 +1,28 @@
+{
+  "name": "@nano-ui/workspace",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Nano UI library workspace",
+  "author": "Ondrej Danek",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git:https://github.com/odanek/nano.git"
+  },
+  "workspaces": [
+    "./packages/*"
+  ],
+  "devDependencies": {
+    "@eslint/js": "^9.12.0",
+    "eslint": "^8.57.1",
+    "eslint-plugin-react": "^7.37.1",
+    "globals": "^15.11.0",
+    "prettier": "^3.3.0",
+    "typescript-eslint": "^8.9.0"
+  },
+  "scripts": {
+    "lint": "eslint . && prettier --check .",
+    "lint:fix": "eslint --fix . && prettier --write ."
+  }
+}
