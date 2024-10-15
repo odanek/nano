@@ -5,6 +5,15 @@
   "author": "Ondrej Danek",
   "license": "MIT",
   "type": "module",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    }
+  },
+  "types": "./dist/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git:https://github.com/odanek/nano.git"
