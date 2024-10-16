@@ -1,14 +1,11 @@
 import globals from 'globals';
 import js from '@eslint/js';
-import tseslint from 'typescript-eslint';
+import ts from 'typescript-eslint';
 import react from 'eslint-plugin-react';
 
 export default [
   {
     files: ['**/*.{js,jsx,ts,tsx}'],
-    plugins: {
-      react,
-    },
     languageOptions: {
       parserOptions: {
         ecmaFeatures: {
@@ -24,6 +21,6 @@ export default [
     },
   },
   js.configs.recommended,
-  ...tseslint.configs.recommended,
+  ...ts.configs.recommended,
   react.configs.flat.recommended,
 ];
