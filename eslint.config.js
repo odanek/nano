@@ -15,6 +15,9 @@ export default [
       },
     },
   },
+  {
+    ignores: ['**/build/', '**/dist/'],
+  },
   js.configs.recommended,
   ...ts.configs.recommended,
   react.configs.flat.recommended,

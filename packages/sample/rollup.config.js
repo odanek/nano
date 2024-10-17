@@ -8,5 +8,5 @@ export default {
     dir: 'dist',
   },
   external: [/node_modules/],
-  plugins: [nodeResolve(), commonjs(), typescript()]
+  plugins: [nodeResolve(), commonjs(), typescript()],
 };

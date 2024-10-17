@@ -23,7 +23,7 @@
     "commander": "12.1.0",
     "@types/node": "^22.7.0"
   },
-  "devDependencies": {    
+  "devDependencies": {
     "typescript": "~5.5.0"
   },
   "scripts": {
