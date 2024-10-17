@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "declaration": true,
+    "outDir": "dist",
+    "lib": ["es2023", "dom"],
+    "target": "es2023",
+    "esModuleInterop": true,
+    "module": "es2022",
+    "moduleResolution": "bundler",
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "noImplicitReturns": true,
+    "noUncheckedIndexedAccess": true
+  },
+  "include": ["./src/**/*.ts"]
+}
