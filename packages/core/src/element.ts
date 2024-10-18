@@ -1,4 +1,9 @@
-import { NanoElementTag, NanoElementKey, NanoElementProps, NanoElementType } from './type';
+import {
+  NanoElementTag,
+  NanoElementKey,
+  NanoElementProps,
+  NanoElementType,
+} from './type';
 import { NanoRef } from './ref';
 
 export class NanoElement {
@@ -33,6 +38,8 @@ export class NanoElement {
   }
 
   static fragment(children: NanoElement[]) {
-    return new NanoElement(NanoElementTag.Fragment, null, null, null, { children });
+    return new NanoElement(NanoElementTag.Fragment, null, null, null, {
+      children,
+    });
   }
 }

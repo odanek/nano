@@ -1,5 +1,10 @@
 import { FlagGenerator } from '@nano-ui/util';
-import { NanoElementTag, NanoElementKey, NanoElementProps, NanoElementType } from './type';
+import {
+  NanoElementTag,
+  NanoElementKey,
+  NanoElementProps,
+  NanoElementType,
+} from './type';
 import { NanoElement } from './element';
 import { NanoRef } from './ref';
 
@@ -39,7 +44,11 @@ class NanoFiber {
 
   public alternate: NanoFiber | null;
 
-  constructor(tag: NanoElementTag, pendingProps: NanoElementProps, key: NanoElementKey) {
+  constructor(
+    tag: NanoElementTag,
+    pendingProps: NanoElementProps,
+    key: NanoElementKey,
+  ) {
     this.tag = tag;
     this.type = null;
     this.key = key;
