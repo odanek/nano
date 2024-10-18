@@ -1,6 +1,18 @@
-import * as JSX from './jsx';
+import { NanoElement } from "./element";
 
-export type FiberProps = object;
-export type FiberKey = unknown;
-export type FiberType = string | FunctionComponent;
-export type FunctionComponent = (props?: FiberProps) => JSX.Element;
+export enum NanoElementTag {
+    HostRoot,
+    HostComponent,
+    HostText,
+    HostPortal,
+    FunctionComponent,
+    Fragment,
+    Context,
+  }
+
+export type NanoElementProps = object;
+export type NanoElementKey = unknown;
+export type NanoElementType = string | NanoComponent;
+
+export type NanoNode = NanoElement | string | number | null;
+export type NanoComponent<T extends NanoElementProps = NanoElementProps> = (props?: T) => NanoNode;

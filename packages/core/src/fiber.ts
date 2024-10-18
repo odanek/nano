@@ -1,19 +1,9 @@
 import { FlagGenerator } from '@nano-ui/util';
-import { FiberKey, FiberProps, FiberType } from './type';
-import { Element } from './element';
-import { Ref } from './ref';
+import { NanoElementTag, NanoElementKey, NanoElementProps, NanoElementType } from './type';
+import { NanoElement } from './element';
+import { NanoRef } from './ref';
 
 const fiberKey = Symbol();
-
-export enum FiberTag {
-  HostRoot,
-  HostComponent,
-  HostText,
-  HostPortal,
-  FunctionComponent,
-  Fragment,
-  Context,
-}
 
 const effectTagCounter = new FlagGenerator();
 export enum EffectTag {
@@ -26,18 +16,18 @@ export enum EffectTag {
   Re = effectTagCounter.next(),
 }
 
-class Fiber {
-  public tag: FiberTag;
-  public type: FiberType | null;
-  public key: FiberKey;
-  public ref: Ref | null;
+class NanoFiber {
+  public tag: NanoElementTag;
+  public type: NanoElementType | null;
+  public key: NanoElementKey;
+  public ref: NanoRef | null;
   public stateNode: HTMLElement | null;
-  public return: Fiber | null;
-  public child: Fiber | null;
-  public sibling: Fiber | null;
+  public return: NanoFiber | null;
+  public child: NanoFiber | null;
+  public sibling: NanoFiber | null;
   public index: number;
-  public pendingProps: FiberProps;
-  public memoizedProps: FiberProps | null;
+  public pendingProps: NanoElementProps;
+  public memoizedProps: NanoElementProps | null;
   public memoizedState: unknown;
   public fullContext: object | null;
   public contextTypes: Array<unknown> | null;
@@ -45,11 +35,11 @@ class Fiber {
   public memoizedStyle: object | null;
   public updateQueue: Array<unknown> | null;
   public effectTag: EffectTag;
-  public deletions: Array<Fiber> | null;
+  public deletions: Array<NanoFiber> | null;
 
-  public alternate: Fiber | null;
+  public alternate: NanoFiber | null;
 
-  constructor(tag: FiberTag, pendingProps: FiberProps, key: FiberKey) {
+  constructor(tag: NanoElementTag, pendingProps: NanoElementProps, key: NanoElementKey) {
     this.tag = tag;
     this.type = null;
     this.key = key;
@@ -79,17 +69,17 @@ class Fiber {
 }
 
 export function createFiber(
-  tag: FiberTag,
-  pendingProps: FiberProps,
-  key: FiberKey,
-): Fiber {
-  return new Fiber(tag, pendingProps, key);
+  tag: NanoElementTag,
+  pendingProps: NanoElementProps,
+  key: NanoElementKey,
+): NanoFiber {
+  return new NanoFiber(tag, pendingProps, key);
 }
 
 export function createWorkInProgress(
-  current: Fiber,
-  pendingProps: FiberProps,
-): Fiber {
+  current: NanoFiber,
+  pendingProps: NanoElementProps,
+): NanoFiber {
   let workInProgress = current.alternate;
   // Double-buffering - reuse existing alternate fiber if already created
   if (workInProgress === null) {
@@ -121,14 +111,14 @@ export function createWorkInProgress(
   return workInProgress;
 }
 
-export function createFiberFromElement(element: Element): Fiber {
+export function createFiberFromElement(element: NanoElement): NanoFiber {
   const fiber = createFiber(element.tag, element.props, element.key);
   fiber.type = element.type;
   fiber.ref = element.ref;
   return fiber;
 }
 
-export function markInstanceFiber(node: HTMLElement, fiber: Fiber) {
+export function markInstanceFiber(node: HTMLElement, fiber: NanoFiber) {
   // @ts-expect-error Conversion to any
   node[fiberKey] = fiber;
 }
@@ -138,7 +128,7 @@ export function unmarkInstanceFiber(node: HTMLElement) {
   node[fiberKey] = null;
 }
 
-export function getInstanceFiber(node: HTMLElement): Fiber {
+export function getInstanceFiber(node: HTMLElement): NanoFiber {
   // @ts-expect-error Conversion to any
   return node[fiberKey];
 }

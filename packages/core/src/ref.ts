@@ -1,4 +1,4 @@
-export class Ref {
+export class NanoRef {
   public current: HTMLElement | null;
 
   constructor() {

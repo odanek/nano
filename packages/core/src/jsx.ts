@@ -1,1 +1,3 @@
-export type Element = unknown;
+import {NanoElement} from './element';
+
+export type Element = NanoElement;

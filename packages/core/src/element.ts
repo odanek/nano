@@ -1,21 +1,20 @@
-import { FiberTag } from './fiber';
-import { FiberKey, FiberProps, FiberType } from './type';
-import { Ref } from './ref';
+import { NanoElementTag, NanoElementKey, NanoElementProps, NanoElementType } from './type';
+import { NanoRef } from './ref';
 
-export class Element {
-  public tag: FiberTag;
+export class NanoElement {
+  public tag: NanoElementTag;
   // TODO Remove null - have special values for text and fragment
-  public type: FiberType | null;
-  public key: FiberKey;
-  public ref: Ref | null;
-  public props: FiberProps;
+  public type: NanoElementType | null;
+  public key: NanoElementKey;
+  public ref: NanoRef | null;
+  public props: NanoElementProps;
 
   constructor(
-    tag: FiberTag,
-    type: FiberType | null,
-    key: FiberKey,
-    ref: Ref | null,
-    props: FiberProps,
+    tag: NanoElementTag,
+    type: NanoElementType | null,
+    key: NanoElementKey,
+    ref: NanoRef | null,
+    props: NanoElementProps,
   ) {
     this.tag = tag;
     this.type = type;
@@ -25,15 +24,15 @@ export class Element {
     Object.freeze(this);
   }
 
-  cloneWithProps(props: FiberProps) {
-    return new Element(this.tag, this.type, this.key, this.ref, props);
+  cloneWithProps(props: NanoElementProps) {
+    return new NanoElement(this.tag, this.type, this.key, this.ref, props);
   }
 
   static text(text: string) {
-    return new Element(FiberTag.HostText, null, null, null, { text });
+    return new NanoElement(NanoElementTag.HostText, null, null, null, { text });
   }
 
-  static fragment(children: Element[]) {
-    return new Element(FiberTag.Fragment, null, null, null, { children });
+  static fragment(children: NanoElement[]) {
+    return new NanoElement(NanoElementTag.Fragment, null, null, null, { children });
   }
 }
