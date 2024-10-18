@@ -3,6 +3,8 @@ import js from '@eslint/js';
 import ts from 'typescript-eslint';
 import react from 'eslint-plugin-react';
 
+// TODO "@typescript-eslint/explicit-function-return-type": "error"
+
 export default [
   {
     files: ['**/*.{js,jsx,ts,tsx}'],

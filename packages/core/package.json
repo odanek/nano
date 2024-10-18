@@ -18,6 +18,10 @@
     "type": "git",
     "url": "git:https://github.com/odanek/nano.git"
   },
+  "dependencies": {
+    "@nano-ui/type": "file:../type",
+    "@nano-ui/util": "file:../util"
+  },
   "devDependencies": {
     "typescript": "~5.5.0"
   }
