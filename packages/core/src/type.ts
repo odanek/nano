@@ -1,3 +1,4 @@
+import { PlainObject } from '@nano-ui/type';
 import { NanoElement } from './element';
 
 export enum NanoElementTag {
@@ -10,7 +11,7 @@ export enum NanoElementTag {
   Context,
 }
 
-export type NanoElementProps = object;
+export type NanoElementProps = PlainObject;
 export type NanoElementKey = unknown;
 export type NanoElementType = string | NanoComponent;
 

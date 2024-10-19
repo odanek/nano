@@ -18,7 +18,7 @@ export enum EffectTag {
   Lifecycle = effectTagCounter.next(),
   Deletion = effectTagCounter.next(),
   ContentReset = effectTagCounter.next(),
-  Re = effectTagCounter.next(),
+  Ref = effectTagCounter.next(),
 }
 
 class NanoFiber {
