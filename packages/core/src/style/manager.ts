@@ -10,7 +10,7 @@ const activeStyles: RefCountMap<Style> = new Map();
 const activeBundles: RefCountMap<StyleBundle> = new Map();
 const cleanupTimeout: number = 2000;
 let totalRuleCount = 0;
-let cleanupHandle: NodeJS.Timeout | null = null; // TODO Wrong type
+let cleanupHandle: number | null = null;
 
 export function connectBundle(bundle: StyleBundle) {
   if (retain(activeBundles, bundle)) {
@@ -32,7 +32,7 @@ export function disconnectBundle(bundle: StyleBundle) {
 
 function scheduleCleanup() {
   if (cleanupHandle === null) {
-    cleanupHandle = setTimeout(() => {
+    cleanupHandle = window.setTimeout(() => {
       cleanupHandle = null;
       cleanup();
     }, cleanupTimeout);
