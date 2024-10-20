@@ -61,6 +61,7 @@ function join(strings: string[], values: unknown[]): string {
   return parts.join('');
 }
 
+// TODO Is it needed?
 export function styleSpec(style: StyleBundle): StyleSpec {
   const classNames = styleClassNames(style);
   return { style, classNames };

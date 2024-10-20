@@ -3,7 +3,7 @@
     "strict": true,
     "declaration": true,
     "outDir": "dist",
-    "lib": ["es2023", "dom"],    
+    "lib": ["es2023", "dom"],
     "target": "es2023",
     "esModuleInterop": true,
     "module": "es2022",
