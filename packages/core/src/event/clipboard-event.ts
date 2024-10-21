@@ -1,7 +1,10 @@
 import { NanoEvent } from './event';
 import { NanoEventType } from './event-type';
 
-type NanoClipboardEventType = NanoEventType.Cut | NanoEventType.Paste;
+type NanoClipboardEventType =
+  | NanoEventType.Cut
+  | NanoEventType.Copy
+  | NanoEventType.Paste;
 
 interface Options {
   type: NanoClipboardEventType;
@@ -24,6 +27,8 @@ export class NanoClipboardEvent extends NanoEvent {
     switch (type) {
       case 'cut':
         return NanoEventType.Cut;
+      case 'copy':
+        return NanoEventType.Copy;
       case 'paste':
         return NanoEventType.Paste;
       default:

@@ -17,6 +17,7 @@ export enum NanoEventType {
   FocusIn = 'focusIn',
   FocusOut = 'focusOut',
   Input = 'input',
-  Paste = 'paste',
   Cut = 'cut',
+  Copy = 'copy',
+  Paste = 'paste',
 }

@@ -41,7 +41,7 @@ export class NanoPointerEvent extends NanoEvent {
       case 'pointerclick':
         return NanoEventType.PointerClick;
       default:
-        throw new Error(`Event type ${type} is not a focus event`);
+        throw new Error(`Event type ${type} is not a pointer event`);
     }
   }
 }
