@@ -1,33 +1,33 @@
 import { NanoEvent } from './event';
 import { NanoEventType } from './event-type';
 
-type FocusEventType = NanoEventType.FocusIn | NanoEventType.FocusOut;
+type NanoFocusEventType = NanoEventType.FocusIn | NanoEventType.FocusOut;
 
 interface Options {
-  type: FocusEventType;
+  type: NanoFocusEventType;
   target: EventTarget | null;
 }
 
-export class FocusEvent extends NanoEvent {
+export class NanoFocusEvent extends NanoEvent {
   constructor(options: Options) {
     super(options.type, options.target);
   }
 
-  static fromNative(nativeEvent: Event) {
-    return new FocusEvent({
+  static fromNative(nativeEvent: FocusEvent) {
+    return new NanoFocusEvent({
       target: nativeEvent.target,
-      type: FocusEvent.getType(nativeEvent.type),
+      type: NanoFocusEvent.getType(nativeEvent.type),
     });
   }
 
-  static getType(type: string): FocusEventType {
+  static getType(type: string): NanoFocusEventType {
     switch (type) {
       case 'focusin':
         return NanoEventType.FocusIn;
       case 'focusout':
         return NanoEventType.FocusOut;
       default:
-        throw new Error(`Event type ${type} is not a clipboard event`);
+        throw new Error(`Event type ${type} is not a focus event`);
     }
   }
 }

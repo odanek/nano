@@ -1,26 +1,26 @@
 import { NanoEvent } from './event';
 import { NanoEventType } from './event-type';
 
-type ClipboardEventType = NanoEventType.Cut | NanoEventType.Paste;
+type NanoClipboardEventType = NanoEventType.Cut | NanoEventType.Paste;
 
 interface Options {
-  type: ClipboardEventType;
+  type: NanoClipboardEventType;
   target: EventTarget | null;
 }
 
-export class ClipboardEvent extends NanoEvent {
+export class NanoClipboardEvent extends NanoEvent {
   constructor(options: Options) {
     super(options.type, options.target);
   }
 
-  static fromNative(nativeEvent: Event) {
-    return new ClipboardEvent({
+  static fromNative(nativeEvent: ClipboardEvent) {
+    return new NanoClipboardEvent({
       target: nativeEvent.target,
-      type: ClipboardEvent.getType(nativeEvent.type),
+      type: NanoClipboardEvent.getType(nativeEvent.type),
     });
   }
 
-  static getType(type: string): ClipboardEventType {
+  static getType(type: string): NanoClipboardEventType {
     switch (type) {
       case 'cut':
         return NanoEventType.Cut;
