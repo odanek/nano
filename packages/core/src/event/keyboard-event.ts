@@ -1,7 +1,10 @@
 import { NanoEvent } from './event';
 import { NanoEventType } from './event-type';
 
-type NanoKeyboardEventType = NanoEventType.KeyDown | NanoEventType.KeyUp | NanoEventType.KeyPress;
+type NanoKeyboardEventType =
+  | NanoEventType.KeyDown
+  | NanoEventType.KeyUp
+  | NanoEventType.KeyPress;
 
 interface Options {
   type: NanoKeyboardEventType;
@@ -18,7 +21,7 @@ export class NanoKeyboardEvent extends NanoEvent {
     return new NanoKeyboardEvent({
       target: nativeEvent.target,
       type: NanoKeyboardEvent.getType(nativeEvent.type),
-      key: nativeEvent.key
+      key: nativeEvent.key,
     });
   }
 
