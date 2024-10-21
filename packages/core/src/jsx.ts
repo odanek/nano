@@ -1,3 +1,3 @@
-import { NanoElement } from './element';
+import { NanoElement } from './vdom/element';
 
 export type Element = NanoElement;

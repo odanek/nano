@@ -3,11 +3,11 @@ import {
   NanoElementKey,
   NanoNode,
   NanoComponent,
-} from './type';
+} from './vdom/type';
 
-import { NanoElement } from './element';
+import { NanoElement } from './vdom/element';
 
-import { NanoRef } from './ref';
+import { NanoRef } from './vdom/ref';
 
 import { NanoEventType } from './event/event-type';
 import { NanoEvent } from './event/event';
