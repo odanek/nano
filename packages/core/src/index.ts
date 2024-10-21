@@ -11,7 +11,12 @@ import { NanoRef } from './vdom/ref';
 
 import { NanoEventType } from './event/event-type';
 import { NanoEvent } from './event/event';
-import { ClipboardEvent } from './event/clipboard-event';
+import { NanoClipboardEvent } from './event/clipboard-event';
+import { NanoFocusEvent } from './event/focus-event';
+import { NanoInputEvent } from './event/input-event';
+import { NanoKeyboardEvent } from './event/keyboard-event';
+import { NanoMouseEvent } from './event/mouse-event';
+import { NanoPointerEvent } from './event/pointer-event';
 
 import { css, keyframes, Style } from './style/style';
 
@@ -24,7 +29,12 @@ export {
   NanoRef,
   NanoEventType,
   NanoEvent,
-  ClipboardEvent,
+  NanoClipboardEvent,
+  NanoFocusEvent,
+  NanoInputEvent,
+  NanoKeyboardEvent,
+  NanoMouseEvent,
+  NanoPointerEvent,
   css,
   keyframes,
   Style,
