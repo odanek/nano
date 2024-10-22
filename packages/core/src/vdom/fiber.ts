@@ -7,6 +7,7 @@ import {
 } from './type';
 import { NanoElement } from './element';
 import { NanoRef } from './ref';
+import { NanoFiberRoot } from './root';
 
 const fiberKey = Symbol();
 
@@ -26,12 +27,12 @@ export class NanoFiber {
   public type: NanoElementType | null;
   public key: NanoElementKey;
   public ref: NanoRef | null;
-  public stateNode: HTMLElement | null;
+  public stateNode: HTMLElement | NanoFiberRoot | null;
   public return: NanoFiber | null;
   public child: NanoFiber | null;
   public sibling: NanoFiber | null;
   public index: number;
-  public pendingProps: NanoElementProps;
+  public pendingProps: NanoElementProps | null;
   public memoizedProps: NanoElementProps | null;
   public memoizedState: unknown;
   public fullContext: object | null;
@@ -46,7 +47,7 @@ export class NanoFiber {
 
   constructor(
     tag: NanoElementTag,
-    pendingProps: NanoElementProps,
+    pendingProps: NanoElementProps | null,
     key: NanoElementKey,
   ) {
     this.tag = tag;
@@ -79,7 +80,7 @@ export class NanoFiber {
 
 export function createFiber(
   tag: NanoElementTag,
-  pendingProps: NanoElementProps,
+  pendingProps: NanoElementProps | null,
   key: NanoElementKey,
 ): NanoFiber {
   return new NanoFiber(tag, pendingProps, key);
@@ -87,7 +88,7 @@ export function createFiber(
 
 export function createWorkInProgress(
   current: NanoFiber,
-  pendingProps: NanoElementProps,
+  pendingProps: NanoElementProps | null,
 ): NanoFiber {
   let workInProgress = current.alternate;
   // Double-buffering - reuse existing alternate fiber if already created
@@ -137,7 +138,7 @@ export function unmarkInstanceFiber(node: Node) {
   node[fiberKey] = null;
 }
 
-export function getInstanceFiber(node: Node): NanoFiber {
+export function getInstanceFiber(node: Node): NanoFiber | undefined {
   // @ts-expect-error Conversion to any
   return node[fiberKey];
 }

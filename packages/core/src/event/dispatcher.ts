@@ -30,7 +30,7 @@ export class NanoEventDispatcher {
     this.eventHandler = this.handleEvent.bind(this);
   }
 
-  public connect(root: EventSource) {
+  public connect(root: EventTarget) {
     for (const event of nativeEventType) {
       root.addEventListener(event, this.eventHandler, {
         capture: true,
@@ -41,7 +41,7 @@ export class NanoEventDispatcher {
     return () => this.disconnect(root);
   }
 
-  public disconnect(root: EventSource) {
+  public disconnect(root: EventTarget) {
     for (const event of nativeEventType) {
       root.removeEventListener(event, this.eventHandler);
     }
