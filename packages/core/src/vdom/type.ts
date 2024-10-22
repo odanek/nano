@@ -12,7 +12,7 @@ export enum NanoElementTag {
 }
 
 export type NanoElementKey = unknown;
-export type NanoElementType = string | NanoComponent;
+export type NanoElementType = null | string | NanoComponent;
 
 export type NanoNode = NanoElement | string | number | null;
 export type NanoComponent<T = PlainObject> = (props: T) => NanoNode;

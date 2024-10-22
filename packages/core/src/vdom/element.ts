@@ -6,20 +6,20 @@ import { PlainObject } from '@nano-ui/type';
 export type NanoTextElementProps = { text: string };
 export type NanoFragmentElementProps = { children: NanoElement[] };
 
-export class NanoElement<T = PlainObject> {
+export class NanoElement<P = PlainObject> {
   public tag: NanoElementTag;
   // TODO Remove null - have special values for text and fragment
-  public type: NanoElementType | null;
+  public type: NanoElementType;
   public key: NanoElementKey;
   public ref: NanoRef | null;
-  public props: T;
+  public props: P;
 
   constructor(
     tag: NanoElementTag,
-    type: NanoElementType | null,
+    type: NanoElementType,
     key: NanoElementKey,
     ref: NanoRef | null,
-    props: T,
+    props: P,
   ) {
     this.tag = tag;
     this.type = type;
@@ -29,7 +29,7 @@ export class NanoElement<T = PlainObject> {
     Object.freeze(this);
   }
 
-  public cloneWithProps<T = PlainObject>(props: T): NanoElement<T> {
+  public cloneWithProps<P = PlainObject>(props: P): NanoElement<P> {
     return new NanoElement(this.tag, this.type, this.key, this.ref, props);
   }
 

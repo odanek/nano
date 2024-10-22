@@ -18,9 +18,9 @@ export enum EffectTag {
   Ref = effectTagCounter.next(),
 }
 
-export class NanoFiber<T = PlainObject> {
+export class NanoFiber<P = PlainObject> {
   public tag: NanoElementTag;
-  public type: NanoElementType | null;
+  public type: NanoElementType;
   public key: NanoElementKey;
   public ref: NanoRef | null;
   public stateNode: HTMLElement | NanoFiberRoot | null;
@@ -28,8 +28,8 @@ export class NanoFiber<T = PlainObject> {
   public child: NanoFiber | null;
   public sibling: NanoFiber | null;
   public index: number;
-  public pendingProps: T;
-  public memoizedProps: T | null;
+  public pendingProps: P;
+  public memoizedProps: P | null;
   public memoizedState: unknown;
   public fullContext: object | null;
   public contextTypes: Array<unknown> | null;
@@ -39,9 +39,9 @@ export class NanoFiber<T = PlainObject> {
   public effectTag: EffectTag;
   public deletions: Array<NanoFiber> | null;
 
-  public alternate: NanoFiber<T> | null;
+  public alternate: NanoFiber<P> | null;
 
-  constructor(tag: NanoElementTag, pendingProps: T, key: NanoElementKey) {
+  constructor(tag: NanoElementTag, pendingProps: P, key: NanoElementKey) {
     this.tag = tag;
     this.type = null;
     this.key = key;
@@ -70,18 +70,18 @@ export class NanoFiber<T = PlainObject> {
   }
 }
 
-export function createFiber<T = PlainObject>(
+export function createFiber<P = PlainObject>(
   tag: NanoElementTag,
-  pendingProps: T,
+  pendingProps: P,
   key: NanoElementKey,
-): NanoFiber<T> {
+): NanoFiber<P> {
   return new NanoFiber(tag, pendingProps, key);
 }
 
-export function createWorkInProgress<T = PlainObject>(
-  current: NanoFiber<T>,
-  pendingProps: T,
-): NanoFiber<T> {
+export function createWorkInProgress<P = PlainObject>(
+  current: NanoFiber<P>,
+  pendingProps: P,
+): NanoFiber<P> {
   let workInProgress = current.alternate;
   // Double-buffering - reuse existing alternate fiber if already created
   if (workInProgress === null) {
@@ -113,9 +113,9 @@ export function createWorkInProgress<T = PlainObject>(
   return workInProgress;
 }
 
-export function createFiberFromElement<T>(
-  element: NanoElement<T>,
-): NanoFiber<T> {
+export function createFiberFromElement<P>(
+  element: NanoElement<P>,
+): NanoFiber<P> {
   const fiber = createFiber(element.tag, element.props, element.key);
   fiber.type = element.type;
   fiber.ref = element.ref;
