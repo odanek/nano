@@ -7,7 +7,7 @@ type NanoPointerEventType =
   | NanoEventType.PointerEnter
   | NanoEventType.PointerLeave
   | NanoEventType.PointerMove
-  | NanoEventType.PointerClick;
+  | NanoEventType.Click;
 
 interface Options {
   type: NanoPointerEventType;
@@ -38,8 +38,8 @@ export class NanoPointerEvent extends NanoEvent {
         return NanoEventType.PointerLeave;
       case 'pointermove':
         return NanoEventType.PointerMove;
-      case 'pointerclick':
-        return NanoEventType.PointerClick;
+      case 'click':
+        return NanoEventType.Click;
       default:
         throw new Error(`Event type ${type} is not a pointer event`);
     }

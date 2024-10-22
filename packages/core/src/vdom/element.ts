@@ -29,7 +29,7 @@ export class NanoElement {
     Object.freeze(this);
   }
 
-  cloneWithProps(props: NanoElementProps) {
+  public cloneWithProps(props: NanoElementProps) {
     return new NanoElement(this.tag, this.type, this.key, this.ref, props);
   }
 

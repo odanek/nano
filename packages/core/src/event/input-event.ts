@@ -1,7 +1,7 @@
 import { NanoEvent } from './event';
 import { NanoEventType } from './event-type';
 
-type NanoInputEventType = NanoEventType.Input;
+type NanoInputEventType = NanoEventType.Input | NanoEventType.BeforeInput;
 
 interface Options {
   type: NanoInputEventType;
@@ -24,6 +24,8 @@ export class NanoInputEvent extends NanoEvent {
     switch (type) {
       case 'input':
         return NanoEventType.Input;
+      case 'beforeinput':
+        return NanoEventType.BeforeInput;
       default:
         throw new Error(`Event type ${type} is not a input event`);
     }

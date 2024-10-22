@@ -22,7 +22,7 @@ export class Style {
     this.rule = rule;
   }
 
-  toString() {
+  public toString() {
     return this.id;
   }
 }

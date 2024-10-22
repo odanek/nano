@@ -17,6 +17,7 @@ import { NanoInputEvent } from './event/input-event';
 import { NanoKeyboardEvent } from './event/keyboard-event';
 import { NanoMouseEvent } from './event/mouse-event';
 import { NanoPointerEvent } from './event/pointer-event';
+import { NanoWheelEvent } from './event/wheel-event';
 
 import { css, keyframes, Style } from './style/style';
 
@@ -35,6 +36,7 @@ export {
   NanoKeyboardEvent,
   NanoMouseEvent,
   NanoPointerEvent,
+  NanoWheelEvent,
   css,
   keyframes,
   Style,

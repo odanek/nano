@@ -21,7 +21,7 @@ export enum EffectTag {
   Ref = effectTagCounter.next(),
 }
 
-class NanoFiber {
+export class NanoFiber {
   public tag: NanoElementTag;
   public type: NanoElementType | null;
   public key: NanoElementKey;
@@ -127,17 +127,17 @@ export function createFiberFromElement(element: NanoElement): NanoFiber {
   return fiber;
 }
 
-export function markInstanceFiber(node: HTMLElement, fiber: NanoFiber) {
+export function markInstanceFiber(node: Node, fiber: NanoFiber) {
   // @ts-expect-error Conversion to any
   node[fiberKey] = fiber;
 }
 
-export function unmarkInstanceFiber(node: HTMLElement) {
+export function unmarkInstanceFiber(node: Node) {
   // @ts-expect-error Conversion to any
   node[fiberKey] = null;
 }
 
-export function getInstanceFiber(node: HTMLElement): NanoFiber {
+export function getInstanceFiber(node: Node): NanoFiber {
   // @ts-expect-error Conversion to any
   return node[fiberKey];
 }
