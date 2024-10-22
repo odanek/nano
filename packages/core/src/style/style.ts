@@ -1,16 +1,7 @@
-import { isPlainObject } from '@nano-ui/type';
-
 export type StyleId = string;
 export type StyleProvider = () => StyleBundle;
 export type StyleBundle = {
   [key: string]: Style | StyleBundle;
-};
-export type StyleIdMap = {
-  [key: string]: StyleId | StyleIdMap;
-};
-export type StyleSpec = {
-  style: StyleBundle;
-  classNames: StyleIdMap;
 };
 
 export class Style {
@@ -59,22 +50,4 @@ function join(strings: string[], values: unknown[]): string {
     parts.push(valueString, strings[i + 1]);
   }
   return parts.join('');
-}
-
-// TODO Is it needed?
-export function styleSpec(style: StyleBundle): StyleSpec {
-  const classNames = styleClassNames(style);
-  return { style, classNames };
-}
-
-function styleClassNames(style: StyleBundle): StyleIdMap {
-  const result: StyleIdMap = {};
-  for (const [key, value] of Object.entries(style)) {
-    if (value instanceof Style) {
-      result[key] = value.id;
-    } else if (isPlainObject(value)) {
-      result[key] = styleClassNames(value);
-    }
-  }
-  return result;
 }
