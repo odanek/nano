@@ -55,7 +55,7 @@ export class NanoEventDispatcher {
 
     const target = event.target;
     if (!(target instanceof Node)) {
-        return;
+      return;
     }
     const fiberChain = this.getFiberChain(target);
     const type = capitalizeFirstLetter(event.type);
