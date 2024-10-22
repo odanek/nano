@@ -5,8 +5,8 @@ import { NanoElementTag, NanoNode } from './type.js';
 
 export class NanoFiberRoot {
   private container: Element;
-  private current: NanoFiber;
-  private workInProgress: NanoFiber | null;
+  private current: NanoFiber<null>;
+  private workInProgress: NanoFiber<null> | null;
   private updateHandle: number | null;
   private disposed: boolean;
   private dispatcher: NanoEventDispatcher;

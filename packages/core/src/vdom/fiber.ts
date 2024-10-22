@@ -1,13 +1,9 @@
 import { FlagGenerator } from '@nano-ui/util';
-import {
-  NanoElementTag,
-  NanoElementKey,
-  NanoElementProps,
-  NanoElementType,
-} from './type';
+import { NanoElementTag, NanoElementKey, NanoElementType } from './type';
 import { NanoElement } from './element';
 import { NanoRef } from './ref';
 import { NanoFiberRoot } from './root';
+import { PlainObject } from '@nano-ui/type';
 
 const fiberKey = Symbol();
 
@@ -22,7 +18,7 @@ export enum EffectTag {
   Ref = effectTagCounter.next(),
 }
 
-export class NanoFiber {
+export class NanoFiber<T = PlainObject> {
   public tag: NanoElementTag;
   public type: NanoElementType | null;
   public key: NanoElementKey;
@@ -32,8 +28,8 @@ export class NanoFiber {
   public child: NanoFiber | null;
   public sibling: NanoFiber | null;
   public index: number;
-  public pendingProps: NanoElementProps | null;
-  public memoizedProps: NanoElementProps | null;
+  public pendingProps: T;
+  public memoizedProps: T | null;
   public memoizedState: unknown;
   public fullContext: object | null;
   public contextTypes: Array<unknown> | null;
@@ -43,13 +39,9 @@ export class NanoFiber {
   public effectTag: EffectTag;
   public deletions: Array<NanoFiber> | null;
 
-  public alternate: NanoFiber | null;
+  public alternate: NanoFiber<T> | null;
 
-  constructor(
-    tag: NanoElementTag,
-    pendingProps: NanoElementProps | null,
-    key: NanoElementKey,
-  ) {
+  constructor(tag: NanoElementTag, pendingProps: T, key: NanoElementKey) {
     this.tag = tag;
     this.type = null;
     this.key = key;
@@ -78,18 +70,18 @@ export class NanoFiber {
   }
 }
 
-export function createFiber(
+export function createFiber<T = PlainObject>(
   tag: NanoElementTag,
-  pendingProps: NanoElementProps | null,
+  pendingProps: T,
   key: NanoElementKey,
-): NanoFiber {
+): NanoFiber<T> {
   return new NanoFiber(tag, pendingProps, key);
 }
 
-export function createWorkInProgress(
-  current: NanoFiber,
-  pendingProps: NanoElementProps | null,
-): NanoFiber {
+export function createWorkInProgress<T = PlainObject>(
+  current: NanoFiber<T>,
+  pendingProps: T,
+): NanoFiber<T> {
   let workInProgress = current.alternate;
   // Double-buffering - reuse existing alternate fiber if already created
   if (workInProgress === null) {
@@ -121,7 +113,9 @@ export function createWorkInProgress(
   return workInProgress;
 }
 
-export function createFiberFromElement(element: NanoElement): NanoFiber {
+export function createFiberFromElement<T>(
+  element: NanoElement<T>,
+): NanoFiber<T> {
   const fiber = createFiber(element.tag, element.props, element.key);
   fiber.type = element.type;
   fiber.ref = element.ref;

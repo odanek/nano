@@ -11,11 +11,8 @@ export enum NanoElementTag {
   Context,
 }
 
-export type NanoElementProps = PlainObject;
 export type NanoElementKey = unknown;
 export type NanoElementType = string | NanoComponent;
 
 export type NanoNode = NanoElement | string | number | null;
-export type NanoComponent<T extends NanoElementProps = NanoElementProps> = (
-  props?: T,
-) => NanoNode;
+export type NanoComponent<T = PlainObject> = (props: T) => NanoNode;

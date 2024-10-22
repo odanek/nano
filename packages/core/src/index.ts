@@ -1,9 +1,4 @@
-import {
-  NanoElementProps,
-  NanoElementKey,
-  NanoNode,
-  NanoComponent,
-} from './vdom/type';
+import { NanoElementKey, NanoNode, NanoComponent } from './vdom/type';
 
 import { NanoElement } from './vdom/element';
 
@@ -22,7 +17,6 @@ import { NanoWheelEvent } from './event/wheel-event';
 import { css, keyframes, Style } from './style/style';
 
 export {
-  NanoElementProps,
   NanoElementKey,
   NanoNode,
   NanoComponent,
