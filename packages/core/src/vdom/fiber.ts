@@ -31,9 +31,9 @@ export class NanoFiber<P = PlainObject> {
   public pendingProps: P;
   public memoizedProps: P | null;
   public memoizedState: unknown;
-  public fullContext: object | null;
-  public contextTypes: Array<unknown> | null;
-  public memoizedContext: object | null;
+  public fullContext: Record<string, unknown> | null;
+  public contextTypes: Array<string> | null;
+  public memoizedContext: Record<string, unknown> | null;
   public memoizedStyle: object | null;
   public updateQueue: Array<unknown> | null;
   public effectTag: EffectTag;
