@@ -17,7 +17,8 @@ export function createContext<T>(): NanoComponent<
 
 export function readContext(workInProgress: NanoFiber) {
   const types = workInProgress.contextTypes;
-  if (types === null) { // TODO When does this happen?
+  if (types === null) {
+    // TODO When does this happen?
     return null;
   }
 
@@ -32,7 +33,8 @@ export function readContext(workInProgress: NanoFiber) {
 
 export function compareContext(current: NanoFiber, workInProgress: NanoFiber) {
   const types = workInProgress.contextTypes;
-  if (types === null) { // TODO When does this happen?
+  if (types === null) {
+    // TODO When does this happen?
     return true;
   }
 
