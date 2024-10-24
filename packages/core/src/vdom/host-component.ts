@@ -8,6 +8,7 @@ export type NanoHostComponentStyle = Record<string, string>; // TODO Explicitly 
 export type NanoHostComponentProps = NanoPropsWithChildren<{
   class?: string;
   style: NanoHostComponentStyle;
+  // TODO Add missing attributes + define JSX.IntrinsicElements etc.
 }>;
 
 type PropsDiff = Array<string | null>;
