@@ -1,23 +1,10 @@
-import { FlagGenerator } from '@nano-ui/util';
-import { NanoElementTag, NanoElementKey, NanoElementType } from './type';
+import { NanoElementTag, NanoElementKey, NanoElementType, NanoEffectTag } from './type';
 import { NanoElement } from './element';
 import { NanoRef } from './ref';
 import { NanoFiberRoot } from './root';
 import { PlainObject } from '@nano-ui/type';
 
 const fiberKey = Symbol();
-
-const effectTagCounter = new FlagGenerator();
-export enum EffectTag {
-  None = effectTagCounter.next(),
-  Placement = effectTagCounter.next(),
-  Update = effectTagCounter.next(),
-  Lifecycle = effectTagCounter.next(),
-  Deletion = effectTagCounter.next(),
-  ContentReset = effectTagCounter.next(),
-  Ref = effectTagCounter.next(),
-}
-
 export class NanoFiber<P = PlainObject> {
   public tag: NanoElementTag;
   public type: NanoElementType;
@@ -36,7 +23,7 @@ export class NanoFiber<P = PlainObject> {
   public memoizedContext: Record<string, unknown> | null;
   public memoizedStyle: object | null;
   public updateQueue: Array<unknown> | null;
-  public effectTag: EffectTag;
+  public effectTag: NanoEffectTag;
   public deletions: Array<NanoFiber> | null;
 
   public alternate: NanoFiber<P> | null;
@@ -63,7 +50,7 @@ export class NanoFiber<P = PlainObject> {
     this.memoizedContext = null;
 
     this.updateQueue = null;
-    this.effectTag = EffectTag.None;
+    this.effectTag = NanoEffectTag.None;
     this.deletions = null;
 
     this.alternate = null;
@@ -106,7 +93,7 @@ export function createWorkInProgress<P = PlainObject>(
     workInProgress.fullContext = null;
     workInProgress.memoizedContext = null;
 
-    workInProgress.effectTag = EffectTag.None;
+    workInProgress.effectTag = NanoEffectTag.None;
     workInProgress.deletions = [];
   }
 

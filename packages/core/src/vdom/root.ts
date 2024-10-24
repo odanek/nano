@@ -4,7 +4,7 @@ import { NanoEventDispatcher } from '../event/dispatcher';
 import { NanoElementTag, NanoNode } from './type.js';
 
 export class NanoFiberRoot {
-  private container: Element;
+  public readonly container: Element;
   private current: NanoFiber<null>;
   private workInProgress: NanoFiber<null> | null;
   private updateHandle: number | null;

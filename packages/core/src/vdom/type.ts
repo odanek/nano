@@ -1,4 +1,5 @@
 import { PlainObject } from '@nano-ui/type';
+import { FlagGenerator } from '@nano-ui/util';
 import { NanoElement } from './element';
 
 export enum NanoElementTag {
@@ -9,6 +10,17 @@ export enum NanoElementTag {
   FunctionComponent,
   Fragment,
   Context,
+}
+
+const effectTagCounter = new FlagGenerator();
+export enum NanoEffectTag {
+  None = effectTagCounter.next(),
+  Placement = effectTagCounter.next(),
+  Update = effectTagCounter.next(),
+  Lifecycle = effectTagCounter.next(),
+  Deletion = effectTagCounter.next(),
+  ContentReset = effectTagCounter.next(),
+  Ref = effectTagCounter.next(),
 }
 
 export type NanoElementKey = unknown;
