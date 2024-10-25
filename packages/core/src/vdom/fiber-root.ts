@@ -1,7 +1,12 @@
-import { performSyncWorkOnRoot } from './work-loop';
-import { createFiber, NanoFiber } from './fiber';
-import { NanoEventDispatcher } from '../event/dispatcher';
+import { performSyncWorkOnRoot } from './work-loop.js';
+import { createFiber, NanoFiber } from './fiber.js';
+import { NanoEventDispatcher } from '../event/dispatcher.js';
 import { NanoElementTag, NanoNode } from './type.js';
+import { NanoElement } from './element.js';
+
+export type NanoFiberRootState = {
+  element: NanoElement,
+};
 
 export class NanoFiberRoot {
   public readonly container: Element;

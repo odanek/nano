@@ -1,8 +1,10 @@
 import { NanoElementTag, NanoElementKey, NanoElementType, NanoEffectTag } from './type';
 import { NanoElement } from './element';
 import { NanoRef } from './ref';
-import { NanoFiberRoot } from './root';
+import { NanoFiberRoot } from './fiber-root';
 import { PlainObject } from '@nano-ui/type';
+import { NanoHostComponentStateNode } from './host-component';
+import { NanoHostTextStateNode } from './host-text';
 
 const fiberKey = Symbol();
 export class NanoFiber<P = PlainObject> {
@@ -10,7 +12,7 @@ export class NanoFiber<P = PlainObject> {
   public type: NanoElementType;
   public key: NanoElementKey;
   public ref: NanoRef | null;
-  public stateNode: HTMLElement | NanoFiberRoot | null;
+  public stateNode: NanoHostComponentStateNode | NanoHostTextStateNode | NanoFiberRoot | null;
   public return: NanoFiber | null;
   public child: NanoFiber | null;
   public sibling: NanoFiber | null;
@@ -109,7 +111,7 @@ export function createFiberFromElement<P>(
   return fiber;
 }
 
-export function markInstanceFiber(node: Node, fiber: NanoFiber) {
+export function markInstanceFiber<T>(node: Node, fiber: NanoFiber<T>) {
   // @ts-expect-error Conversion to any
   node[fiberKey] = fiber;
 }

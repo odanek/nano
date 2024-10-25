@@ -1,7 +1,7 @@
 import { isFlag } from '@nano-ui/util';
 import { NanoFiber } from './fiber';
 import { NanoEffectTag, NanoElementTag } from './type';
-import { NanoFiberRoot } from './root';
+import { NanoFiberRoot } from './fiber-root';
 
 type TraversalCallback = (fiber: NanoFiber) => void;
 
@@ -74,7 +74,6 @@ export function getHostParentNode(parentFiber: NanoFiber): Element {
     case NanoElementTag.HostRoot:
       return (parentStateNode as NanoFiberRoot).container;
     case NanoElementTag.HostPortal:
-      // @ts-expect-error TODO
       return parentFiber.type as Element;
     default:
       throw new Error('Invalid host parent fiber');

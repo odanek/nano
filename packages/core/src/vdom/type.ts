@@ -24,7 +24,7 @@ export enum NanoEffectTag {
 }
 
 export type NanoElementKey = unknown;
-export type NanoElementType = null | string | NanoComponent;
+export type NanoElementType = null | string | HTMLElement | SVGElement | NanoComponent;
 
 export type NanoNode = NanoElement | string | number | null;
 export type NanoChildren = NanoNode | NanoNode[];
