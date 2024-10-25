@@ -1,133 +1,175 @@
-import { isNumber, isString } from "@nano-ui/type";
-import { markInstanceFiber, NanoFiber } from "../fiber";
-import { createHostComponentInstance } from "../host-component";
-import { createHostTextInstance } from "../host-text";
-import { NanoFiberRootState } from "../fiber-root";
-import { NanoChildren, NanoEffectTag, NanoElementTag } from "../type";
+import { isNumber, isString } from '@nano-ui/type';
+import { markInstanceFiber, NanoFiber } from '../fiber';
+import { createHostComponentInstance } from '../host-component';
+import { createHostTextInstance } from '../host-text';
+import { NanoFiberRootState } from '../fiber-root';
+import { NanoChildren, NanoEffectTag, NanoElementTag } from '../type';
 
-export function beginWork(current: NanoFiber, workInProgress: NanoFiber): NanoFiber | null {
-	propagateContext(workInProgress);
+export function beginWork(
+  current: NanoFiber,
+  workInProgress: NanoFiber,
+): NanoFiber | null {
+  propagateContext(workInProgress);
 
-	switch (workInProgress.tag) {
-		case NanoElementTag.FunctionComponent:
-			return beginFunctionComponent(current, workInProgress);
-		case NanoElementTag.HostRoot:
-			return beginHostRoot(current, workInProgress);
-		case NanoElementTag.HostComponent:
-			return beginHostComponent(current, workInProgress);
-		case NanoElementTag.HostText:
-			return beginHostText(current, workInProgress);
-		case NanoElementTag.HostPortal:
-		case NanoElementTag.Fragment:
-		case NanoElementTag.Context:
-			return beginElement(current, workInProgress);
-	}
+  switch (workInProgress.tag) {
+    case NanoElementTag.FunctionComponent:
+      return beginFunctionComponent(current, workInProgress);
+    case NanoElementTag.HostRoot:
+      return beginHostRoot(current, workInProgress);
+    case NanoElementTag.HostComponent:
+      return beginHostComponent(current, workInProgress);
+    case NanoElementTag.HostText:
+      return beginHostText(current, workInProgress);
+    case NanoElementTag.HostPortal:
+    case NanoElementTag.Fragment:
+    case NanoElementTag.Context:
+      return beginElement(current, workInProgress);
+  }
 
-	return null;
+  return null;
 }
 
 function propagateContext(workInProgress: NanoFiber) {
-	const returnFiber = workInProgress.return;
-	const fullContext = returnFiber === null ? emptyObject : returnFiber.fullContext;
+  const returnFiber = workInProgress.return;
+  const fullContext =
+    returnFiber === null ? emptyObject : returnFiber.fullContext;
 
-	if (workInProgress.tag === NanoElementTag.Context) {
-		const value = workInProgress.pendingProps.value;
-		workInProgress.fullContext = Object.freeze(mergeObjects(fullContext, value));
-	} else {
-		workInProgress.fullContext = fullContext;
-	}
+  if (workInProgress.tag === NanoElementTag.Context) {
+    const value = workInProgress.pendingProps.value;
+    workInProgress.fullContext = Object.freeze(
+      mergeObjects(fullContext, value),
+    );
+  } else {
+    workInProgress.fullContext = fullContext;
+  }
 }
 
-function beginFunctionComponent(current: NanoFiber, workInProgress: NanoFiber): NanoFiber | null {
-	if (current !== null) {
-		const shouldUpdate = updateFunctionComponent(current, workInProgress);
-		if (!shouldUpdate) {
-			workInProgress.memoizedState = current.memoizedState;
-			return bailoutOnAlreadyFinishedWork(current, workInProgress);
-		}
-	}
+function beginFunctionComponent(
+  current: NanoFiber,
+  workInProgress: NanoFiber,
+): NanoFiber | null {
+  if (current !== null) {
+    const shouldUpdate = updateFunctionComponent(current, workInProgress);
+    if (!shouldUpdate) {
+      workInProgress.memoizedState = current.memoizedState;
+      return bailoutOnAlreadyFinishedWork(current, workInProgress);
+    }
+  }
 
-	const nextChildren = renderFunctionComponent(current, workInProgress);
-	reconcileChildren(current, workInProgress, nextChildren);
-	return workInProgress.child;
+  const nextChildren = renderFunctionComponent(current, workInProgress);
+  reconcileChildren(current, workInProgress, nextChildren);
+  return workInProgress.child;
 }
 
-function beginHostRoot(current: NanoFiber, workInProgress: NanoFiber): NanoFiber | null {
-	const prevState = current.memoizedState as NanoFiberRootState;
-	const prevChildren = prevState?.element ?? null;
+function beginHostRoot(
+  current: NanoFiber,
+  workInProgress: NanoFiber,
+): NanoFiber | null {
+  const prevState = current.memoizedState as NanoFiberRootState;
+  const prevChildren = prevState?.element ?? null;
 
-	const updateQueue = current.updateQueue;
-	const nextState = (updateQueue === null ? current.memoizedState : updateQueue[0]) as NanoFiberRootState;
-	workInProgress.memoizedState = nextState;
-	workInProgress.updateQueue = null;
+  const updateQueue = current.updateQueue;
+  const nextState = (
+    updateQueue === null ? current.memoizedState : updateQueue[0]
+  ) as NanoFiberRootState;
+  workInProgress.memoizedState = nextState;
+  workInProgress.updateQueue = null;
 
-	const nextChildren = nextState.element;
-	if (nextChildren === prevChildren) {
-		return bailoutOnAlreadyFinishedWork(current, workInProgress);
-	}
-	reconcileChildren(current, workInProgress, nextChildren);
-	return workInProgress.child;
+  const nextChildren = nextState.element;
+  if (nextChildren === prevChildren) {
+    return bailoutOnAlreadyFinishedWork(current, workInProgress);
+  }
+  reconcileChildren(current, workInProgress, nextChildren);
+  return workInProgress.child;
 }
 
-function beginHostComponent(current: NanoFiber, workInProgress: NanoFiber): NanoFiber | null {
-	if (current === null) {
-		workInProgress.stateNode = createHostComponentInstance(workInProgress);		
-	}
+function beginHostComponent(
+  current: NanoFiber,
+  workInProgress: NanoFiber,
+): NanoFiber | null {
+  if (current === null) {
+    workInProgress.stateNode = createHostComponentInstance(workInProgress);
+  }
 
-	const nextProps = workInProgress.pendingProps;
-	const prevProps = current !== null ? current.memoizedProps : null;
+  const nextProps = workInProgress.pendingProps;
+  const prevProps = current !== null ? current.memoizedProps : null;
 
-	let nextChildren = nextProps.children as NanoChildren;
-	// Direct text child optimization - do not create a new fiber
-	const isDirectTextChild = shouldSetTextContent(nextChildren);
+  let nextChildren = nextProps.children as NanoChildren;
+  // Direct text child optimization - do not create a new fiber
+  const isDirectTextChild = shouldSetTextContent(nextChildren);
 
-	if (isDirectTextChild) {
-		nextChildren = null;
-	} else if (prevProps !== null && shouldSetTextContent(prevProps.children as NanoChildren)) {
-		workInProgress.effectTag |= NanoEffectTag.ContentReset;
-	}
+  if (isDirectTextChild) {
+    nextChildren = null;
+  } else if (
+    prevProps !== null &&
+    shouldSetTextContent(prevProps.children as NanoChildren)
+  ) {
+    workInProgress.effectTag |= NanoEffectTag.ContentReset;
+  }
 
-	markRef(current, workInProgress);
-	markInstanceFiber(workInProgress.stateNode as Element, workInProgress);
+  markRef(current, workInProgress);
+  markInstanceFiber(workInProgress.stateNode as Element, workInProgress);
 
-	reconcileChildren(current, workInProgress, nextChildren);
-	return workInProgress.child;
+  reconcileChildren(current, workInProgress, nextChildren);
+  return workInProgress.child;
 }
 
-function beginHostText(current: NanoFiber<string>, workInProgress: NanoFiber<string>): NanoFiber | null {
-	if (current === null) {
-		workInProgress.stateNode = createHostTextInstance(workInProgress.pendingProps as string);
-	}
-	markInstanceFiber(workInProgress.stateNode as Node, workInProgress);
-	return null;
+function beginHostText(
+  current: NanoFiber<string>,
+  workInProgress: NanoFiber<string>,
+): NanoFiber | null {
+  if (current === null) {
+    workInProgress.stateNode = createHostTextInstance(
+      workInProgress.pendingProps as string,
+    );
+  }
+  markInstanceFiber(workInProgress.stateNode as Node, workInProgress);
+  return null;
 }
 
-function beginElement(current: NanoFiber, workInProgress: NanoFiber): NanoFiber | null {
-	const nextChildren = workInProgress.pendingProps.children as NanoChildren;
-	reconcileChildren(current, workInProgress, nextChildren);
-	return workInProgress.child;
+function beginElement(
+  current: NanoFiber,
+  workInProgress: NanoFiber,
+): NanoFiber | null {
+  const nextChildren = workInProgress.pendingProps.children as NanoChildren;
+  reconcileChildren(current, workInProgress, nextChildren);
+  return workInProgress.child;
 }
 
 function shouldSetTextContent(children: NanoChildren) {
-	return isString(children) || isNumber(children);
+  return isString(children) || isNumber(children);
 }
 
 function markRef(current: NanoFiber, workInProgress: NanoFiber) {
-	const ref = workInProgress.ref;
-	if ((current === null && ref !== null) || (current !== null && current.ref !== ref)) {
-		workInProgress.effectTag |= NanoEffectTag.Ref;
-	}
+  const ref = workInProgress.ref;
+  if (
+    (current === null && ref !== null) ||
+    (current !== null && current.ref !== ref)
+  ) {
+    workInProgress.effectTag |= NanoEffectTag.Ref;
+  }
 }
 
-function bailoutOnAlreadyFinishedWork(current: NanoFiber, workInProgress: NanoFiber) {
-	cloneChildFibers(current, workInProgress);
-	return workInProgress.child;
+function bailoutOnAlreadyFinishedWork(
+  current: NanoFiber,
+  workInProgress: NanoFiber,
+) {
+  cloneChildFibers(current, workInProgress);
+  return workInProgress.child;
 }
 
-function reconcileChildren(current: NanoFiber, workInProgress: NanoFiber, nextChildren: NanoChildren) {
-	if (current === null) {
-		workInProgress.child = mountChildFibers(workInProgress, null, nextChildren);
-	} else {
-		workInProgress.child = reconcileChildFibers(workInProgress, current.child, nextChildren);
-	}
+function reconcileChildren(
+  current: NanoFiber,
+  workInProgress: NanoFiber,
+  nextChildren: NanoChildren,
+) {
+  if (current === null) {
+    workInProgress.child = mountChildFibers(workInProgress, null, nextChildren);
+  } else {
+    workInProgress.child = reconcileChildFibers(
+      workInProgress,
+      current.child,
+      nextChildren,
+    );
+  }
 }

@@ -1,4 +1,9 @@
-import { NanoElementTag, NanoElementKey, NanoElementType, NanoEffectTag } from './type';
+import {
+  NanoElementTag,
+  NanoElementKey,
+  NanoElementType,
+  NanoEffectTag,
+} from './type';
 import { NanoElement } from './element';
 import { NanoRef } from './ref';
 import { NanoFiberRoot } from './fiber-root';
@@ -12,7 +17,11 @@ export class NanoFiber<P = PlainObject> {
   public type: NanoElementType;
   public key: NanoElementKey;
   public ref: NanoRef | null;
-  public stateNode: NanoHostComponentStateNode | NanoHostTextStateNode | NanoFiberRoot | null;
+  public stateNode:
+    | NanoHostComponentStateNode
+    | NanoHostTextStateNode
+    | NanoFiberRoot
+    | null;
   public return: NanoFiber | null;
   public child: NanoFiber | null;
   public sibling: NanoFiber | null;

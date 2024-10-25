@@ -5,7 +5,7 @@ import { NanoElementTag, NanoNode } from './type.js';
 import { NanoElement } from './element.js';
 
 export type NanoFiberRootState = {
-  element: NanoElement,
+  element: NanoElement;
 };
 
 export class NanoFiberRoot {
