@@ -11,9 +11,9 @@ export type NanoHostComponentProps = NanoPropsWithChildren<{
   // TODO Add missing attributes + define JSX.IntrinsicElements etc.
 }>;
 
-type PropsDiff = Array<string | null>;
+export type NanoHostComponentPropsDiff = Array<string | null>;
 type DiffFunc = (
-  diff: PropsDiff,
+  diff: NanoHostComponentPropsDiff,
   key: string,
   oldValue: unknown,
   newValue: unknown,
@@ -64,7 +64,7 @@ export function createHostComponentInstance(
 
 export function updateHostComponentInstance(
   node: NanoHostComponentStateNode,
-  diff: PropsDiff,
+  diff: NanoHostComponentPropsDiff,
 ) {
   let i = 0;
   const length = diff.length;
@@ -133,13 +133,13 @@ export function diffProperties(current: NanoFiber, workInProgress: NanoFiber) {
     return null;
   }
 
-  const diff: PropsDiff = [];
+  const diff: NanoHostComponentPropsDiff = [];
   diffObjects(diff, oldProps, newProps, diffPropertyChange);
   return diff.length === 0 ? null : diff;
 }
 
 function diffObjects(
-  diff: PropsDiff,
+  diff: NanoHostComponentPropsDiff,
   left: object,
   right: object,
   handler: DiffFunc,
@@ -161,7 +161,7 @@ function diffObjects(
 }
 
 function diffPropertyChange(
-  diff: PropsDiff,
+  diff: NanoHostComponentPropsDiff,
   key: string,
   oldValue: unknown,
   newValue: unknown,
@@ -184,7 +184,7 @@ function diffPropertyChange(
 }
 
 function diffStyleChange(
-  diff: PropsDiff,
+  diff: NanoHostComponentPropsDiff,
   key: string,
   oldValue: unknown,
   newValue: unknown,

@@ -14,7 +14,7 @@ export function updateHostTextInstance(
   }
 }
 
-export function resetHostTextContent(node: NanoHostTextStateNode) {
+export function resetHostTextContent(node: Node) {
   setHostTextContent(node, '');
 }
 

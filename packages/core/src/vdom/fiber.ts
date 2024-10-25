@@ -12,7 +12,7 @@ import { NanoHostComponentStateNode } from './host-component';
 import { NanoHostTextStateNode } from './host-text';
 
 const fiberKey = Symbol();
-export class NanoFiber<P = PlainObject> {
+export class NanoFiber<P = unknown> {
   public tag: NanoElementTag;
   public type: NanoElementType;
   public key: NanoElementKey;
