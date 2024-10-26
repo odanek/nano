@@ -14,7 +14,7 @@ export function findFiberRoot(fiber: NanoFiber) {
 }
 
 export function visitFibersDepthFirst(
-  root: NanoFiber,
+  root: NanoFiber | null,
   beforeHandler: TraversalCallback | null,
   afterHandler: TraversalCallback | null,
 ) {
@@ -42,7 +42,6 @@ export function visitFibersDepthFirst(
           fiber = sibling;
         } else {
           emerged = true;
-          // @ts-expect-error Return can be null but then the loop will end
           fiber = fiber.return;
         }
       }

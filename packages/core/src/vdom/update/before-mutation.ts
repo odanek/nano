@@ -4,7 +4,7 @@ import { visitFibersDepthFirst } from '../traversal';
 import { NanoElementTag } from '../type';
 
 export function commitBeforeLifecycleEffects(
-  current: NanoFiber,
+  current: NanoFiber | null,
   finishedWork: NanoFiber,
 ) {
   if (current !== null) {

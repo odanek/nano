@@ -8,6 +8,11 @@ import { NanoInputEvent } from './input-event.js';
 import { NanoClipboardEvent } from './clipboard-event.js';
 import { NanoEvent } from './event.js';
 import { NanoElementTag } from '../vdom/type.js';
+import {
+  NanoHostComponentBubbleEventProps,
+  NanoHostComponentCaptureEventProps,
+  NanoHostComponentProps,
+} from '../vdom/host-component.js';
 
 export type NanoEventDispatchResult = {
   handled: boolean;
@@ -22,6 +27,10 @@ export type NanoEventHandler = (
   event: NanoEvent,
   result: NanoEventDispatchResult,
 ) => void;
+export type NanoCaptureEventHandlerName =
+  keyof NanoHostComponentCaptureEventProps;
+export type NanoBubbleEventHandlerName =
+  keyof NanoHostComponentBubbleEventProps;
 
 export class NanoEventDispatcher {
   private eventHandler: (event: Event) => void;
@@ -59,8 +68,8 @@ export class NanoEventDispatcher {
     }
     const fiberChain = this.getFiberChain(target);
     const type = capitalizeFirstLetter(event.type);
-    const captureHandler = 'onCapture' + type;
-    const bubbleHandler = 'on' + type;
+    const captureHandler = ('onCapture' + type) as NanoCaptureEventHandlerName;
+    const bubbleHandler = ('on' + type) as NanoBubbleEventHandlerName;
     const result = this.runHandlerChain(
       fiberChain,
       event,
@@ -93,8 +102,8 @@ export class NanoEventDispatcher {
   private runHandlerChain(
     fiberChain: NanoFiber[],
     event: NanoEvent,
-    captureHandlerName: string,
-    bubbleHandlerName: string,
+    captureHandlerName: NanoCaptureEventHandlerName,
+    bubbleHandlerName: NanoBubbleEventHandlerName,
   ): NanoEventDispatchResult {
     const result: NanoEventDispatchResult = {
       handled: false,
@@ -104,7 +113,8 @@ export class NanoEventDispatcher {
 
     for (let i = length - 1; i >= 0 && !result.handled; i--) {
       const fiber = fiberChain[i] as NanoFiber;
-      const captureHandler = fiber.memoizedProps?.[captureHandlerName] as
+      const props = fiber.memoizedProps as NanoHostComponentProps;
+      const captureHandler = props[captureHandlerName] as
         | NanoEventHandler
         | undefined;
       captureHandler?.(event, result);
@@ -112,7 +122,8 @@ export class NanoEventDispatcher {
 
     for (let i = 0; i < length && !result.handled; i++) {
       const fiber = fiberChain[i] as NanoFiber;
-      const bubbleHandler = fiber.memoizedProps?.[bubbleHandlerName] as
+      const props = fiber.memoizedProps as NanoHostComponentProps;
+      const bubbleHandler = props[bubbleHandlerName] as
         | NanoEventHandler
         | undefined;
       bubbleHandler?.(event, result);

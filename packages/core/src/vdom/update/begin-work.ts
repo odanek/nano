@@ -4,9 +4,10 @@ import { createHostComponentInstance } from '../host-component';
 import { createHostTextInstance } from '../host-text';
 import { NanoFiberRootState } from '../fiber-root';
 import { NanoChildren, NanoEffectTag, NanoElementTag } from '../type';
+import { cloneChildFibers, mountChildFibers, reconcileChildFibers } from './reconcile';
 
 export function beginWork(
-  current: NanoFiber,
+  current: NanoFiber | null,
   workInProgress: NanoFiber,
 ): NanoFiber | null {
   propagateContext(workInProgress);
@@ -15,7 +16,7 @@ export function beginWork(
     case NanoElementTag.FunctionComponent:
       return beginFunctionComponent(current, workInProgress);
     case NanoElementTag.HostRoot:
-      return beginHostRoot(current, workInProgress);
+      return beginHostRoot(current as NanoFiber, workInProgress);
     case NanoElementTag.HostComponent:
       return beginHostComponent(current, workInProgress);
     case NanoElementTag.HostText:
@@ -45,7 +46,7 @@ function propagateContext(workInProgress: NanoFiber) {
 }
 
 function beginFunctionComponent(
-  current: NanoFiber,
+  current: NanoFiber | null,
   workInProgress: NanoFiber,
 ): NanoFiber | null {
   if (current !== null) {
@@ -84,7 +85,7 @@ function beginHostRoot(
 }
 
 function beginHostComponent(
-  current: NanoFiber,
+  current: NanoFiber | null,
   workInProgress: NanoFiber,
 ): NanoFiber | null {
   if (current === null) {
@@ -115,8 +116,8 @@ function beginHostComponent(
 }
 
 function beginHostText(
-  current: NanoFiber<string>,
-  workInProgress: NanoFiber<string>,
+  current: NanoFiber | null,
+  workInProgress: NanoFiber,
 ): NanoFiber | null {
   if (current === null) {
     workInProgress.stateNode = createHostTextInstance(
@@ -128,7 +129,7 @@ function beginHostText(
 }
 
 function beginElement(
-  current: NanoFiber,
+  current: NanoFiber | null,
   workInProgress: NanoFiber,
 ): NanoFiber | null {
   const nextChildren = workInProgress.pendingProps.children as NanoChildren;
@@ -159,7 +160,7 @@ function bailoutOnAlreadyFinishedWork(
 }
 
 function reconcileChildren(
-  current: NanoFiber,
+  current: NanoFiber | null,
   workInProgress: NanoFiber,
   nextChildren: NanoChildren,
 ) {

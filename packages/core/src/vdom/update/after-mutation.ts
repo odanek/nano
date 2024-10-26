@@ -2,7 +2,7 @@ import { NanoFiber } from '../fiber';
 import { mountLifecycleEffects } from '../function-component';
 
 export function commitAfterMutation(
-  current: NanoFiber,
+  current: NanoFiber | null,
   finishedWork: NanoFiber,
 ) {
   mountLifecycleEffects(current, finishedWork);

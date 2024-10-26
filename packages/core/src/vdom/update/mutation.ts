@@ -21,7 +21,7 @@ export function commitResetTextContent(fiber: NanoFiber) {
   resetHostTextContent(fiber.stateNode as NanoHostTextStateNode);
 }
 
-export function commitDetachRef(current: NanoFiber) {
+export function commitDetachRef(current: NanoFiber | null) {
   if (current !== null) {
     const ref = current.ref;
     if (ref !== null) {
@@ -71,7 +71,7 @@ function placeHostComponent(
   parent.insertBefore(stateNode, before);
 }
 
-export function commitMutation(current: NanoFiber, finishedWork: NanoFiber) {
+export function commitMutation(current: NanoFiber | null, finishedWork: NanoFiber) {
   switch (finishedWork.tag) {
     case NanoElementTag.FunctionComponent:
       commitFunctionComponentMutation(current, finishedWork);
@@ -89,14 +89,14 @@ export function commitMutation(current: NanoFiber, finishedWork: NanoFiber) {
 }
 
 function commitFunctionComponentMutation(
-  current: NanoFiber,
+  current: NanoFiber | null,
   finishedWork: NanoFiber,
 ) {
   mountStyleEffects(current, finishedWork);
 }
 
 function commitHostComponentMutation(
-  current: NanoFiber,
+  current: NanoFiber | null,
   finishedWork: NanoFiber,
 ) {
   const instance = finishedWork.stateNode as NanoHostComponentStateNode;
