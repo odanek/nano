@@ -5,6 +5,7 @@ import { createHostTextInstance } from '../host-text';
 import { NanoFiberRootState } from '../fiber-root';
 import { NanoChildren, NanoEffectTag, NanoElementTag } from '../type';
 import { cloneChildFibers, mountChildFibers, reconcileChildFibers } from './reconcile';
+import { emptyContext } from '../context';
 
 export function beginWork(
   current: NanoFiber | null,
@@ -33,7 +34,7 @@ export function beginWork(
 function propagateContext(workInProgress: NanoFiber) {
   const returnFiber = workInProgress.return;
   const fullContext =
-    returnFiber === null ? emptyObject : returnFiber.fullContext;
+    returnFiber === null ? emptyContext : returnFiber.fullContext;
 
   if (workInProgress.tag === NanoElementTag.Context) {
     const value = workInProgress.pendingProps.value;

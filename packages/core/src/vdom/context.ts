@@ -5,7 +5,7 @@ export type NanoContextComponentProps<T> = NanoPropsWithChildren<{ value: T }>;
 
 let id = 1;
 const contextMarker = Symbol('nano-context-marker');
-const emptyContext: Record<string, unknown> = Object.freeze({});
+export const emptyContext: Record<string, unknown> = Object.freeze({});
 
 export function createContext<T>(): NanoComponent<
   NanoContextComponentProps<T>
