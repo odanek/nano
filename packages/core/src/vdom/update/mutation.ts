@@ -16,6 +16,7 @@ import {
   NanoHostComponentStateNode,
   updateHostComponentInstance,
 } from '../host-component';
+import { mountStyleEffects } from '../function-component';
 
 export function commitResetTextContent(fiber: NanoFiber) {
   resetHostTextContent(fiber.stateNode as NanoHostTextStateNode);

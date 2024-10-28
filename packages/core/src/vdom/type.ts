@@ -1,4 +1,3 @@
-import { PlainObject } from '@nano-ui/type';
 import { FlagGenerator } from '@nano-ui/util';
 import { NanoElement } from './element';
 
@@ -32,15 +31,9 @@ export type NanoElementType =
   | NanoComponent;
 
 export type NanoNode = NanoElement | string | number | null;
-export type NanoChildren = NanoNode | NanoNode[];
-export type NanoComponent<T = PlainObject> = (props: T) => NanoNode;
+export type NanoChildren = undefined | NanoNode | NanoNode[];
+export type NanoComponent<T = unknown> = (props: T) => NanoNode;
 
-export type NanoPropsWithChildren<T> = T & {
+export type NanoPropsWithChildren<T = unknown> = T & {
   children?: NanoChildren;
 };
-export type NanoPropsWithKey<T> = T & {
-  key?: NanoElementKey;
-};
-export type NanoPropsWithChildrenAndKey<T> = NanoPropsWithKey<
-  NanoPropsWithChildren<T>
->;

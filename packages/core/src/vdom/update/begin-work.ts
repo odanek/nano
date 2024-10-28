@@ -1,11 +1,12 @@
 import { isNumber, isString } from '@nano-ui/type';
 import { markInstanceFiber, NanoFiber } from '../fiber';
-import { createHostComponentInstance } from '../host-component';
+import { createHostComponentInstance, NanoHostComponentProps } from '../host-component';
 import { createHostTextInstance } from '../host-text';
 import { NanoFiberRootState } from '../fiber-root';
-import { NanoChildren, NanoEffectTag, NanoElementTag } from '../type';
+import { NanoChildren, NanoEffectTag, NanoElementTag, NanoPropsWithChildren } from '../type';
 import { cloneChildFibers, mountChildFibers, reconcileChildFibers } from './reconcile';
 import { emptyContext } from '../context';
+import { renderFunctionComponent, updateFunctionComponent } from '../function-component';
 
 export function beginWork(
   current: NanoFiber | null,
@@ -93,8 +94,8 @@ function beginHostComponent(
     workInProgress.stateNode = createHostComponentInstance(workInProgress);
   }
 
-  const nextProps = workInProgress.pendingProps;
-  const prevProps = current !== null ? current.memoizedProps : null;
+  const nextProps = workInProgress.pendingProps as NanoHostComponentProps;
+  const prevProps = current !== null ? current.memoizedProps as NanoHostComponentProps : null;
 
   let nextChildren = nextProps.children as NanoChildren;
   // Direct text child optimization - do not create a new fiber
@@ -133,7 +134,7 @@ function beginElement(
   current: NanoFiber | null,
   workInProgress: NanoFiber,
 ): NanoFiber | null {
-  const nextChildren = workInProgress.pendingProps.children as NanoChildren;
+  const nextChildren = (workInProgress.pendingProps as NanoPropsWithChildren).children;
   reconcileChildren(current, workInProgress, nextChildren);
   return workInProgress.child;
 }
@@ -142,7 +143,7 @@ function shouldSetTextContent(children: NanoChildren) {
   return isString(children) || isNumber(children);
 }
 
-function markRef(current: NanoFiber, workInProgress: NanoFiber) {
+function markRef(current: NanoFiber | null, workInProgress: NanoFiber) {
   const ref = workInProgress.ref;
   if (
     (current === null && ref !== null) ||

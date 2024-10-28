@@ -1,8 +1,17 @@
+import { connectBundle, disconnectBundle } from '../style/manager';
 import { compareContext, readContext } from './context';
+import { NanoFiber } from './fiber';
+import { NanoFiberRoot } from './fiber-root';
+import { NanoHook, NanoHookTag } from './hook';
+import { findFiberRoot } from './traversal';
+import { NanoComponent } from './type';
 
-let workInProgressFiber = null;
-let workInProgressHook = null;
-let currentHook = null;
+type NanoHookVisitCallback = (currentHook: NanoHook | null, finishedWorkHook: NanoHook | null) => void;
+
+const emptyArray = Object.freeze([]);
+let workInProgressFiber: NanoFiber | null = null;
+let workInProgressHook: NanoHook | null = null;
+let currentHook: NanoHook | null = null;
 let hookDispatcher = null;
 
 const mountDispatcher = {
@@ -27,23 +36,23 @@ const updateDispatcher = {
 	useMemo: updateMemo
 };
 
-function scheduleUpdateOnFiber(fiber) {
+function scheduleUpdateOnFiber(fiber: NanoFiber) {
 	const rootFiber = findFiberRoot(fiber);
 	if (!rootFiber) {
 		return;
 	}
 
-	const root = rootFiber.stateNode;
+	const root = rootFiber.stateNode as NanoFiberRoot;
 	if (!root.disposed && (root.workInProgress === null || rootFiber === root.workInProgress)) {
 		root.scheduleUpdate();
 	}
 }
 
-export function renderFunctionComponent(current, workInProgress) {
+export function renderFunctionComponent(current: NanoFiber | null, workInProgress: NanoFiber) {
 	workInProgressFiber = workInProgress;
 	hookDispatcher = current === null ? mountDispatcher : updateDispatcher;
 
-	const Component = workInProgress.type;
+	const Component = workInProgress.type as NanoComponent;
 	const props = workInProgress.pendingProps;
 	const children = Component(props);
 	if (current === null) {
@@ -58,7 +67,7 @@ export function renderFunctionComponent(current, workInProgress) {
 	return children;
 }
 
-export function updateFunctionComponent(current, workInProgress) {
+export function updateFunctionComponent(current: NanoFiber, workInProgress: NanoFiber) {
 	const hasContextUpdate = !compareContext(current, workInProgress);
 	if (hasContextUpdate) {
 		workInProgress.memoizedContext = readContext(workInProgress);
@@ -73,8 +82,8 @@ export function updateFunctionComponent(current, workInProgress) {
 		return true;
 	}
 
-	for (let hook = current.memoizedState; hook !== null; hook = hook.next) {
-		if (hook.tag === reducerHookTag && hook.payload.dirty) {
+	for (let hook = current.memoizedState as NanoHook | null; hook !== null; hook = hook.next) {
+		if (hook.tag === NanoHookTag.Reducer && hook.payload.dirty) {
 			return true;
 		}
 	}
@@ -82,9 +91,9 @@ export function updateFunctionComponent(current, workInProgress) {
 	return false;
 }
 
-export function mountLifecycleEffects(current, finishedWork) {
+export function mountLifecycleEffects(current: NanoFiber | null, finishedWork: NanoFiber) {
 	visitHooks(current, finishedWork, (currentHook, finishedWorkHook) => {
-		if (finishedWorkHook.tag === layoutEffectHookTag) {
+		if (finishedWorkHook.tag === NanoHookTag.LayoutEffect) {
 			const payload = finishedWorkHook.payload;
 			if (currentHook === null || currentHook.payload !== payload) {
 				const deps = payload.deps ?? emptyArray;
@@ -94,9 +103,9 @@ export function mountLifecycleEffects(current, finishedWork) {
 	});
 }
 
-export function unmountLifecycleEffects(current, finishedWork) {
+export function unmountLifecycleEffects(current: NanoFiber | null, finishedWork: NanoFiber | null) {
 	visitHooks(current, finishedWork, (currentHook, finishedWorkHook) => {
-		if (currentHook.tag === layoutEffectHookTag) {
+		if (currentHook.tag === NanoHookTag.LayoutEffect) {
 			const payload = currentHook.payload;
 			if ((finishedWorkHook === null || finishedWorkHook.payload !== payload) && payload.destroy !== undefined) {
 				payload.destroy();
@@ -105,9 +114,9 @@ export function unmountLifecycleEffects(current, finishedWork) {
 	});
 }
 
-export function mountStyleEffects(current, finishedWork) {
+export function mountStyleEffects(current: NanoFiber | null, finishedWork: NanoFiber | null) {
 	visitHooks(current, finishedWork, (currentHook, finishedWorkHook) => {
-		if (currentHook !== null && currentHook.tag === styleHookTag) {
+		if (currentHook !== null && currentHook.tag === NanoHookTag.Style) {
 			const payload = currentHook.payload;
 			if (finishedWorkHook == null) {				
 				disconnectBundle(payload);
@@ -115,15 +124,15 @@ export function mountStyleEffects(current, finishedWork) {
 				disconnectBundle(payload);
 				connectBundle(finishedWorkHook.payload);
 			}
-		} else if (finishedWorkHook !== null && finishedWorkHook.tag === styleHookTag) {			
+		} else if (finishedWorkHook !== null && finishedWorkHook.tag === NanoHookTag.Style) {
 			connectBundle(finishedWorkHook.payload);
 		}
 	});
 }
 
-function visitHooks(current, finishedWork, callback) {
-	let currentHook = current === null ? null : current.memoizedState;
-	let finishedWorkHook = finishedWork === null ? null : finishedWork.memoizedState;
+function visitHooks(current: NanoFiber | null, finishedWork: NanoFiber | null, callback: NanoHookVisitCallback) {
+	let currentHook = current === null ? null : (current.memoizedState as NanoHook | null);
+	let finishedWorkHook = finishedWork === null ? null : (finishedWork.memoizedState as NanoHook | null);
 	while (currentHook !== null || finishedWorkHook !== null) {
 		callback(currentHook, finishedWorkHook);
 		if (currentHook !== null) {
@@ -135,8 +144,8 @@ function visitHooks(current, finishedWork, callback) {
 	}
 }
 
-function mountWorkInProgressHook(tag) {
-	const hook = new Hook(tag);
+function mountWorkInProgressHook(tag: NanoHookTag) {
+	const hook = new NanoHook(tag);
 
 	if (workInProgressHook === null) {
 		workInProgressFiber.memoizedState = hook;
@@ -148,7 +157,7 @@ function mountWorkInProgressHook(tag) {
 	return hook;
 }
 
-function updateWorkInProgressHook(tag) {
+function updateWorkInProgressHook(tag: NanoHook) {
 	if (currentHook === null) {
 		const current = workInProgressFiber.alternate;
 		currentHook = current.memoizedState;
@@ -167,7 +176,7 @@ function updateWorkInProgressHook(tag) {
 	return hook;
 }
 
-function stateReducer(currentState, value) {
+function stateReducer(currentState: unknown, value: unknown): unknown {
 	return value;
 }
 
@@ -347,7 +356,7 @@ function updateMemo(create, deps) {
 	}
 }
 
-export function useState(initialState) {
+export function useState<T>(initialState: T): T {
 	return hookDispatcher.useState(initialState);
 }
 

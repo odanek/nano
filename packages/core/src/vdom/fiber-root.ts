@@ -11,9 +11,9 @@ export type NanoFiberRootState = {
 export class NanoFiberRoot {
   public readonly container: Element;
   public current: NanoFiber;
-  public workInProgress: NanoFiber | null;
+  public workInProgress: NanoFiber | null;  
+  public disposed: boolean;
   private updateHandle: number | null;
-  private disposed: boolean;
   private dispatcher: NanoEventDispatcher;
 
   constructor(container: Element) {
