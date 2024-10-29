@@ -1,7 +1,7 @@
 export class NanoRef<T = unknown> {
-  public current: T | null;
+  public current: T;
 
-  constructor() {
-    this.current = null;
+  constructor(initialValue: T) {
+    this.current = initialValue;
   }
 }

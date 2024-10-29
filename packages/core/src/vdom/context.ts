@@ -1,15 +1,16 @@
 import { NanoFiber } from './fiber';
 import { NanoComponent, NanoPropsWithChildren } from './type';
 
+export type NanoContext<T> = NanoComponent<
+NanoContextComponentProps<T>
+>;
 export type NanoContextComponentProps<T> = NanoPropsWithChildren<{ value: T }>;
 
 let id = 1;
 const contextMarker = Symbol('nano-context-marker');
 export const emptyContext: Record<string, unknown> = Object.freeze({});
 
-export function createContext<T>(): NanoComponent<
-  NanoContextComponentProps<T>
-> {
+export function createContext<T>(): NanoContext<T> {
   const Context = () => null;
   Context[contextMarker] = id++;
   return Context;

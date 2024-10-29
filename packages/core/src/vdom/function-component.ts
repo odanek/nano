@@ -1,10 +1,12 @@
 import { connectBundle, disconnectBundle } from '../style/manager';
-import { compareContext, readContext } from './context';
+import { StyleBundle, StyleProvider } from '../style/style';
+import { compareContext, NanoContext, readContext } from './context';
 import { NanoFiber } from './fiber';
 import { NanoFiberRoot } from './fiber-root';
-import { NanoHook, NanoHookTag } from './hook';
+import { NanoEffectCreator, NanoHook, NanoHookDispatcher, NanoHookTag, NanoReducer } from './hook';
+import { NanoRef } from './ref';
 import { findFiberRoot } from './traversal';
-import { NanoComponent } from './type';
+import { NanoComponent, NanoEffectTag } from './type';
 
 type NanoHookVisitCallback = (currentHook: NanoHook | null, finishedWorkHook: NanoHook | null) => void;
 
@@ -12,9 +14,9 @@ const emptyArray = Object.freeze([]);
 let workInProgressFiber: NanoFiber | null = null;
 let workInProgressHook: NanoHook | null = null;
 let currentHook: NanoHook | null = null;
-let hookDispatcher = null;
+let hookDispatcher: NanoHookDispatcher | null = null;
 
-const mountDispatcher = {
+const mountDispatcher: NanoHookDispatcher = {
 	useState: mountState,
 	useLayoutEffect: mountLayoutEffect,
 	useContext: mountContext,
@@ -25,7 +27,7 @@ const mountDispatcher = {
 	useMemo: mountMemo
 };
 
-const updateDispatcher = {
+const updateDispatcher: NanoHookDispatcher = {
 	useState: updateState,
 	useLayoutEffect: updateLayoutEffect,
 	useContext: updateContext,
@@ -157,10 +159,10 @@ function mountWorkInProgressHook(tag: NanoHookTag) {
 	return hook;
 }
 
-function updateWorkInProgressHook(tag: NanoHook) {
+function updateWorkInProgressHook(tag: NanoHookTag) {
 	if (currentHook === null) {
-		const current = workInProgressFiber.alternate;
-		currentHook = current.memoizedState;
+		const current = (workInProgressFiber as NanoFiber).alternate as NanoFiber;
+		currentHook = current.memoizedState as NanoHook;
 	} else {
 		currentHook = currentHook.next;
 	}
@@ -228,31 +230,31 @@ function addContextType(fiber, contextType) {
 	}
 }
 
-function mountState(initialState) {
+function mountState<T>(initialState: T): [T, (value: T) => void] {
 	return mountReducer(stateReducer, initialState);
 }
 
 function mountLayoutEffect(create, deps) {
-	const hook = mountWorkInProgressHook(layoutEffectHookTag);
+	const hook = mountWorkInProgressHook(NanoHookTag.LayoutEffect);
 	hook.payload = createEffectPayload(create, deps);
 	workInProgressFiber.effectTag |= lifecycleEffectTag;
 }
 
-function mountContext(contextType) {
-	mountWorkInProgressHook(contextHookTag);
+function mountContext<T>(context: NanoContext<T>): T {
+	mountWorkInProgressHook(NanoHookTag.Context);
 	addContextType(workInProgressFiber, contextType);
 	return workInProgressFiber.fullContext[contextType];
 }
 
 function mountStyle(bundle) {
-	const hook = mountWorkInProgressHook(styleHookTag);	
+	const hook = mountWorkInProgressHook(NanoHookTag.Style);	
 	hook.payload = bundle;
-	workInProgressFiber.effectTag |= updateEffectTag;
+	workInProgressFiber.effectTag |= NanoEffectTag.Update;
 	return bundle.classNames;
 }
 
-function mountReducer(reducer, initialState) {
-	const hook = mountWorkInProgressHook(reducerHookTag);
+function mountReducer<T,A>(reducer: NanoReducer<T,A>, initialState: T): [T, (action: A) => void] {
+	const hook = mountWorkInProgressHook(NanoHookTag.Reducer);
 	const payload = {
 		memoizedState: initialState,
 		nextState: null,
@@ -285,7 +287,7 @@ function mountMemo(create, deps) {
 	return payload.value;
 }
 
-function updateState(initialState) {
+function updateState<T>(initialState: T): [T, (value: T) => void] {
 	return updateReducer(stateReducer, initialState);
 }
 
@@ -301,22 +303,22 @@ function updateLayoutEffect(create, deps) {
 	}
 }
 
-function updateContext(contextType) {
-	updateWorkInProgressHook(contextHookTag);
+function updateContext<T>(context: NanoContext<T>): T {
+	updateWorkInProgressHook(NanoHookTag.Context);
 	return workInProgressFiber.memoizedContext[contextType];
 }
 
 function updateStyle(bundle) {
-	const hook = updateWorkInProgressHook(styleHookTag);	
+	const hook = updateWorkInProgressHook(NanoHookTag.Style);	
 	if (hook.payload !== bundle) {
 		hook.payload = bundle;
-		workInProgressFiber.effectTag |= updateEffectTag;
+		workInProgressFiber.effectTag |= NanoEffectTag.Update;
 	}
 	return bundle.classNames;
 }
 
-function updateReducer(reducer, initialState) {
-	const hook = updateWorkInProgressHook(reducerHookTag);
+function updateReducer<T,A>(reducer: NanoReducer<T,A>, initialState: T): [T, (action: A) => void] {
+	const hook = updateWorkInProgressHook(NanoHookTag.Reducer);
 	const payload = hook.payload;
 	if (payload.dirty) {
 		payload.memoizedState = payload.nextState;
@@ -327,14 +329,13 @@ function updateReducer(reducer, initialState) {
 	return [payload.memoizedState, payload.dispatch];
 }
 
-function updateRef(initialValue) {
-	const hook = updateWorkInProgressHook(refHookTag);
-	const ref = hook.payload;
-	return ref;
+function updateRef<T>(initialValue: T): NanoRef<T> {
+	const hook = updateWorkInProgressHook(NanoHookTag.Ref);
+	return hook.payload as NanoRef<T>;
 }
 
-function updateCallback(callback, deps) {
-	const hook = updateWorkInProgressHook(callbackHookTag);
+function updateCallback<T extends (...args: unknown[]) => unknown>(callback: T, deps: unknown[]): T {
+	const hook = updateWorkInProgressHook(NanoHookTag.Callback);
 	const payload = hook.payload;
 	if (deps !== undefined && !arrayEquals(payload.deps, deps)) {
 		const updatedPayload = hook.payload = createCallbackPayload(callback, deps);
@@ -344,8 +345,8 @@ function updateCallback(callback, deps) {
 	}
 }
 
-function updateMemo(create, deps) {
-	const hook = updateWorkInProgressHook(memoHookTag);
+function updateMemo<T>(create: () => T, deps: unknwon[]): T {
+	const hook = updateWorkInProgressHook(NanoHookTag.Memo);
 	const payload = hook.payload;
 	if (deps !== undefined && !arrayEquals(payload.deps, deps)) {
 		const newPayload = createMemoPayload(create, deps);
@@ -356,34 +357,34 @@ function updateMemo(create, deps) {
 	}
 }
 
-export function useState<T>(initialState: T): T {
-	return hookDispatcher.useState(initialState);
+export function useState<T>(initialState: T): [T, (value: T) => void] {
+	return (hookDispatcher as NanoHookDispatcher).useState(initialState);
 }
 
-export function useLayoutEffect(create, deps) {
-	return hookDispatcher.useLayoutEffect(create, deps);
+export function useLayoutEffect(create: NanoEffectCreator, deps: unknown[]) {
+	(hookDispatcher as NanoHookDispatcher).useLayoutEffect(create, deps);
 }
 
-export function useContext(contextType) {
-	return hookDispatcher.useContext(contextType);
+export function useContext<T>(context: NanoContext<T>): T {
+	return (hookDispatcher as NanoHookDispatcher).useContext(context);
 }
 
-export function useStyle(create) {
-	return hookDispatcher.useStyle(create);
+export function useStyle<T extends StyleBundle>(create: StyleProvider<T>): T {
+	return (hookDispatcher as NanoHookDispatcher).useStyle(create);
 }
 
-export function useReducer(reducer, initialState) {
-	return hookDispatcher.useReducer(reducer, initialState);
+export function useReducer<T,A>(reducer: NanoReducer<T,A>, initialState: T): [T, (action: A) => void]  {
+	return (hookDispatcher as NanoHookDispatcher).useReducer(reducer, initialState);
 }
 
-export function useRef(initialValue) {
-	return hookDispatcher.useRef(initialValue);
+export function useRef<T>(initialValue: T): NanoRef<T> {
+	return (hookDispatcher as NanoHookDispatcher).useRef(initialValue);
 }
 
-export function useCallback(callback, deps) {
-	return hookDispatcher.useCallback(callback, deps);
+export function useCallback<T extends (...args: unknown[]) => unknown>(callback: T, deps: unknown[]): T {
+	return (hookDispatcher as NanoHookDispatcher).useCallback(callback, deps);
 }
 
-export function useMemo(create, deps) {
-	return hookDispatcher.useMemo(create, deps);
+export function useMemo<T>(create: () => T, deps: unknown[]): T {
+	return (hookDispatcher as NanoHookDispatcher).useMemo(create, deps);
 }

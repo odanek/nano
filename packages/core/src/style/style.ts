@@ -1,5 +1,5 @@
 export type StyleId = string;
-export type StyleProvider = () => StyleBundle;
+export type StyleProvider<T extends StyleBundle = StyleBundle> = () => T;
 export type StyleBundle = {
   [key: string]: Style | StyleBundle;
 };
