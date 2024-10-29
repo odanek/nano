@@ -2,6 +2,7 @@ import { Counter } from "@nano-ui/util";
 import { NanoContext } from "./context";
 import { StyleBundle, StyleProvider } from "../style/style";
 import { NanoRef } from "./ref";
+import { AnyFunction } from "@nano-ui/type";
 
 export class NanoHook<P = unknown> {
     public tag: NanoHookTag;
@@ -35,8 +36,8 @@ export type NanoUseContextHook = <T,>(context: NanoContext<T>) => T;
 export type NanoUseStyleHook = <T extends StyleBundle,>(provider: StyleProvider<T>) => T;
 export type NanoUseReducerHook = <T,A,>(reducer: NanoReducer<T, A>, initialState: T) => [T, (action: A) => void];
 export type NanoUseRefHook = <T,>(initialValue: T) => NanoRef<T>;
-export type NanoUseCallbackHook = <T extends (...args: unknown[]) => unknown>(callback: T, deps: unknown[]) => T;
-export type NanoUseMemoHook = <T,>(create: () => T, deps: unknown[]) => T;
+export type NanoUseCallbackHook = <T extends AnyFunction>(callback: T, deps?: unknown[]) => T;
+export type NanoUseMemoHook = <T,>(create: () => T, deps?: unknown[]) => T;
 
 export type NanoHookDispatcher = {
 	useState: NanoUseStateHook,

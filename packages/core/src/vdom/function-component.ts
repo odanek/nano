@@ -1,3 +1,4 @@
+import { arrayEquals } from '@nano-ui/util';
 import { connectBundle, disconnectBundle } from '../style/manager';
 import { StyleBundle, StyleProvider } from '../style/style';
 import { compareContext, NanoContext, readContext } from './context';
@@ -7,6 +8,7 @@ import { NanoEffectCreator, NanoHook, NanoHookDispatcher, NanoHookTag, NanoReduc
 import { NanoRef } from './ref';
 import { findFiberRoot } from './traversal';
 import { NanoComponent, NanoEffectTag } from './type';
+import { AnyFunction, isValue } from '@nano-ui/type';
 
 type NanoHookVisitCallback = (currentHook: NanoHook | null, finishedWorkHook: NanoHook | null) => void;
 
@@ -150,7 +152,7 @@ function mountWorkInProgressHook(tag: NanoHookTag) {
 	const hook = new NanoHook(tag);
 
 	if (workInProgressHook === null) {
-		workInProgressFiber.memoizedState = hook;
+		(workInProgressFiber as NanoFiber).memoizedState = hook;
 	} else {
 		workInProgressHook.next = hook;
 	}
@@ -178,11 +180,11 @@ function updateWorkInProgressHook(tag: NanoHookTag) {
 	return hook;
 }
 
-function stateReducer(currentState: unknown, value: unknown): unknown {
+function stateReducer<T>(currentState: T, value: T): T {
 	return value;
 }
 
-function dispatchReducer(payload, reducer, action) {
+function dispatchReducer<T,A>(payload, reducer: NanoReducer<T,A>, action: A) {
 	const memoizedState = payload.memoizedState;
 	const currentState = payload.dirty ? payload.nextState : memoizedState;
 	const nextState = reducer(currentState, action);
@@ -197,7 +199,7 @@ function dispatchReducer(payload, reducer, action) {
 	}
 }
 
-function createEffectPayload(create, deps) {
+function createEffectPayload(create: NanoEffectCreator, deps?: unknown[]) {
 	return {
 		create,
 		destroy: undefined,
@@ -205,21 +207,21 @@ function createEffectPayload(create, deps) {
 	};
 }
 
-function createCallbackPayload(callback, deps) {
+function createCallbackPayload(callback: AnyFunction, deps?: unknown[]) {
 	return {
 		callback: isValue(deps) ? callback.bind(null, ...deps) : callback,
 		deps
 	};
 }
 
-function createMemoPayload(create, deps) {
+function createMemoPayload<T>(create: () => T, deps?: unknown[]) {
 	return {
-		value: create(...(deps ?? emptyArray)),
+		value: create(),
 		deps
 	};
 }
 
-function addContextType(fiber, contextType) {
+function addContextType(fiber: NanoFiber, contextType) {
 	let contextTypes = fiber.contextTypes;
 	if (fiber.contextTypes === null) {
 		contextTypes = [];
@@ -234,10 +236,10 @@ function mountState<T>(initialState: T): [T, (value: T) => void] {
 	return mountReducer(stateReducer, initialState);
 }
 
-function mountLayoutEffect(create, deps) {
+function mountLayoutEffect(create: NanoEffectCreator, deps?: unknown[]) {
 	const hook = mountWorkInProgressHook(NanoHookTag.LayoutEffect);
 	hook.payload = createEffectPayload(create, deps);
-	workInProgressFiber.effectTag |= lifecycleEffectTag;
+	workInProgressFiber.effectTag |= NanoEffectTag.Lifecycle;
 }
 
 function mountContext<T>(context: NanoContext<T>): T {
@@ -266,22 +268,21 @@ function mountReducer<T,A>(reducer: NanoReducer<T,A>, initialState: T): [T, (act
 	return [initialState, payload.dispatch];
 }
 
-function mountRef(initialValue) {
-	const hook = mountWorkInProgressHook(refHookTag);
-	const ref = new Ref();
-	ref.current = initialValue;
+function mountRef<T>(initialValue: T): NanoRef<T> {
+	const hook = mountWorkInProgressHook(NanoHookTag.Ref);
+	const ref = new NanoRef(initialValue);
 	hook.payload = ref;
 	return ref;
 }
 
-function mountCallback(callback, deps) {
-	const hook = mountWorkInProgressHook(callbackHookTag);
+function mountCallback<T extends AnyFunction>(callback: T, deps?: unknown[]): T {
+	const hook = mountWorkInProgressHook(NanoHookTag.Callback);
 	const payload = hook.payload = createCallbackPayload(callback, deps);
 	return payload.callback;
 }
 
-function mountMemo(create, deps) {
-	const hook = mountWorkInProgressHook(memoHookTag);
+function mountMemo<T>(create: () => T, deps?: unknown[]): T {
+	const hook = mountWorkInProgressHook(NanoHookTag.Memo);
 	const payload = createMemoPayload(create, deps);
 	hook.payload = payload;
 	return payload.value;
@@ -291,15 +292,15 @@ function updateState<T>(initialState: T): [T, (value: T) => void] {
 	return updateReducer(stateReducer, initialState);
 }
 
-function updateLayoutEffect(create, deps) {
-	const hook = updateWorkInProgressHook(layoutEffectHookTag);
+function updateLayoutEffect(create: () => NanoEffectCreator, deps?: unknown[]) {
+	const hook = updateWorkInProgressHook(NanoHookTag.LayoutEffect);
 	if (deps === undefined || !arrayEquals(hook.payload.deps, deps)) {
 		hook.payload = {
 			create,
 			destroy: null,
 			deps
 		};
-		workInProgressFiber.effectTag |= lifecycleEffectTag;
+		workInProgressFiber.effectTag |= NanoEffectTag.Lifecycle;
 	}
 }
 
@@ -334,7 +335,7 @@ function updateRef<T>(initialValue: T): NanoRef<T> {
 	return hook.payload as NanoRef<T>;
 }
 
-function updateCallback<T extends (...args: unknown[]) => unknown>(callback: T, deps: unknown[]): T {
+function updateCallback<T extends AnyFunction>(callback: T, deps?: unknown[]): T {
 	const hook = updateWorkInProgressHook(NanoHookTag.Callback);
 	const payload = hook.payload;
 	if (deps !== undefined && !arrayEquals(payload.deps, deps)) {
@@ -345,7 +346,7 @@ function updateCallback<T extends (...args: unknown[]) => unknown>(callback: T, 
 	}
 }
 
-function updateMemo<T>(create: () => T, deps: unknwon[]): T {
+function updateMemo<T>(create: () => T, deps?: unknown[]): T {
 	const hook = updateWorkInProgressHook(NanoHookTag.Memo);
 	const payload = hook.payload;
 	if (deps !== undefined && !arrayEquals(payload.deps, deps)) {
@@ -361,7 +362,7 @@ export function useState<T>(initialState: T): [T, (value: T) => void] {
 	return (hookDispatcher as NanoHookDispatcher).useState(initialState);
 }
 
-export function useLayoutEffect(create: NanoEffectCreator, deps: unknown[]) {
+export function useLayoutEffect(create: NanoEffectCreator, deps?: unknown[]) {
 	(hookDispatcher as NanoHookDispatcher).useLayoutEffect(create, deps);
 }
 
@@ -381,10 +382,10 @@ export function useRef<T>(initialValue: T): NanoRef<T> {
 	return (hookDispatcher as NanoHookDispatcher).useRef(initialValue);
 }
 
-export function useCallback<T extends (...args: unknown[]) => unknown>(callback: T, deps: unknown[]): T {
+export function useCallback<T extends AnyFunction>(callback: T, deps?: unknown[]): T {
 	return (hookDispatcher as NanoHookDispatcher).useCallback(callback, deps);
 }
 
-export function useMemo<T>(create: () => T, deps: unknown[]): T {
+export function useMemo<T>(create: () => T, deps?: unknown[]): T {
 	return (hookDispatcher as NanoHookDispatcher).useMemo(create, deps);
 }
