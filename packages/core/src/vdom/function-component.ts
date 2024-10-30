@@ -1,15 +1,16 @@
-import { arrayEquals } from '@nano-ui/util';
+import { arrayEquals, objectEquals } from '@nano-ui/util';
 import { connectBundle, disconnectBundle } from '../style/manager';
 import { StyleBundle, StyleProvider } from '../style/style';
 import { compareContext, NanoContext, readContext } from './context';
 import { NanoFiber } from './fiber';
 import { NanoFiberRoot } from './fiber-root';
-import { NanoEffectCreator, NanoHook, NanoHookDispatcher, NanoHookTag, NanoReducer } from './hook';
+import { NanoEffectCreator, NanoHook, NanoHookDispatcher, NanoHookTag, NanoReducer, NanoEffectHookPayload, NanoReducerHookPayload } from './hook';
 import { NanoRef } from './ref';
 import { findFiberRoot } from './traversal';
 import { NanoComponent, NanoEffectTag } from './type';
-import { AnyFunction, isValue } from '@nano-ui/type';
+import { AnyFunction, isValue, PlainObject } from '@nano-ui/type';
 
+type NanoFunctionComponentProps = PlainObject;
 type NanoHookVisitCallback = (currentHook: NanoHook | null, finishedWorkHook: NanoHook | null) => void;
 
 const emptyArray = Object.freeze([]);
@@ -80,15 +81,18 @@ export function updateFunctionComponent(current: NanoFiber, workInProgress: Nano
 		workInProgress.memoizedContext = current.memoizedContext;
 	}
 
-	const oldProps = current.memoizedProps;
-	const newProps = workInProgress.pendingProps;
+	const oldProps = current.memoizedProps as NanoFunctionComponentProps;
+	const newProps = workInProgress.pendingProps as NanoFunctionComponentProps;
 	if (!objectEquals(oldProps, newProps)) {
 		return true;
 	}
 
 	for (let hook = current.memoizedState as NanoHook | null; hook !== null; hook = hook.next) {
-		if (hook.tag === NanoHookTag.Reducer && hook.payload.dirty) {
-			return true;
+		if (hook.tag === NanoHookTag.Reducer) {
+			const payload =  hook.payload as NanoReducerHookPayload;
+			if (payload.dirty) {
+				return true;
+			}			
 		}
 	}
 
@@ -97,11 +101,10 @@ export function updateFunctionComponent(current: NanoFiber, workInProgress: Nano
 
 export function mountLifecycleEffects(current: NanoFiber | null, finishedWork: NanoFiber) {
 	visitHooks(current, finishedWork, (currentHook, finishedWorkHook) => {
-		if (finishedWorkHook.tag === NanoHookTag.LayoutEffect) {
-			const payload = finishedWorkHook.payload;
+		if (finishedWorkHook !== null && finishedWorkHook.tag === NanoHookTag.LayoutEffect) {
+			const payload = finishedWorkHook.payload as NanoEffectHookPayload;
 			if (currentHook === null || currentHook.payload !== payload) {
-				const deps = payload.deps ?? emptyArray;
-				payload.destroy = payload.create(...deps);
+				payload.destroy = payload.create();
 			}
 		}
 	});
@@ -109,8 +112,8 @@ export function mountLifecycleEffects(current: NanoFiber | null, finishedWork: N
 
 export function unmountLifecycleEffects(current: NanoFiber | null, finishedWork: NanoFiber | null) {
 	visitHooks(current, finishedWork, (currentHook, finishedWorkHook) => {
-		if (currentHook.tag === NanoHookTag.LayoutEffect) {
-			const payload = currentHook.payload;
+		if (currentHook !== null && currentHook.tag === NanoHookTag.LayoutEffect) {
+			const payload = currentHook.payload as NanoEffectHookPayload;
 			if ((finishedWorkHook === null || finishedWorkHook.payload !== payload) && payload.destroy !== undefined) {
 				payload.destroy();
 			}
@@ -184,10 +187,10 @@ function stateReducer<T>(currentState: T, value: T): T {
 	return value;
 }
 
-function dispatchReducer<T,A>(payload, reducer: NanoReducer<T,A>, action: A) {
+function dispatchReducer<T,A>(payload: NanoReducerHookPayload<T,A>, reducer: NanoReducer<T,A>, action: A) {
 	const memoizedState = payload.memoizedState;
 	const currentState = payload.dirty ? payload.nextState : memoizedState;
-	const nextState = reducer(currentState, action);
+	const nextState = reducer(currentState as T, action);
 	const dirty = nextState !== memoizedState;
 	if (dirty) {
 		payload.nextState = nextState;
@@ -199,7 +202,7 @@ function dispatchReducer<T,A>(payload, reducer: NanoReducer<T,A>, action: A) {
 	}
 }
 
-function createEffectPayload(create: NanoEffectCreator, deps?: unknown[]) {
+function createLayoutEffectPayload(create: NanoEffectCreator, deps?: unknown[]): NanoEffectHookPayload {
 	return {
 		create,
 		destroy: undefined,
@@ -207,9 +210,20 @@ function createEffectPayload(create: NanoEffectCreator, deps?: unknown[]) {
 	};
 }
 
+function createReducerPayload<T,A>(reducer: NanoReducer<T,A>, initialState: T): NanoReducerHookPayload<T,A> {
+	const payload = {
+		memoizedState: initialState,
+		nextState: null,
+		dirty: false,
+		dispatch: (action: A) => dispatchReducer(payload, reducer, action),
+		fiber: workInProgressFiber as NanoFiber,
+	};
+	return payload;
+}
+
 function createCallbackPayload(callback: AnyFunction, deps?: unknown[]) {
 	return {
-		callback: isValue(deps) ? callback.bind(null, ...deps) : callback,
+		callback,
 		deps
 	};
 }
@@ -238,7 +252,7 @@ function mountState<T>(initialState: T): [T, (value: T) => void] {
 
 function mountLayoutEffect(create: NanoEffectCreator, deps?: unknown[]) {
 	const hook = mountWorkInProgressHook(NanoHookTag.LayoutEffect);
-	hook.payload = createEffectPayload(create, deps);
+	hook.payload = createLayoutEffectPayload(create, deps);
 	workInProgressFiber.effectTag |= NanoEffectTag.Lifecycle;
 }
 
@@ -257,13 +271,7 @@ function mountStyle(bundle) {
 
 function mountReducer<T,A>(reducer: NanoReducer<T,A>, initialState: T): [T, (action: A) => void] {
 	const hook = mountWorkInProgressHook(NanoHookTag.Reducer);
-	const payload = {
-		memoizedState: initialState,
-		nextState: null,
-		dirty: false,
-		dispatch: (action) => dispatchReducer(payload, reducer, action),
-		fiber: workInProgressFiber,
-	};
+	const payload = createReducerPayload(reducer, initialState);
 	hook.payload = payload;
 	return [initialState, payload.dispatch];
 }
@@ -292,7 +300,7 @@ function updateState<T>(initialState: T): [T, (value: T) => void] {
 	return updateReducer(stateReducer, initialState);
 }
 
-function updateLayoutEffect(create: () => NanoEffectCreator, deps?: unknown[]) {
+function updateLayoutEffect(create: NanoEffectCreator, deps?: unknown[]) {
 	const hook = updateWorkInProgressHook(NanoHookTag.LayoutEffect);
 	if (deps === undefined || !arrayEquals(hook.payload.deps, deps)) {
 		hook.payload = {
