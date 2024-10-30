@@ -77,12 +77,17 @@ export type NanoReducerHookPayload<T = unknown, A = unknown> = {
   fiber: NanoFiber;
 };
 
-export type NanoCallbackHookPayload = {
-  callback: AnyFunction;
+export type NanoCallbackHookPayload<T extends AnyFunction> = {
+  callback: T;
   deps: unknown[] | undefined;
 };
 
 export type NanoMemoHookPayload<T> = {
   value: T;
   deps: unknown[] | undefined;
+};
+
+export type NanoStyleHookPayload<T extends StyleBundle = StyleBundle> = {
+  provider: StyleProvider<T>;
+  bundle: T;
 };

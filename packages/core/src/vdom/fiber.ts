@@ -10,6 +10,7 @@ import { NanoFiberRoot } from './fiber-root';
 import { PlainObject } from '@nano-ui/type';
 import { NanoHostComponentStateNode } from './host-component';
 import { NanoHostTextStateNode } from './host-text';
+import { NanoContextKey } from './context';
 
 const fiberKey = Symbol();
 export class NanoFiber<P = unknown> {
@@ -30,7 +31,7 @@ export class NanoFiber<P = unknown> {
   public memoizedProps: P | null;
   public memoizedState: unknown;
   public fullContext: Record<string, unknown> | null;
-  public contextTypes: Array<string> | null;
+  public contextTypes: Array<NanoContextKey> | null;
   public memoizedContext: Record<string, unknown> | null;
   public memoizedStyle: object | null;
   public updateQueue: Array<unknown> | null;
