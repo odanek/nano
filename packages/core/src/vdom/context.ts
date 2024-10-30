@@ -1,8 +1,8 @@
 import { NanoFiber } from './fiber';
 import { NanoComponent, NanoPropsWithChildren } from './type';
 
-export type NanoContext<T> = NanoComponent<
-NanoContextComponentProps<T>
+export type NanoContext<T = unknown> = NanoComponent<
+  NanoContextComponentProps<T>
 >;
 export type NanoContextComponentProps<T> = NanoPropsWithChildren<{ value: T }>;
 
@@ -48,4 +48,9 @@ export function compareContext(current: NanoFiber, workInProgress: NanoFiber) {
     }
   }
   return true;
+}
+
+export function getContextKey<T>(context: NanoContext<T>): string {
+  // @ts-expect-error Marker is always set
+  return context[contextMarker];
 }

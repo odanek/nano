@@ -1,14 +1,14 @@
+import { AnyFunction, PlainObject } from '@nano-ui/type';
 import { arrayEquals, objectEquals } from '@nano-ui/util';
 import { connectBundle, disconnectBundle } from '../style/manager';
 import { StyleBundle, StyleProvider } from '../style/style';
-import { compareContext, NanoContext, readContext } from './context';
+import { compareContext, getContextKey, NanoContext, readContext } from './context';
 import { NanoFiber } from './fiber';
 import { NanoFiberRoot } from './fiber-root';
-import { NanoEffectCreator, NanoHook, NanoHookDispatcher, NanoHookTag, NanoReducer, NanoEffectHookPayload, NanoReducerHookPayload } from './hook';
+import { NanoEffectCreator, NanoHook, NanoHookDispatcher, NanoHookTag, NanoReducer, NanoEffectHookPayload, NanoReducerHookPayload, NanoCallbackHookPayload, NanoMemoHookPayload } from './hook';
 import { NanoRef } from './ref';
 import { findFiberRoot } from './traversal';
 import { NanoComponent, NanoEffectTag } from './type';
-import { AnyFunction, isValue, PlainObject } from '@nano-ui/type';
 
 type NanoFunctionComponentProps = PlainObject;
 type NanoHookVisitCallback = (currentHook: NanoHook | null, finishedWorkHook: NanoHook | null) => void;
@@ -124,15 +124,15 @@ export function unmountLifecycleEffects(current: NanoFiber | null, finishedWork:
 export function mountStyleEffects(current: NanoFiber | null, finishedWork: NanoFiber | null) {
 	visitHooks(current, finishedWork, (currentHook, finishedWorkHook) => {
 		if (currentHook !== null && currentHook.tag === NanoHookTag.Style) {
-			const payload = currentHook.payload;
+			const payload = currentHook.payload as StyleBundle;
 			if (finishedWorkHook == null) {				
 				disconnectBundle(payload);
 			} else if (finishedWorkHook.payload !== payload) {				
 				disconnectBundle(payload);
-				connectBundle(finishedWorkHook.payload);
+				connectBundle(finishedWorkHook.payload as StyleBundle);
 			}
 		} else if (finishedWorkHook !== null && finishedWorkHook.tag === NanoHookTag.Style) {
-			connectBundle(finishedWorkHook.payload);
+			connectBundle(finishedWorkHook.payload as StyleBundle);
 		}
 	});
 }
@@ -221,28 +221,27 @@ function createReducerPayload<T,A>(reducer: NanoReducer<T,A>, initialState: T): 
 	return payload;
 }
 
-function createCallbackPayload(callback: AnyFunction, deps?: unknown[]) {
+function createCallbackPayload(callback: AnyFunction, deps?: unknown[]): NanoCallbackHookPayload {
 	return {
 		callback,
 		deps
 	};
 }
 
-function createMemoPayload<T>(create: () => T, deps?: unknown[]) {
+function createMemoPayload<T>(create: () => T, deps?: unknown[]): NanoMemoHookPayload<T> {
 	return {
 		value: create(),
 		deps
 	};
 }
 
-function addContextType(fiber: NanoFiber, contextType) {
-	let contextTypes = fiber.contextTypes;
-	if (fiber.contextTypes === null) {
-		contextTypes = [];
-		fiber.contextTypes = contextTypes;
-	}
-	if (!contextTypes.includes(contextType)) {
-		contextTypes.push(contextType);
+function addContextType(fiber: NanoFiber, context: NanoContext) {
+	const contextTypes = fiber.contextTypes ?? [];
+	fiber.contextTypes = contextTypes;
+
+	const key = getContextKey(context);
+	if (!contextTypes.includes(key)) {
+		contextTypes.push(key);
 	}
 }
 
@@ -253,7 +252,7 @@ function mountState<T>(initialState: T): [T, (value: T) => void] {
 function mountLayoutEffect(create: NanoEffectCreator, deps?: unknown[]) {
 	const hook = mountWorkInProgressHook(NanoHookTag.LayoutEffect);
 	hook.payload = createLayoutEffectPayload(create, deps);
-	workInProgressFiber.effectTag |= NanoEffectTag.Lifecycle;
+	(workInProgressFiber as NanoFiber).effectTag |= NanoEffectTag.Lifecycle;
 }
 
 function mountContext<T>(context: NanoContext<T>): T {

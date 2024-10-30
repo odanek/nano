@@ -32,35 +32,35 @@ export type NanoReducer<T, A> = (state: T, action: A) => T;
 export type NanoEffectCleanup = () => void;
 export type NanoEffectCreator = () => NanoEffectCleanup | undefined;
 
-export type NanoUseStateHook = <T>(initialState: T) => [T, (value: T) => void];
-export type NanoUseLayoutEffectHook = (
+export type NanoStateHook = <T>(initialState: T) => [T, (value: T) => void];
+export type NanoLayoutEffectHook = (
   create: NanoEffectCreator,
   deps?: unknown[],
 ) => void;
-export type NanoUseContextHook = <T>(context: NanoContext<T>) => T;
-export type NanoUseStyleHook = <T extends StyleBundle>(
+export type NanoContextHook = <T>(context: NanoContext<T>) => T;
+export type NanoStyleHook = <T extends StyleBundle>(
   provider: StyleProvider<T>,
 ) => T;
-export type NanoUseReducerHook = <T, A>(
+export type NanoReducerHook = <T, A>(
   reducer: NanoReducer<T, A>,
   initialState: T,
 ) => [T, (action: A) => void];
-export type NanoUseRefHook = <T>(initialValue: T) => NanoRef<T>;
-export type NanoUseCallbackHook = <T extends AnyFunction>(
+export type NanoRefHook = <T>(initialValue: T) => NanoRef<T>;
+export type NanoCallbackHook = <T extends AnyFunction>(
   callback: T,
   deps?: unknown[],
 ) => T;
-export type NanoUseMemoHook = <T>(create: () => T, deps?: unknown[]) => T;
+export type NanoMemoHook = <T>(create: () => T, deps?: unknown[]) => T;
 
 export type NanoHookDispatcher = {
-  useState: NanoUseStateHook;
-  useLayoutEffect: NanoUseLayoutEffectHook;
-  useContext: NanoUseContextHook;
-  useStyle: NanoUseStyleHook;
-  useReducer: NanoUseReducerHook;
-  useRef: NanoUseRefHook;
-  useCallback: NanoUseCallbackHook;
-  useMemo: NanoUseMemoHook;
+  useState: NanoStateHook;
+  useLayoutEffect: NanoLayoutEffectHook;
+  useContext: NanoContextHook;
+  useStyle: NanoStyleHook;
+  useReducer: NanoReducerHook;
+  useRef: NanoRefHook;
+  useCallback: NanoCallbackHook;
+  useMemo: NanoMemoHook;
 };
 
 export type NanoEffectHookPayload = {
@@ -75,4 +75,14 @@ export type NanoReducerHookPayload<T = unknown, A = unknown> = {
   dirty: boolean;
   dispatch: (action: A) => void;
   fiber: NanoFiber;
+};
+
+export type NanoCallbackHookPayload = {
+  callback: AnyFunction;
+  deps: unknown[] | undefined;
+};
+
+export type NanoMemoHookPayload<T> = {
+  value: T;
+  deps: unknown[] | undefined;
 };
