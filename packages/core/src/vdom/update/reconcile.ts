@@ -1,6 +1,7 @@
 import { isArray, isIterable, isNumber, isString } from "@nano-ui/type";
 import { NanoElement } from "../element";
 import { createFiberFromElement, createWorkInProgress, NanoFiber } from "../fiber";
+import { NanoEffectTag, NanoElementTag } from "../type";
 
 export function cloneChildFibers(current: NanoFiber, workInProgress: NanoFiber) {
 	if (current.child === null) {
@@ -134,20 +135,20 @@ function childReconciler(shouldTrackSideEffects: boolean) {
 		if (current !== null) {
 			const oldIndex = current.index;
 			if (oldIndex < lastPlacedIndex) { // Move
-				newFiber.effectTag = placementEffectTag;
+				newFiber.effectTag = NanoEffectTag.Placement;
 				return lastPlacedIndex;
 			} else {
 				return oldIndex;
 			}
 		} else { // Insertion
-			newFiber.effectTag = placementEffectTag;
+			newFiber.effectTag = NanoEffectTag.Placement;
 			return lastPlacedIndex;
 		}
 	}
 
-	function placeSingleChild(newFiber) {
+	function placeSingleChild(newFiber: NanoFiber) {
 		if (shouldTrackSideEffects && newFiber.alternate === null) {
-			newFiber.effectTag = placementEffectTag;
+			newFiber.effectTag = NanoEffectTag.Placement;
 		}
 		return newFiber;
 	}
@@ -270,14 +271,14 @@ function childReconciler(shouldTrackSideEffects: boolean) {
 	function reconcileChildFibers(returnFiber, currentFirstChild, element) {
 		if (isValue(element)) {
 			const coercedElement = coerceElement(element);
-			if (coercedElement.tag === fragmentFiberTag && coercedElement.key === null) {
+			if (coercedElement.tag === NanoElementTag.Fragment && coercedElement.key === null) {
 				return reconcileChildren(returnFiber, currentFirstChild, coercedElement.props.children);
 			} else {
 				return placeSingleChild(reconcileSingleElement(returnFiber, currentFirstChild, coercedElement));
 			}
 		} else if (element === undefined) {
 			const parentTag = returnFiber.tag;
-			if (parentTag === functionComponentFiberTag) {
+			if (parentTag === NanoElementTag.FunctionComponent) {
 				throw new Error('Nothing was returned from render. You may miss a return statement or, to render nothing, return null.');
 			}
 			return deleteRemainingChildren(returnFiber, currentFirstChild);

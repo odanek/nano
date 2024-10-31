@@ -2,10 +2,8 @@ import { NanoFiber } from './fiber';
 import { NanoComponent, NanoPropsWithChildren } from './type';
 
 export type NanoContextKey = number;
-export type NanoContext<T = unknown> = NanoComponent<
-  NanoContextComponentProps<T>
->;
-export type NanoContextComponentProps<T> = NanoPropsWithChildren<{ value: T }>;
+export type NanoContext<T = unknown> = NanoComponent<NanoContextProps<T>>;
+export type NanoContextProps<T = unknown> = NanoPropsWithChildren<{ value: T }>;
 
 let id = 1;
 const contextMarker = Symbol('nano-context-marker');
@@ -13,7 +11,7 @@ export const emptyContext: Record<string, unknown> = Object.freeze({});
 
 // TODO Specify context name?
 export function createContext<T>(): NanoContext<T> {
-  const Context = () => null;
+  const Context = () => null; // TODO: Return NanoElement.context() here so that no special casing is needed in jsx
   Context[contextMarker] = id++;
   return Context;
 }

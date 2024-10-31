@@ -1,3 +1,5 @@
+// TODO Rename everything to start with Nano
+
 export type StyleId = string;
 export type StyleProvider<T extends StyleBundle = StyleBundle> = () => T;
 export type StyleBundle = {
