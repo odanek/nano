@@ -1,7 +1,10 @@
-import { isArray, isIterable, isNumber, isString } from "@nano-ui/type";
+import { isArray, isIterable, isNumber, isString, isValue } from "@nano-ui/type";
 import { NanoElement } from "../element";
 import { createFiberFromElement, createWorkInProgress, NanoFiber } from "../fiber";
-import { NanoEffectTag, NanoElementTag } from "../type";
+import { NanoEffectTag, NanoElementKey, NanoElementTag, NanoNode } from "../type";
+import { NanoFragmentProps } from "../fragment";
+
+type NanoReconciler = (returnFiber: NanoFiber, currentFirstChild: NanoFiber | null, element: unknown) => NanoFiber<unknown> | null;
 
 export function cloneChildFibers(current: NanoFiber, workInProgress: NanoFiber) {
 	if (current.child === null) {
@@ -25,7 +28,7 @@ export function cloneChildFibers(current: NanoFiber, workInProgress: NanoFiber) 
 	}
 }
 
-function mapRemainingChildren(returnFiber: NanoFiber, currentFirstChild: NanoFiber): Map<unknown, NanoFiber> {
+function mapRemainingChildren(returnFiber: NanoFiber, currentFirstChild: NanoFiber): Map<NanoElementKey, NanoFiber> {
 	const existingChildren = new Map();
 
 	let existingChild: NanoFiber | null = currentFirstChild;
@@ -40,7 +43,7 @@ function mapRemainingChildren(returnFiber: NanoFiber, currentFirstChild: NanoFib
 	return existingChildren;
 }
 
-function updateElement(returnFiber: NanoFiber, current: NanoFiber, element: NanoElement): NanoFiber {
+function updateElement(returnFiber: NanoFiber, current: NanoFiber | null, element: NanoElement): NanoFiber {
 	if (current !== null && current.tag === element.tag && current.type === element.type) { // Update
 		const existing = createWorkInProgress(current, element.props);
 		existing.ref = element.ref;
@@ -59,7 +62,7 @@ function coerceElement(element: unknown): NanoElement {
 	} else if (isString(element) || isNumber(element)) {
 		return NanoElement.text(element.toString());
 	} else if (isArray(element) || isIterable(element)) {
-		return NanoElement.fragment(element);
+		return NanoElement.fragment(element as NanoNode[], null);
 	} else {
 		throw new Error('Invalid virtual dom node: ' + element);
 	}
@@ -76,7 +79,7 @@ function createChild(returnFiber: NanoFiber, element: unknown): NanoFiber | null
 	return fiber;
 }
 
-function updateSlot(returnFiber: NanoFiber, oldFiber: NanoFiber, element: unknown): NanoFiber | null {
+function updateSlot(returnFiber: NanoFiber, oldFiber: NanoFiber | null, element: unknown): NanoFiber | null {
 	if (element === null || element === undefined) {
 		return null;
 	}
@@ -86,19 +89,19 @@ function updateSlot(returnFiber: NanoFiber, oldFiber: NanoFiber, element: unknow
 	return coercedElement.key === key ? updateElement(returnFiber, oldFiber, coercedElement) : null;
 }
 
-function updateFromMap(existingChildren, returnFiber, newIdx, element) {
+function updateFromMap(existingChildren: Map<NanoElementKey, NanoFiber>, returnFiber: NanoFiber, newIdx: number, element: unknown) {
 	if (element === null || element === undefined) {
 		return null;
 	}
 
 	const coercedElement = coerceElement(element);
 	const key = coercedElement.key ?? newIdx;
-	const matchedFiber = existingChildren.get(key) || null;
+	const matchedFiber = existingChildren.get(key) ?? null;
 	return updateElement(returnFiber, matchedFiber, coercedElement);
 }
 
-function childReconciler(shouldTrackSideEffects: boolean) {
-	function deleteChild(returnFiber, childToDelete) {
+function childReconciler(shouldTrackSideEffects: boolean): NanoReconciler {
+	function deleteChild(returnFiber: NanoFiber, childToDelete: NanoFiber) {
 		if (!shouldTrackSideEffects) {
 			return;
 		}
@@ -106,13 +109,13 @@ function childReconciler(shouldTrackSideEffects: boolean) {
 		const deletions = returnFiber.deletions;
 		if (deletions === null) {
 			returnFiber.deletions = [childToDelete];
-			returnFiber.effectTag |= deletionEffectTag;
+			returnFiber.effectTag |= NanoEffectTag.Deletion;
 		} else {
 			deletions.push(childToDelete);
 		}
 	}
 
-	function deleteRemainingChildren(returnFiber, currentFirstChild) {
+	function deleteRemainingChildren(returnFiber: NanoFiber, currentFirstChild: NanoFiber | null): null {
 		if (!shouldTrackSideEffects) {
 			return null;
 		}
@@ -125,7 +128,7 @@ function childReconciler(shouldTrackSideEffects: boolean) {
 		return null;
 	}
 
-	function placeChild(newFiber, lastPlacedIndex, newIndex) {
+	function placeChild(newFiber: NanoFiber, lastPlacedIndex: number, newIndex: number): number {
 		newFiber.index = newIndex;
 		if (!shouldTrackSideEffects) {
 			return lastPlacedIndex;
@@ -146,14 +149,14 @@ function childReconciler(shouldTrackSideEffects: boolean) {
 		}
 	}
 
-	function placeSingleChild(newFiber: NanoFiber) {
+	function placeSingleChild(newFiber: NanoFiber): NanoFiber {
 		if (shouldTrackSideEffects && newFiber.alternate === null) {
 			newFiber.effectTag = NanoEffectTag.Placement;
 		}
 		return newFiber;
 	}
 
-	function reconcileChildren(returnFiber, currentFirstChild, newChildrenIterable) {
+	function reconcileChildren(returnFiber: NanoFiber, currentFirstChild: NanoFiber | null, newChildrenIterable: Iterable<NanoNode>): NanoFiber | null {
 		const iteratorFn = newChildrenIterable[Symbol.iterator];
 		const newChildren = iteratorFn.call(newChildrenIterable);
 		let resultingFirstChild = null;
@@ -247,7 +250,7 @@ function childReconciler(shouldTrackSideEffects: boolean) {
 		return resultingFirstChild;
 	}
 
-	function reconcileSingleElement(returnFiber, currentFirstChild, element) {
+	function reconcileSingleElement(returnFiber: NanoFiber, currentFirstChild: NanoFiber | null, element: NanoElement): NanoFiber {
 		const key = element.key;
 		let child = currentFirstChild;
 		while (child !== null) {
@@ -268,11 +271,12 @@ function childReconciler(shouldTrackSideEffects: boolean) {
 		return created;
 	}
 
-	function reconcileChildFibers(returnFiber, currentFirstChild, element) {
+	function reconcileChildFibers(returnFiber: NanoFiber, currentFirstChild: NanoFiber | null, element: unknown): NanoFiber | null {
 		if (isValue(element)) {
 			const coercedElement = coerceElement(element);
 			if (coercedElement.tag === NanoElementTag.Fragment && coercedElement.key === null) {
-				return reconcileChildren(returnFiber, currentFirstChild, coercedElement.props.children);
+				const props = coercedElement.props as NanoFragmentProps;
+				return reconcileChildren(returnFiber, currentFirstChild, props.children);
 			} else {
 				return placeSingleChild(reconcileSingleElement(returnFiber, currentFirstChild, coercedElement));
 			}
