@@ -7,10 +7,12 @@ import { NanoEventHandler } from '../event/dispatcher';
 export type NanoHostComponentStateNode = HTMLElement | SVGElement;
 export type NanoHostComponentStyle = Record<string, string>;
 
-export type NanoHostComponentCaptureEventProps = { // TODO
+export type NanoHostComponentCaptureEventProps = {
+  // TODO
   onCaptureClick?: NanoEventHandler;
 };
-export type NanoHostComponentBubbleEventProps = { // TODO
+export type NanoHostComponentBubbleEventProps = {
+  // TODO
   onClick?: NanoEventHandler;
 };
 export type NanoHostComponentAttributeProps = {

@@ -1,5 +1,5 @@
-import { NanoNode } from "./type";
+import { NanoNode } from './type';
 
 export type NanoFragmentProps = {
-    children: NanoNode[],
+  children: NanoNode[];
 };

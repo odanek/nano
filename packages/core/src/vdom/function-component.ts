@@ -1,5 +1,5 @@
 import { AnyFunction, PlainObject } from '@nano-ui/type';
-import { arrayEquals, objectEquals } from '@nano-ui/util';
+import { arrayEquals, objectEquals, objectHasOwnProperty } from '@nano-ui/util';
 import { connectBundle, disconnectBundle } from '../style/manager';
 import { StyleBundle, StyleProvider } from '../style/style';
 import {
@@ -33,7 +33,6 @@ type NanoHookVisitCallback = (
   finishedWorkHook: NanoHook | null,
 ) => void;
 
-const emptyArray = Object.freeze([]);
 let workInProgressFiber: NanoFiber | null = null;
 let workInProgressHook: NanoHook | null = null;
 let currentHook: NanoHook | null = null;
@@ -350,7 +349,7 @@ function mountContext<T>(context: NanoContext<T>): T {
   const key = getContextKey(context);
   addContextType(workInProgressFiber as NanoFiber, key);
   const fullContext = (workInProgressFiber as NanoFiber).fullContext;
-  if (fullContext === null || !fullContext.hasOwnProperty(key)) {
+  if (fullContext === null || !objectHasOwnProperty(fullContext, key)) {
     throw new Error('Context value not defined');
   }
   return fullContext[key] as T;
@@ -420,7 +419,7 @@ function updateContext<T>(context: NanoContext<T>): T {
   updateWorkInProgressHook(NanoHookTag.Context);
   const key = getContextKey(context);
   const memoizedContext = (workInProgressFiber as NanoFiber).memoizedContext;
-  if (memoizedContext === null || !memoizedContext.hasOwnProperty(key)) {
+  if (memoizedContext === null || !objectHasOwnProperty(memoizedContext, key)) {
     throw new Error('Context value not defined');
   }
   return memoizedContext[key] as T;
@@ -438,7 +437,9 @@ function updateStyle<T extends StyleBundle>(provider: StyleProvider<T>): T {
 }
 
 function updateReducer<T, A>(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   reducer: NanoReducer<T, A>,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   initialState: T,
 ): [T, (action: A) => void] {
   const hook = updateWorkInProgressHook(NanoHookTag.Reducer);
@@ -452,6 +453,7 @@ function updateReducer<T, A>(
   return [payload.memoizedState as T, payload.dispatch];
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function updateRef<T>(initialValue: T): NanoRef<T> {
   const hook = updateWorkInProgressHook(NanoHookTag.Ref);
   return hook.payload as NanoRef<T>;

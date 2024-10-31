@@ -1,4 +1,9 @@
-import { NanoElementTag, NanoElementKey, NanoElementType, NanoChildren, NanoNode } from './type';
+import {
+  NanoElementTag,
+  NanoElementKey,
+  NanoElementType,
+  NanoNode,
+} from './type';
 import { NanoRef } from './ref';
 import { PlainObject } from '@nano-ui/type';
 
@@ -38,6 +43,8 @@ export class NanoElement<P = PlainObject> {
 
   // TODO <Fragment> element, ktery bere i key
   static fragment(children: NanoNode[], key: NanoElementKey) {
-    return new NanoElement(NanoElementTag.Fragment, null, key, null, { children });
+    return new NanoElement(NanoElementTag.Fragment, null, key, null, {
+      children,
+    });
   }
 }

@@ -2,7 +2,10 @@ import { NanoFiber } from '../fiber';
 import { diffProperties } from '../host-component';
 import { NanoEffectTag, NanoElementTag } from '../type';
 
-export function completeWork(current: NanoFiber | null, workInProgress: NanoFiber) {
+export function completeWork(
+  current: NanoFiber | null,
+  workInProgress: NanoFiber,
+) {
   switch (workInProgress.tag) {
     case NanoElementTag.HostComponent:
       completeHostComponentWork(current, workInProgress);
@@ -27,7 +30,10 @@ function completeHostComponentWork(
   }
 }
 
-function completeHostTextWork(current: NanoFiber | null, workInProgress: NanoFiber) {
+function completeHostTextWork(
+  current: NanoFiber | null,
+  workInProgress: NanoFiber,
+) {
   if (current !== null) {
     const oldText = current.memoizedProps;
     const newText = workInProgress.pendingProps;
@@ -37,7 +43,10 @@ function completeHostTextWork(current: NanoFiber | null, workInProgress: NanoFib
   }
 }
 
-function completeHostPortalWork(current: NanoFiber | null, workInProgress: NanoFiber) {
+function completeHostPortalWork(
+  current: NanoFiber | null,
+  workInProgress: NanoFiber,
+) {
   if (current === null) {
     appendAllChildren(workInProgress.type as Element, workInProgress);
   }

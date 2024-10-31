@@ -72,7 +72,10 @@ function placeHostComponent(
   parent.insertBefore(stateNode, before);
 }
 
-export function commitMutation(current: NanoFiber | null, finishedWork: NanoFiber) {
+export function commitMutation(
+  current: NanoFiber | null,
+  finishedWork: NanoFiber,
+) {
   switch (finishedWork.tag) {
     case NanoElementTag.FunctionComponent:
       commitFunctionComponentMutation(current, finishedWork);
