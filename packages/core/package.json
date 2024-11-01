@@ -11,6 +11,12 @@
         "types": "./dist/index.d.ts",
         "default": "./dist/index.js"
       }
+    },
+    "./jsx-runtime": {
+      "import": {
+        "types": "./dist/jsx.d.ts",
+        "default": "./dist/jsx.js"
+      }
     }
   },
   "types": "./dist/index.d.ts",

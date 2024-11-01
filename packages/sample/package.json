@@ -18,7 +18,11 @@
     "typescript": "~5.5.0",
     "tslib": "^2.8.0"
   },
+  "dependencies": {
+    "@nano-ui/core": "file:../core"
+  },
   "scripts": {
+    "build": "tsc",
     "bundle": "rollup -c"
   }
 }
