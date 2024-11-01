@@ -16,6 +16,8 @@ import { NanoWheelEvent } from './event/wheel-event';
 
 import { css, keyframes, Style } from './style/style';
 
+import * as JSX from './jsx';
+
 export {
   NanoElementKey,
   NanoNode,
@@ -34,4 +36,5 @@ export {
   css,
   keyframes,
   Style,
+  JSX
 };
