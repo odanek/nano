@@ -4,14 +4,16 @@ import { NanoEventDispatcher } from '../event/dispatcher.js';
 import { NanoElementTag, NanoNode } from './type.js';
 import { NanoElement } from './element.js';
 
+export type NanoFiberRootProps = null;
+
 export type NanoFiberRootState = {
   element: NanoElement;
 };
 
 export class NanoFiberRoot {
   public readonly container: Element;
-  public current: NanoFiber;
-  public workInProgress: NanoFiber | null;
+  public current: NanoFiber<NanoFiberRootProps>;
+  public workInProgress: NanoFiber<NanoFiberRootProps> | null;
   public disposed: boolean;
   private updateHandle: number | null;
   private dispatcher: NanoEventDispatcher;

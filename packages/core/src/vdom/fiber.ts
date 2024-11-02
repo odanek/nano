@@ -15,7 +15,7 @@ import { NanoContextKey } from './context';
 const fiberKey = Symbol('nano-fiber-key');
 export class NanoFiber<P = unknown> {
   public tag: NanoElementTag;
-  public type: NanoElementType;
+  public type: NanoElementType<P>;
   public key: NanoElementKey;
   public ref: NanoRef | null;
   public stateNode:

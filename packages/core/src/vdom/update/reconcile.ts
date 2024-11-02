@@ -97,9 +97,9 @@ function coerceElement(element: unknown): NanoElement {
   if (element instanceof NanoElement) {
     return element;
   } else if (isString(element) || isNumber(element)) {
-    return NanoElement.text(element.toString());
+    return NanoElement.text(element.toString()) as NanoElement<unknown>;
   } else if (isArray(element) || isIterable(element)) {
-    return NanoElement.fragment(element as NanoNode[], null);
+    return NanoElement.fragment(element as NanoNode[], null) as NanoElement<unknown>;
   } else {
     throw new Error('Invalid virtual dom node: ' + element);
   }

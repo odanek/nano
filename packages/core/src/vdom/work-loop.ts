@@ -1,6 +1,6 @@
 import { isFlag } from '@nano-ui/util';
 import { createWorkInProgress, NanoFiber } from './fiber';
-import { NanoFiberRoot } from './fiber-root';
+import { NanoFiberRoot, NanoFiberRootProps } from './fiber-root';
 import { beginWork } from './update/begin-work';
 import { completeWork } from './update/complete-work';
 import {
@@ -24,7 +24,7 @@ export function performSyncWorkOnRoot(root: NanoFiberRoot) {
   const workInProgress = createWorkInProgress(root.current, null);
   root.workInProgress = workInProgress;
 
-  workLoopSync(workInProgress);
+  workLoopSync(workInProgress as NanoFiber<unknown>);
   commitRoot(root);
 
   const end = performance.now();
@@ -76,7 +76,7 @@ function commitRoot(root: NanoFiberRoot) {
     commitDeletionEffects,
     commitMutationEffects,
   );
-  root.current = finishedWork;
+  root.current = finishedWork as NanoFiber<NanoFiberRootProps>;
   root.workInProgress = null;
   visitFibersDepthFirst(finishedWork, null, commitAfterMutationEffects);
 }

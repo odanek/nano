@@ -1,5 +1,6 @@
 import { FlagGenerator } from '@nano-ui/util';
 import { NanoElement } from './element';
+import { NanoRef } from './ref';
 
 export enum NanoElementTag {
   HostRoot,
@@ -23,17 +24,21 @@ export enum NanoEffectTag {
 }
 
 export type NanoElementKey = unknown;
-export type NanoElementType =
+export type NanoElementType<P = unknown> =
   | null
   | string
   | HTMLElement
   | SVGElement
-  | NanoComponent;
+  | NanoComponent<P>;
 
 export type NanoNode = NanoElement | string | number | null;
 export type NanoChildren = undefined | NanoNode | NanoNode[];
 export type NanoComponent<T = unknown> = (props: T) => NanoNode;
 
-export type NanoPropsWithChildren<T = unknown> = T & {
+export type NanoChildrenProp = {
   children?: NanoChildren;
 };
+export type NanoRefProp = {
+  ref?: NanoRef;
+};
+export type NanoPropsWithChildren<T = unknown> = T & NanoChildrenProp;

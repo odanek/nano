@@ -1,12 +1,14 @@
 import { isString, isNumber } from '@nano-ui/type';
 import { setHostTextContent } from './host-text';
 import { NanoFiber } from './fiber';
-import { NanoPropsWithChildren } from './type';
+
 import { NanoEventHandler } from '../event/dispatcher';
+import { NanoChildrenProp, NanoRefProp } from './type';
 
 export type NanoHostComponentStateNode = HTMLElement | SVGElement;
 export type NanoHostComponentStyle = Record<string, string>;
 
+// TODO Merge somehow with intrinsic elements?
 export type NanoHostComponentCaptureEventProps = {
   // TODO
   onCaptureClick?: NanoEventHandler;
@@ -15,16 +17,19 @@ export type NanoHostComponentBubbleEventProps = {
   // TODO
   onClick?: NanoEventHandler;
 };
+export type NanoHostComponentEventProps = NanoHostComponentCaptureEventProps &
+  NanoHostComponentBubbleEventProps;
+
 export type NanoHostComponentAttributeProps = {
   class?: string;
   style: NanoHostComponentStyle;
 };
+
 // TODO Explicitly name all style props
-export type NanoHostComponentProps = NanoPropsWithChildren<
+export type NanoHostComponentProps = NanoChildrenProp &
+  NanoRefProp &
   NanoHostComponentAttributeProps &
-    NanoHostComponentCaptureEventProps &
-    NanoHostComponentBubbleEventProps
->;
+  NanoHostComponentEventProps;
 
 export type NanoHostComponentPropsDiff = Array<string | null>;
 type DiffFunc = (
