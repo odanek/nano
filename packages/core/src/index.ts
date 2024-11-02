@@ -16,7 +16,7 @@ import { NanoWheelEvent } from './event/wheel-event';
 
 import { css, keyframes, Style } from './style/style';
 
-import * as JSX from './jsx';
+import * as JSX from './jsx/runtime';
 
 export {
   NanoElementKey,

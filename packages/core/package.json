@@ -14,8 +14,8 @@
     },
     "./jsx-runtime": {
       "import": {
-        "types": "./dist/jsx.d.ts",
-        "default": "./dist/jsx.js"
+        "types": "./dist/jsx/runtime.d.ts",
+        "default": "./dist/jsx/runtime.js"
       }
     }
   },
@@ -32,6 +32,7 @@
     "typescript": "~5.5.0"
   },
   "scripts": {
-    "build": "tsc"
+    "clean": "tsc --build --clean",
+    "build": "npm run clean && tsc"
   }
 }

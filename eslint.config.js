@@ -23,4 +23,9 @@ export default [
   js.configs.recommended,
   ...ts.configs.recommended,
   react.configs.flat.recommended,
+  {
+    rules: {
+      'react/react-in-jsx-scope': 'off',
+    }
+  }
 ];
