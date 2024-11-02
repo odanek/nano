@@ -1,7 +1,12 @@
 // TODO Pouzit Vite
 
-import { JSX } from "@nano-ui/core";
+import { JSX } from '@nano-ui/core';
 
 export function Foo(): JSX.Element {
-    return <div class={'foo'}>Hello<div/></div>;
+  return (
+    <div class={'foo'}>
+      Hello
+      <div />
+    </div>
+  );
 }

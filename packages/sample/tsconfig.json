@@ -1,20 +1,19 @@
 {
-    "compilerOptions": {
-      "strict": true,
-      "declaration": true,
-      "outDir": "dist",
-      "lib": ["es2023", "dom"],
-      "target": "es2023",
-      "esModuleInterop": true,
-      "module": "es2022",
-      "moduleResolution": "bundler",
-      "jsx": "react-jsx",
-      "jsxImportSource": "@nano-ui/core",
-      "noImplicitAny": true,
-      "strictNullChecks": true,
-      "noImplicitReturns": true,
-      "noUncheckedIndexedAccess": true
-    },
-    "include": ["./src/**/*.ts", "src/index.tsx"]
-  }
-  
+  "compilerOptions": {
+    "strict": true,
+    "declaration": true,
+    "outDir": "dist",
+    "lib": ["es2023", "dom"],
+    "target": "es2023",
+    "esModuleInterop": true,
+    "module": "es2022",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "jsxImportSource": "@nano-ui/core",
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "noImplicitReturns": true,
+    "noUncheckedIndexedAccess": true
+  },
+  "include": ["./src/**/*.ts", "src/index.tsx"]
+}

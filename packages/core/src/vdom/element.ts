@@ -46,17 +46,30 @@ export class NanoElement<P = unknown> {
     type: string,
     props: NanoHostComponentProps,
     ref: NanoRef | null,
-    key: NanoElementKey,    
+    key: NanoElementKey,
   ): NanoElement<NanoHostComponentProps> {
     return new NanoElement(NanoElementTag.HostComponent, type, key, ref, props);
   }
 
-  static functionComponent<P = unknown>(type: NanoComponent<P>, props: P, key: NanoElementKey): NanoElement<P> {
-    return new NanoElement(NanoElementTag.FunctionComponent, type, key, null, props);
+  static functionComponent<P = unknown>(
+    type: NanoComponent<P>,
+    props: P,
+    key: NanoElementKey,
+  ): NanoElement<P> {
+    return new NanoElement(
+      NanoElementTag.FunctionComponent,
+      type,
+      key,
+      null,
+      props,
+    );
   }
 
   // TODO <Fragment> element, ktery bere i key
-  static fragment(children: NanoNode[], key: NanoElementKey): NanoElement<NanoFragmentProps> {
+  static fragment(
+    children: NanoNode[],
+    key: NanoElementKey,
+  ): NanoElement<NanoFragmentProps> {
     return new NanoElement(NanoElementTag.Fragment, null, key, null, {
       children,
     });

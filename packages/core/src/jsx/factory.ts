@@ -10,7 +10,11 @@ export function jsx(
   key?: NanoElementKey,
 ): NanoElement {
   if (isString(type)) {
-    return jsxHostComponent(type, props as NanoHostComponentProps, key) as NanoElement<unknown>;
+    return jsxHostComponent(
+      type,
+      props as NanoHostComponentProps,
+      key,
+    ) as NanoElement<unknown>;
   } else if (isFunction(type)) {
     return jsxFunctionComponent(type, props, key) as NanoElement<unknown>;
   } else {
@@ -25,14 +29,14 @@ function jsxHostComponent(
   props: NanoHostComponentProps,
   key?: NanoElementKey,
 ): NanoElement<NanoHostComponentProps> {
-    const {ref, ...other} = props ?? emptyObject;
-    return NanoElement.hostComponent(type, other, ref ?? null, key);
+  const { ref, ...other } = props ?? emptyObject;
+  return NanoElement.hostComponent(type, other, ref ?? null, key);
 }
 
 function jsxFunctionComponent<T = unknown>(
-    type: NanoComponent<T>,
-    props: T,
-    key?: NanoElementKey,
+  type: NanoComponent<T>,
+  props: T,
+  key?: NanoElementKey,
 ): NanoElement<T> {
-    return NanoElement.functionComponent(type, props, key);
+  return NanoElement.functionComponent(type, props, key);
 }

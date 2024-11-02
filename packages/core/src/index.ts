@@ -36,5 +36,5 @@ export {
   css,
   keyframes,
   Style,
-  JSX
+  JSX,
 };
