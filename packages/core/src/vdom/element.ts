@@ -39,7 +39,7 @@ export class NanoElement<P = unknown> {
   }
 
   static text(text: string): NanoElement<NanoHostTextProps> {
-    return new NanoElement(NanoElementTag.HostText, null, null, null, { text });
+    return new NanoElement(NanoElementTag.HostText, null, null, null, text);
   }
 
   static hostComponent(

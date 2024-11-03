@@ -1,4 +1,4 @@
-export type NanoHostTextProps = { text: string };
+export type NanoHostTextProps = string;
 export type NanoHostTextStateNode = Text;
 
 export function createHostTextInstance(text: string): NanoHostTextStateNode {
