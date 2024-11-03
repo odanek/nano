@@ -1,7 +1,7 @@
 import { NanoElement } from '../vdom/element';
 import { NanoIntrinsicElements } from './intrinsic-elements';
 
-export { jsx, jsxs } from './factory';
+export { jsx, jsxs, jsxDEV } from './factory';
 export type Element = NanoElement;
 export type IntrinsicElements = NanoIntrinsicElements;
 

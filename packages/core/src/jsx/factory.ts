@@ -23,6 +23,7 @@ export function jsx(
 }
 
 export const jsxs = jsx;
+export const jsxDEV = jsx;
 
 function jsxHostComponent(
   type: string,

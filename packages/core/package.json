@@ -17,6 +17,12 @@
         "types": "./dist/jsx/runtime.d.ts",
         "default": "./dist/jsx/runtime.js"
       }
+    },
+    "./jsx-dev-runtime": {
+      "import": {
+        "types": "./dist/jsx/runtime.d.ts",
+        "default": "./dist/jsx/runtime.js"
+      }
     }
   },
   "types": "./dist/index.d.ts",

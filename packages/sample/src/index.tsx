@@ -1,8 +1,6 @@
-// TODO Pouzit Vite
+import { JSX, render } from '@nano-ui/core';
 
-import { JSX } from '@nano-ui/core';
-
-export function Foo(): JSX.Element {
+function Foo(): JSX.Element {
   return (
     <div class={'foo'}>
       Hello
@@ -10,3 +8,9 @@ export function Foo(): JSX.Element {
     </div>
   );
 }
+
+function run() {
+    render(<Foo />, document.body);
+}
+
+window.addEventListener('DOMContentLoaded', run);
