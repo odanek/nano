@@ -9,7 +9,7 @@ function Foo(): JSX.Element {
 }
 
 function run() {
-    render(<Foo />, document.body);
+  render(<Foo />, document.body);
 }
 
 window.addEventListener('DOMContentLoaded', run);

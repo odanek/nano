@@ -62,7 +62,10 @@ function cleanupBundles() {
   }
 }
 
-function cleanupBundle(bundle: NanoStyleBundle, cleanedBundles: Set<NanoStyleBundle>) {
+function cleanupBundle(
+  bundle: NanoStyleBundle,
+  cleanedBundles: Set<NanoStyleBundle>,
+) {
   cleanedBundles.add(bundle);
   for (const style of Object.values(bundle)) {
     if (style instanceof NanoStyle) {

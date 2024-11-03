@@ -1,5 +1,6 @@
 export type NanoStyleId = string;
-export type NanoStyleProvider<T extends NanoStyleBundle = NanoStyleBundle> = () => T;
+export type NanoStyleProvider<T extends NanoStyleBundle = NanoStyleBundle> =
+  () => T;
 export type NanoStyleBundle = {
   [key: string]: NanoStyle | NanoStyleBundle;
 };

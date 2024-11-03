@@ -87,7 +87,8 @@ export type NanoMemoHookPayload<T> = {
   deps: unknown[] | undefined;
 };
 
-export type NanoStyleHookPayload<T extends NanoStyleBundle = NanoStyleBundle> = {
-  provider: NanoStyleProvider<T>;
-  bundle: T;
-};
+export type NanoStyleHookPayload<T extends NanoStyleBundle = NanoStyleBundle> =
+  {
+    provider: NanoStyleProvider<T>;
+    bundle: T;
+  };

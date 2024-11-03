@@ -356,7 +356,9 @@ function mountContext<T>(context: NanoContext<T>): T {
 }
 
 // TODO: Convert Style objects to just class names?
-function mountStyle<T extends NanoStyleBundle>(provider: NanoStyleProvider<T>): T {
+function mountStyle<T extends NanoStyleBundle>(
+  provider: NanoStyleProvider<T>,
+): T {
   const hook = mountWorkInProgressHook(NanoHookTag.Style);
   const payload = createStylePayload(provider);
   hook.payload = payload;
@@ -425,7 +427,9 @@ function updateContext<T>(context: NanoContext<T>): T {
   return memoizedContext[key] as T;
 }
 
-function updateStyle<T extends NanoStyleBundle>(provider: NanoStyleProvider<T>): T {
+function updateStyle<T extends NanoStyleBundle>(
+  provider: NanoStyleProvider<T>,
+): T {
   const hook = updateWorkInProgressHook(NanoHookTag.Style);
   let payload = hook.payload as NanoStyleHookPayload<T>;
   if (payload.provider !== provider) {
@@ -500,7 +504,9 @@ export function useContext<T>(context: NanoContext<T>): T {
   return (hookDispatcher as NanoHookDispatcher).useContext(context);
 }
 
-export function useStyle<T extends NanoStyleBundle>(create: NanoStyleProvider<T>): T {
+export function useStyle<T extends NanoStyleBundle>(
+  create: NanoStyleProvider<T>,
+): T {
   return (hookDispatcher as NanoHookDispatcher).useStyle(create);
 }
 
