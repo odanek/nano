@@ -6,17 +6,17 @@ import { NanoElementTag } from '../type';
 export function commitBeforeLifecycleEffects(
   current: NanoFiber | null,
   finishedWork: NanoFiber,
-) {
+): void {
   if (current !== null) {
     unmountLifecycleEffects(current, finishedWork);
   }
 }
 
-export function commitBeforeDeletion(current: NanoFiber) {
+export function commitBeforeDeletion(current: NanoFiber): void {
   visitFibersDepthFirst(current, commitBeforeUnmount, null);
 }
 
-function commitBeforeUnmount(current: NanoFiber) {
+function commitBeforeUnmount(current: NanoFiber): void {
   switch (current.tag) {
     case NanoElementTag.FunctionComponent:
       commitBeforeUnmountFunctionComponent(current);
@@ -24,6 +24,6 @@ function commitBeforeUnmount(current: NanoFiber) {
   }
 }
 
-function commitBeforeUnmountFunctionComponent(current: NanoFiber) {
+function commitBeforeUnmountFunctionComponent(current: NanoFiber): void {
   unmountLifecycleEffects(current, null);
 }

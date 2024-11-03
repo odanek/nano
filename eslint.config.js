@@ -25,7 +25,7 @@ export default [
     rules: {
       'react/react-in-jsx-scope': 'off',
       'react/no-unknown-property': [2, { ignore: ['class'] }],
-      '@typescript-eslint/explicit-function-return-type': 2
+      '@typescript-eslint/explicit-function-return-type': 2,
     },
   },
 ];

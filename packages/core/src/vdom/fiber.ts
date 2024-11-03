@@ -30,7 +30,7 @@ export class NanoFiber<P = unknown> {
   public pendingProps: P;
   public memoizedProps: P | null;
   public memoizedState: unknown;
-  public fullContext: Record<string, unknown> | null; // TODO Instead of null use emptyObject
+  public fullContext: Record<NanoContextKey, unknown> | null; // TODO Instead of null use emptyObject
   public contextTypes: Array<NanoContextKey> | null; // TODO Instead of null use emptyArray
   public memoizedContext: Record<string, unknown> | null; // TODO Instead of null use emptyObject
   public updateQueue: Array<unknown> | null;
@@ -118,12 +118,12 @@ export function createFiberFromElement<P>(
   return fiber;
 }
 
-export function markInstanceFiber<T>(node: Node, fiber: NanoFiber<T>) {
+export function markInstanceFiber<T>(node: Node, fiber: NanoFiber<T>): void {
   // @ts-expect-error Conversion to any
   node[fiberKey] = fiber;
 }
 
-export function unmarkInstanceFiber(node: Node) {
+export function unmarkInstanceFiber(node: Node): void {
   // @ts-expect-error Conversion to any
   node[fiberKey] = null;
 }

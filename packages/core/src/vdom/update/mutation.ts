@@ -18,11 +18,11 @@ import {
 } from '../host-component';
 import { mountStyleEffects } from '../function-component';
 
-export function commitResetTextContent(fiber: NanoFiber) {
+export function commitResetTextContent(fiber: NanoFiber): void {
   resetHostTextContent(fiber.stateNode as NanoHostTextStateNode);
 }
 
-export function commitDetachRef(current: NanoFiber | null) {
+export function commitDetachRef(current: NanoFiber | null): void {
   if (current !== null) {
     const ref = current.ref;
     if (ref !== null) {
@@ -31,7 +31,7 @@ export function commitDetachRef(current: NanoFiber | null) {
   }
 }
 
-export function commitPlacement(finishedWork: NanoFiber) {
+export function commitPlacement(finishedWork: NanoFiber): void {
   const parentFiber = getHostParentFiber(finishedWork);
   const parentNode = getHostParentNode(parentFiber);
 
@@ -50,7 +50,7 @@ function insertOrAppendPlacementNode(
   fiber: NanoFiber,
   before: Node | null,
   parent: Node,
-) {
+): void {
   const tag = fiber.tag;
   if (tag === NanoElementTag.HostComponent || tag === NanoElementTag.HostText) {
     placeHostComponent(fiber, before, parent);
@@ -67,7 +67,7 @@ function placeHostComponent(
   fiber: NanoFiber,
   before: Node | null,
   parent: Node,
-) {
+): void {
   const stateNode = fiber.stateNode as Node;
   parent.insertBefore(stateNode, before);
 }
@@ -75,7 +75,7 @@ function placeHostComponent(
 export function commitMutation(
   current: NanoFiber | null,
   finishedWork: NanoFiber,
-) {
+): void {
   switch (finishedWork.tag) {
     case NanoElementTag.FunctionComponent:
       commitFunctionComponentMutation(current, finishedWork);
@@ -95,14 +95,14 @@ export function commitMutation(
 function commitFunctionComponentMutation(
   current: NanoFiber | null,
   finishedWork: NanoFiber,
-) {
+): void {
   mountStyleEffects(current, finishedWork);
 }
 
 function commitHostComponentMutation(
   current: NanoFiber | null,
   finishedWork: NanoFiber,
-) {
+): void {
   const instance = finishedWork.stateNode as NanoHostComponentStateNode;
   const updatePayload = finishedWork.updateQueue as NanoHostComponentPropsDiff;
   finishedWork.updateQueue = null;
@@ -115,14 +115,14 @@ function commitHostComponentMutation(
 function commitHostTextMutation(
   current: NanoFiber<string>,
   finishedWork: NanoFiber<string>,
-) {
+): void {
   const textInstance = finishedWork.stateNode as NanoHostTextStateNode;
   const newText = finishedWork.memoizedProps as string;
   const oldText = current.memoizedProps as string;
   updateHostTextInstance(textInstance, newText, oldText);
 }
 
-export function commitDeletion(current: NanoFiber) {
+export function commitDeletion(current: NanoFiber): void {
   unmountHostComponents(current, true);
 
   const alternate = current.alternate;
@@ -132,7 +132,7 @@ export function commitDeletion(current: NanoFiber) {
   }
 }
 
-function unmountHostComponents(current: NanoFiber, detach: boolean) {
+function unmountHostComponents(current: NanoFiber, detach: boolean): void {
   commitUnmount(current, detach);
 
   const isElement = current.tag === NanoElementTag.HostComponent;
@@ -144,7 +144,7 @@ function unmountHostComponents(current: NanoFiber, detach: boolean) {
   }
 }
 
-function commitUnmount(current: NanoFiber, removeNode: boolean) {
+function commitUnmount(current: NanoFiber, removeNode: boolean): void {
   switch (current.tag) {
     case NanoElementTag.FunctionComponent:
       commitUnmountFunctionComponent(current);
@@ -161,11 +161,14 @@ function commitUnmount(current: NanoFiber, removeNode: boolean) {
   }
 }
 
-function commitUnmountFunctionComponent(current: NanoFiber) {
+function commitUnmountFunctionComponent(current: NanoFiber): void {
   mountStyleEffects(current, null);
 }
 
-function commitUnmountHostComponent(current: NanoFiber, removeNode: boolean) {
+function commitUnmountHostComponent(
+  current: NanoFiber,
+  removeNode: boolean,
+): void {
   const node = current.stateNode as Element;
   unmarkInstanceFiber(node);
   commitDetachRef(current);
@@ -174,7 +177,7 @@ function commitUnmountHostComponent(current: NanoFiber, removeNode: boolean) {
   }
 }
 
-function commitUnmountHostText(current: NanoFiber, removeNode: boolean) {
+function commitUnmountHostText(current: NanoFiber, removeNode: boolean): void {
   const node = current.stateNode as NanoHostTextStateNode;
   unmarkInstanceFiber(node);
   if (removeNode) {
@@ -182,7 +185,7 @@ function commitUnmountHostText(current: NanoFiber, removeNode: boolean) {
   }
 }
 
-function commitDetachFiber(fiber: NanoFiber) {
+function commitDetachFiber(fiber: NanoFiber): void {
   const alternate = fiber.alternate;
   if (alternate !== null) {
     alternate.return = null;

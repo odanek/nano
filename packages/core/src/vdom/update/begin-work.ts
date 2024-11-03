@@ -50,7 +50,7 @@ export function beginWork(
   }
 }
 
-function propagateContext(workInProgress: NanoFiber) {
+function propagateContext(workInProgress: NanoFiber): void {
   const returnFiber = workInProgress.return;
   const fullContext =
     returnFiber === null ? emptyContext : returnFiber.fullContext;
@@ -162,11 +162,11 @@ function beginElement(
   return workInProgress.child;
 }
 
-function shouldSetTextContent(children: NanoChildren) {
+function shouldSetTextContent(children: NanoChildren): boolean {
   return isString(children) || isNumber(children);
 }
 
-function markRef(current: NanoFiber | null, workInProgress: NanoFiber) {
+function markRef(current: NanoFiber | null, workInProgress: NanoFiber): void {
   const ref = workInProgress.ref;
   if (
     (current === null && ref !== null) ||
@@ -179,7 +179,7 @@ function markRef(current: NanoFiber | null, workInProgress: NanoFiber) {
 function bailoutOnAlreadyFinishedWork(
   current: NanoFiber,
   workInProgress: NanoFiber,
-) {
+): NanoFiber | null {
   cloneChildFibers(current, workInProgress);
   return workInProgress.child;
 }
@@ -188,7 +188,7 @@ function reconcileChildren(
   current: NanoFiber | null,
   workInProgress: NanoFiber,
   nextChildren: NanoChildren,
-) {
+): void {
   if (current === null) {
     workInProgress.child = mountChildFibers(workInProgress, null, nextChildren);
   } else {

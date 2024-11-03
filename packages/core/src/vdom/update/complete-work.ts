@@ -5,7 +5,7 @@ import { NanoEffectTag, NanoElementTag } from '../type';
 export function completeWork(
   current: NanoFiber | null,
   workInProgress: NanoFiber,
-) {
+): void {
   switch (workInProgress.tag) {
     case NanoElementTag.HostComponent:
       completeHostComponentWork(current, workInProgress);
@@ -22,7 +22,7 @@ export function completeWork(
 function completeHostComponentWork(
   current: NanoFiber | null,
   workInProgress: NanoFiber,
-) {
+): void {
   if (current !== null) {
     updateHostComponent(current, workInProgress);
   } else {
@@ -33,7 +33,7 @@ function completeHostComponentWork(
 function completeHostTextWork(
   current: NanoFiber | null,
   workInProgress: NanoFiber,
-) {
+): void {
   if (current !== null) {
     const oldText = current.memoizedProps;
     const newText = workInProgress.pendingProps;
@@ -46,13 +46,16 @@ function completeHostTextWork(
 function completeHostPortalWork(
   current: NanoFiber | null,
   workInProgress: NanoFiber,
-) {
+): void {
   if (current === null) {
     appendAllChildren(workInProgress.type as Element, workInProgress);
   }
 }
 
-function updateHostComponent(current: NanoFiber, workInProgress: NanoFiber) {
+function updateHostComponent(
+  current: NanoFiber,
+  workInProgress: NanoFiber,
+): void {
   const updatePayload = diffProperties(current, workInProgress);
   workInProgress.updateQueue = updatePayload;
   if (updatePayload) {
@@ -60,7 +63,7 @@ function updateHostComponent(current: NanoFiber, workInProgress: NanoFiber) {
   }
 }
 
-function appendAllChildren(parent: Element, workInProgress: NanoFiber) {
+function appendAllChildren(parent: Element, workInProgress: NanoFiber): void {
   let fiber = workInProgress.child;
   while (fiber !== null) {
     const tag = fiber.tag;

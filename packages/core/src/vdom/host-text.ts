@@ -9,17 +9,17 @@ export function updateHostTextInstance(
   node: NanoHostTextStateNode,
   text: string,
   previousText: string,
-) {
+): void {
   if (text !== previousText) {
     node.nodeValue = text;
   }
 }
 
-export function resetHostTextContent(node: Node) {
+export function resetHostTextContent(node: Node): void {
   setHostTextContent(node, '');
 }
 
-export function setHostTextContent(node: Node, text: string) {
+export function setHostTextContent(node: Node, text: string): void {
   if (text.length > 0) {
     const firstChild = node.firstChild;
     if (

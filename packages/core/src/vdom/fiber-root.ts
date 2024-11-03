@@ -33,7 +33,7 @@ export class NanoFiberRoot {
     this.dispatcher.connect(container);
   }
 
-  render(element: NanoNode) {
+  render(element: NanoNode): void {
     this.cancelUpdate();
 
     const update = { element };
@@ -46,7 +46,7 @@ export class NanoFiberRoot {
     performSyncWorkOnRoot(this);
   }
 
-  scheduleUpdate() {
+  scheduleUpdate(): void {
     if (this.updateHandle === null) {
       this.updateHandle = requestAnimationFrame(() => {
         this.updateHandle = null;
@@ -55,21 +55,21 @@ export class NanoFiberRoot {
     }
   }
 
-  forceUpdate() {
+  forceUpdate(): void {
     if (this.updateHandle !== null) {
       this.cancelUpdate();
       performSyncWorkOnRoot(this);
     }
   }
 
-  dispose() {
+  dispose(): void {
     this.dispatcher.disconnect(this.container);
     this.render(null);
     this.cancelUpdate();
     this.disposed = true;
   }
 
-  private cancelUpdate() {
+  private cancelUpdate(): void {
     if (this.updateHandle !== null) {
       cancelAnimationFrame(this.updateHandle);
       this.updateHandle = null;

@@ -5,7 +5,7 @@ import { NanoFiberRoot } from './fiber-root';
 
 type TraversalCallback = (fiber: NanoFiber) => void;
 
-export function findFiberRoot(fiber: NanoFiber) {
+export function findFiberRoot(fiber: NanoFiber): NanoFiber {
   let current = fiber;
   while (current.tag !== NanoElementTag.HostRoot) {
     current = current.return as NanoFiber;
@@ -17,7 +17,7 @@ export function visitFibersDepthFirst(
   root: NanoFiber | null,
   beforeHandler: TraversalCallback | null,
   afterHandler: TraversalCallback | null,
-) {
+): void {
   let fiber = root;
   let emerged = false;
 
@@ -49,7 +49,7 @@ export function visitFibersDepthFirst(
   }
 }
 
-export function getHostParentFiber(fiber: NanoFiber) {
+export function getHostParentFiber(fiber: NanoFiber): NanoFiber {
   let parent = fiber.return;
   while (parent !== null) {
     const tag = parent.tag;

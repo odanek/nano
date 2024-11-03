@@ -17,7 +17,10 @@ const isValidElement = isAnyOf(
   isNull,
 );
 
-export function render(element: NanoNode, container: HTMLElement) {
+export function render(
+  element: NanoNode,
+  container: HTMLElement,
+): NanoFiberRoot {
   if (!isValidElement(element)) {
     throw new Error('Virtual element expected in render');
   }

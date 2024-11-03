@@ -28,7 +28,7 @@ type NanoReconciler = (
 export function cloneChildFibers(
   current: NanoFiber,
   workInProgress: NanoFiber,
-) {
+): void {
   if (current.child === null) {
     return;
   }
@@ -143,7 +143,7 @@ function updateFromMap(
   returnFiber: NanoFiber,
   newIdx: number,
   element: unknown,
-) {
+): NanoFiber | null {
   if (element === null || element === undefined) {
     return null;
   }
@@ -155,7 +155,7 @@ function updateFromMap(
 }
 
 function childReconciler(shouldTrackSideEffects: boolean): NanoReconciler {
-  function deleteChild(returnFiber: NanoFiber, childToDelete: NanoFiber) {
+  function deleteChild(returnFiber: NanoFiber, childToDelete: NanoFiber): void {
     if (!shouldTrackSideEffects) {
       return;
     }

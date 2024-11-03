@@ -85,7 +85,7 @@ export function createHostComponentInstance(
 export function updateHostComponentInstance(
   node: NanoHostComponentStateNode,
   diff: NanoHostComponentPropsDiff,
-) {
+): void {
   let i = 0;
   const length = diff.length;
   while (i < length) {
@@ -117,7 +117,7 @@ function createElement(type: string): NanoHostComponentStateNode {
 function setInitialProperties(
   node: NanoHostComponentStateNode,
   props: NanoHostComponentProps,
-) {
+): void {
   for (const [key, value] of Object.entries(props)) {
     if (value === null || value === undefined) {
       continue;
@@ -139,14 +139,17 @@ function setInitialProperties(
 function setInitialChildren(
   node: NanoHostComponentStateNode,
   props: NanoHostComponentProps,
-) {
+): void {
   const children = props.children;
   if (isString(children) || isNumber(children)) {
     setHostTextContent(node, children.toString());
   }
 }
 
-export function diffProperties(current: NanoFiber, workInProgress: NanoFiber) {
+export function diffProperties(
+  current: NanoFiber,
+  workInProgress: NanoFiber,
+): NanoHostComponentPropsDiff | null {
   const oldProps = current.memoizedProps as NanoHostComponentProps;
   const newProps = workInProgress.pendingProps as NanoHostComponentProps;
   if (oldProps === newProps) {
@@ -163,7 +166,7 @@ function diffObjects(
   left: object,
   right: object,
   handler: DiffFunc,
-) {
+): void {
   for (const [key, value] of Object.entries(left)) {
     // @ts-expect-error TODO
     const newValue = right[key];
@@ -185,7 +188,7 @@ function diffPropertyChange(
   key: string,
   oldValue: unknown,
   newValue: unknown,
-) {
+): void {
   if (key === 'children') {
     if (isString(newValue) || isNumber(newValue)) {
       diff.push(SET_TEXT_CHILD, newValue.toString());
@@ -208,7 +211,7 @@ function diffStyleChange(
   key: string,
   oldValue: unknown,
   newValue: unknown,
-) {
+): void {
   // @ts-expect-error TODO
   diff.push(SET_STYLE, key, newValue === undefined ? null : newValue);
 }

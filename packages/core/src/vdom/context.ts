@@ -16,7 +16,9 @@ export function createContext<T>(): NanoContext<T> {
   return Context;
 }
 
-export function readContext(workInProgress: NanoFiber) {
+export function readContext(
+  workInProgress: NanoFiber,
+): Record<NanoContextKey, unknown> | null {
   const types = workInProgress.contextTypes;
   if (types === null) {
     // TODO When does this happen?
@@ -32,7 +34,10 @@ export function readContext(workInProgress: NanoFiber) {
   return context;
 }
 
-export function compareContext(current: NanoFiber, workInProgress: NanoFiber) {
+export function compareContext(
+  current: NanoFiber,
+  workInProgress: NanoFiber,
+): boolean {
   const types = workInProgress.contextTypes;
   if (types === null) {
     // TODO When does this happen?
