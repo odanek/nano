@@ -1,21 +1,21 @@
 import { isNumber } from '@nano-ui/type';
-import { Style, StyleBundle } from './style.js';
+import { NanoStyle, NanoStyleBundle } from './style.js';
 
 type RefCountMap<T> = Map<T, number>;
 
 const styleSheet = document.createElement('style');
 styleSheet.classList.add('nano-styles');
 
-const activeStyles: RefCountMap<Style> = new Map();
-const activeBundles: RefCountMap<StyleBundle> = new Map();
+const activeStyles: RefCountMap<NanoStyle> = new Map();
+const activeBundles: RefCountMap<NanoStyleBundle> = new Map();
 const cleanupTimeout: number = 2000;
 let totalRuleCount = 0;
 let cleanupHandle: number | null = null;
 
-export function connectBundle(bundle: StyleBundle) {
+export function connectBundle(bundle: NanoStyleBundle) {
   if (retain(activeBundles, bundle)) {
     for (const style of Object.values(bundle)) {
-      if (style instanceof Style) {
+      if (style instanceof NanoStyle) {
         connectStyle(style);
       } else {
         connectBundle(style);
@@ -24,7 +24,7 @@ export function connectBundle(bundle: StyleBundle) {
   }
 }
 
-export function disconnectBundle(bundle: StyleBundle) {
+export function disconnectBundle(bundle: NanoStyleBundle) {
   if (release(activeBundles, bundle)) {
     scheduleCleanup();
   }
@@ -50,7 +50,7 @@ function cleanup() {
 }
 
 function cleanupBundles() {
-  const cleanedBundles = new Set<StyleBundle>();
+  const cleanedBundles = new Set<NanoStyleBundle>();
   for (const [bundle, referenceCount] of activeBundles.entries()) {
     if (referenceCount === 0 && !cleanedBundles.has(bundle)) {
       cleanupBundle(bundle, cleanedBundles);
@@ -62,10 +62,10 @@ function cleanupBundles() {
   }
 }
 
-function cleanupBundle(bundle: StyleBundle, cleanedBundles: Set<StyleBundle>) {
+function cleanupBundle(bundle: NanoStyleBundle, cleanedBundles: Set<NanoStyleBundle>) {
   cleanedBundles.add(bundle);
   for (const style of Object.values(bundle)) {
-    if (style instanceof Style) {
+    if (style instanceof NanoStyle) {
       disconnectStyle(style, false);
     } else if (release(activeBundles, style)) {
       cleanupBundle(style, cleanedBundles);
@@ -113,7 +113,7 @@ function release<T>(map: RefCountMap<T>, object: T) {
   return referenceCount === 0;
 }
 
-function connectStyle(style: Style) {
+function connectStyle(style: NanoStyle) {
   if (retain(activeStyles, style)) {
     if (activeStyles.size === 1) {
       document.head.appendChild(styleSheet);
@@ -124,7 +124,7 @@ function connectStyle(style: Style) {
   }
 }
 
-function disconnectStyle(style: Style, cleanup: boolean) {
+function disconnectStyle(style: NanoStyle, cleanup: boolean) {
   if (release(activeStyles, style) && cleanup !== false) {
     scheduleCleanup();
   }

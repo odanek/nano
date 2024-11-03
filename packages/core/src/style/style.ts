@@ -1,16 +1,14 @@
-// TODO Rename everything to start with Nano
-
-export type StyleId = string;
-export type StyleProvider<T extends StyleBundle = StyleBundle> = () => T;
-export type StyleBundle = {
-  [key: string]: Style | StyleBundle;
+export type NanoStyleId = string;
+export type NanoStyleProvider<T extends NanoStyleBundle = NanoStyleBundle> = () => T;
+export type NanoStyleBundle = {
+  [key: string]: NanoStyle | NanoStyleBundle;
 };
 
-export class Style {
-  public id: StyleId;
+export class NanoStyle {
+  public id: NanoStyleId;
   public rule: string;
 
-  constructor(id: StyleId, rule: string) {
+  constructor(id: NanoStyleId, rule: string) {
     this.id = id;
     this.rule = rule;
   }
@@ -21,22 +19,22 @@ export class Style {
 }
 
 let lastId = 0;
-function nextId(): StyleId {
+function nextId(): NanoStyleId {
   return 's' + ++lastId;
 }
 
-export function css(strings: string[], ...values: unknown[]): Style {
+export function css(strings: string[], ...values: unknown[]): NanoStyle {
   const id = nextId();
   const definition = join(strings, values);
   const rule = `.${id} {${definition}}`;
-  return new Style(id, rule);
+  return new NanoStyle(id, rule);
 }
 
-export function keyframes(strings: string[], ...values: unknown[]): Style {
+export function keyframes(strings: string[], ...values: unknown[]): NanoStyle {
   const id = nextId();
   const definition = join(strings, values);
   const rule = `@keyframes ${id} {${definition}}`;
-  return new Style(id, rule);
+  return new NanoStyle(id, rule);
 }
 
 function join(strings: string[], values: unknown[]): string {
@@ -48,7 +46,7 @@ function join(strings: string[], values: unknown[]): string {
       throw new Error('Style value contains null or undefined');
     }
     const valueString =
-      value instanceof Style ? '.' + value.id : value.toString();
+      value instanceof NanoStyle ? '.' + value.id : value.toString();
     parts.push(valueString, strings[i + 1]);
   }
   return parts.join('');

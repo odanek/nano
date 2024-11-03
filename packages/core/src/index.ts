@@ -14,7 +14,7 @@ import { NanoMouseEvent } from './event/mouse-event';
 import { NanoPointerEvent } from './event/pointer-event';
 import { NanoWheelEvent } from './event/wheel-event';
 
-import { css, keyframes, Style } from './style/style';
+import { css, keyframes, NanoStyle } from './style/style';
 
 import * as JSX from './jsx/runtime';
 
@@ -36,6 +36,6 @@ export {
   NanoWheelEvent,
   css,
   keyframes,
-  Style,
+  NanoStyle,
   JSX,
 };
