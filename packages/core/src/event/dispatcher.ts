@@ -47,16 +47,16 @@ export class NanoEventDispatcher {
       });
     }
 
-    return () => this.disconnect(root);
+    return (): void => this.disconnect(root);
   }
 
-  public disconnect(root: EventTarget) {
+  public disconnect(root: EventTarget): void {
     for (const event of nativeEventType) {
       root.removeEventListener(event, this.eventHandler);
     }
   }
 
-  private handleEvent(nativeEvent: Event) {
+  private handleEvent(nativeEvent: Event): void {
     const event = this.createEvent(nativeEvent);
     if (event === null) {
       return;

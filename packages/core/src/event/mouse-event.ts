@@ -13,7 +13,7 @@ export class NanoMouseEvent extends NanoEvent {
     super(options.type, options.target);
   }
 
-  static fromNative(nativeEvent: MouseEvent) {
+  static fromNative(nativeEvent: MouseEvent): NanoMouseEvent {
     return new NanoMouseEvent({
       target: nativeEvent.target,
       type: NanoMouseEvent.getType(nativeEvent.type),

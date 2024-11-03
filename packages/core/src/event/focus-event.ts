@@ -13,7 +13,7 @@ export class NanoFocusEvent extends NanoEvent {
     super(options.type, options.target);
   }
 
-  static fromNative(nativeEvent: FocusEvent) {
+  static fromNative(nativeEvent: FocusEvent): NanoFocusEvent {
     return new NanoFocusEvent({
       target: nativeEvent.target,
       type: NanoFocusEvent.getType(nativeEvent.type),

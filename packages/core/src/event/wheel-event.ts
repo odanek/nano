@@ -13,7 +13,7 @@ export class NanoWheelEvent extends NanoEvent {
     super(options.type, options.target);
   }
 
-  static fromNative(nativeEvent: WheelEvent) {
+  static fromNative(nativeEvent: WheelEvent): NanoWheelEvent {
     return new NanoWheelEvent({
       target: nativeEvent.target,
       type: NanoWheelEvent.getType(nativeEvent.type),

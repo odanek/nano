@@ -16,7 +16,7 @@ export class NanoClipboardEvent extends NanoEvent {
     super(options.type, options.target);
   }
 
-  static fromNative(nativeEvent: ClipboardEvent) {
+  static fromNative(nativeEvent: ClipboardEvent): NanoClipboardEvent {
     return new NanoClipboardEvent({
       target: nativeEvent.target,
       type: NanoClipboardEvent.getType(nativeEvent.type),

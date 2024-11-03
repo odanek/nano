@@ -13,7 +13,7 @@ export class NanoInputEvent extends NanoEvent {
     super(options.type, options.target);
   }
 
-  static fromNative(nativeEvent: InputEvent) {
+  static fromNative(nativeEvent: InputEvent): NanoInputEvent {
     return new NanoInputEvent({
       target: nativeEvent.target,
       type: NanoInputEvent.getType(nativeEvent.type),

@@ -3,7 +3,7 @@ export const emptyObject = Object.freeze({});
 export function objectEquals(
   left: Record<string, unknown>,
   right: Record<string, unknown>,
-) {
+): boolean {
   if (left === right) {
     return true;
   }

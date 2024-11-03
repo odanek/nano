@@ -11,7 +11,7 @@ export const emptyContext: Record<string, unknown> = Object.freeze({});
 
 // TODO Specify context name?
 export function createContext<T>(): NanoContext<T> {
-  const Context = () => null; // TODO: Return NanoElement.context() here so that no special casing is needed in jsx
+  const Context = (): null => null; // TODO: Return NanoElement.context() here so that no special casing is needed in jsx
   Context[contextMarker] = id++;
   return Context;
 }

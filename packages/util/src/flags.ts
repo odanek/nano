@@ -9,7 +9,7 @@ export class FlagGenerator {
     this.value = 1;
   }
 
-  next() {
+  next(): number {
     const value = this.value;
     if (value > maxFlagValue) {
       throw new Error('Flag generator overflow');

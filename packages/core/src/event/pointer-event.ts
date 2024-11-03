@@ -19,7 +19,7 @@ export class NanoPointerEvent extends NanoEvent {
     super(options.type, options.target);
   }
 
-  static fromNative(nativeEvent: PointerEvent) {
+  static fromNative(nativeEvent: PointerEvent): NanoPointerEvent {
     return new NanoPointerEvent({
       target: nativeEvent.target,
       type: NanoPointerEvent.getType(nativeEvent.type),

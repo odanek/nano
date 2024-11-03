@@ -5,7 +5,7 @@ export class Counter {
     this.value = initialValue;
   }
 
-  next() {
+  next(): number {
     return ++this.value;
   }
 }

@@ -4,7 +4,7 @@ export function arrayEquals<T>(
   left: T[],
   right: T[],
   comparator = strictEquals,
-) {
+): boolean {
   if (left === right) {
     return true;
   }

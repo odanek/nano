@@ -17,7 +17,7 @@ export class NanoKeyboardEvent extends NanoEvent {
     super(options.type, options.target);
   }
 
-  static fromNative(nativeEvent: KeyboardEvent) {
+  static fromNative(nativeEvent: KeyboardEvent): NanoKeyboardEvent {
     return new NanoKeyboardEvent({
       target: nativeEvent.target,
       type: NanoKeyboardEvent.getType(nativeEvent.type),

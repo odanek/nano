@@ -8,7 +8,7 @@ function Foo(): JSX.Element {
   );
 }
 
-function run() {
+function run(): void {
   render(<Foo />, document.body);
 }
 

@@ -14,7 +14,7 @@ export class NanoStyle {
     this.rule = rule;
   }
 
-  public toString() {
+  public toString(): string {
     return this.id;
   }
 }

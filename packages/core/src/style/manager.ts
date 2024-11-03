@@ -12,7 +12,7 @@ const cleanupTimeout: number = 2000;
 let totalRuleCount = 0;
 let cleanupHandle: number | null = null;
 
-export function connectBundle(bundle: NanoStyleBundle) {
+export function connectBundle(bundle: NanoStyleBundle): void {
   if (retain(activeBundles, bundle)) {
     for (const style of Object.values(bundle)) {
       if (style instanceof NanoStyle) {
@@ -24,13 +24,13 @@ export function connectBundle(bundle: NanoStyleBundle) {
   }
 }
 
-export function disconnectBundle(bundle: NanoStyleBundle) {
+export function disconnectBundle(bundle: NanoStyleBundle): void {
   if (release(activeBundles, bundle)) {
     scheduleCleanup();
   }
 }
 
-function scheduleCleanup() {
+function scheduleCleanup(): void {
   if (cleanupHandle === null) {
     cleanupHandle = window.setTimeout(() => {
       cleanupHandle = null;
@@ -39,7 +39,7 @@ function scheduleCleanup() {
   }
 }
 
-function cleanup() {
+function cleanup(): void {
   if (cleanupHandle !== null) {
     clearTimeout(cleanupHandle);
     cleanupHandle = null;
@@ -49,7 +49,7 @@ function cleanup() {
   cleanupStyles();
 }
 
-function cleanupBundles() {
+function cleanupBundles(): void {
   const cleanedBundles = new Set<NanoStyleBundle>();
   for (const [bundle, referenceCount] of activeBundles.entries()) {
     if (referenceCount === 0 && !cleanedBundles.has(bundle)) {
@@ -65,7 +65,7 @@ function cleanupBundles() {
 function cleanupBundle(
   bundle: NanoStyleBundle,
   cleanedBundles: Set<NanoStyleBundle>,
-) {
+): void {
   cleanedBundles.add(bundle);
   for (const style of Object.values(bundle)) {
     if (style instanceof NanoStyle) {
@@ -76,7 +76,7 @@ function cleanupBundle(
   }
 }
 
-function cleanupStyles() {
+function cleanupStyles(): void {
   const sheet = styleSheet.sheet;
   let index = 0;
   for (const [style, referenceCount] of activeStyles.entries()) {
@@ -95,7 +95,7 @@ function cleanupStyles() {
   }
 }
 
-function retain<T>(map: RefCountMap<T>, object: T) {
+function retain<T>(map: RefCountMap<T>, object: T): boolean {
   const referenceCount = map.get(object);
   if (referenceCount !== undefined) {
     map.set(object, referenceCount + 1);
@@ -106,7 +106,7 @@ function retain<T>(map: RefCountMap<T>, object: T) {
   }
 }
 
-function release<T>(map: RefCountMap<T>, object: T) {
+function release<T>(map: RefCountMap<T>, object: T): boolean {
   let referenceCount = map.get(object);
   if (!isNumber(referenceCount) || referenceCount < 1) {
     throw new Error('Releasing a style or bundle that has not been retained');
@@ -116,7 +116,7 @@ function release<T>(map: RefCountMap<T>, object: T) {
   return referenceCount === 0;
 }
 
-function connectStyle(style: NanoStyle) {
+function connectStyle(style: NanoStyle): void {
   if (retain(activeStyles, style)) {
     if (activeStyles.size === 1) {
       document.head.appendChild(styleSheet);
@@ -127,7 +127,7 @@ function connectStyle(style: NanoStyle) {
   }
 }
 
-function disconnectStyle(style: NanoStyle, cleanup: boolean) {
+function disconnectStyle(style: NanoStyle, cleanup: boolean): void {
   if (release(activeStyles, style) && cleanup !== false) {
     scheduleCleanup();
   }

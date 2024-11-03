@@ -1,12 +1,12 @@
-export const voidFunction = () => undefined;
+export const voidFunction = (): undefined => undefined;
 
-export const trueFunction = () => true;
+export const trueFunction = (): true => true;
 
-export const falseFunction = () => false;
+export const falseFunction = (): false => false;
 
-export const nullFunction = () => null;
+export const nullFunction = (): null => null;
 
-export const strictEquals = (a: unknown, b: unknown) => a === b;
+export const strictEquals = (a: unknown, b: unknown): boolean => a === b;
 
 export const memoizeSingle = <T, U>(f: (arg: T) => U) => {
   const cache = new Map<T, U>();
