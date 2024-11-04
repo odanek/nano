@@ -1,6 +1,10 @@
-import { JSX, render } from '@nano-ui/core';
+import { JSX, render, useEffect } from '@nano-ui/core';
 
 function Foo(): JSX.Element {
+  useEffect((): undefined => {
+    console.log('Rendered passive');
+  });
+
   return (
     <div class={'foo'}>
       Hello <div>Nic se nedeje</div>

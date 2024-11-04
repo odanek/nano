@@ -493,6 +493,10 @@ export function useState<T>(initialState: T): [T, (value: T) => void] {
   return (hookDispatcher as NanoHookDispatcher).useState(initialState);
 }
 
+export function useEffect(create: NanoEffectCreator, deps?: unknown[]): void {
+  (hookDispatcher as NanoHookDispatcher).useEffect(create, deps);
+}
+
 export function useLayoutEffect(
   create: NanoEffectCreator,
   deps?: unknown[],

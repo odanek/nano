@@ -98,7 +98,7 @@ export function runPassiveEffects(): void {
 
 function createEffect(effect: NanoEffectHookPayload): void {
   effect.flags &= ~NanoEffectFlag.Create;
-  const destroy = effect.destroy;
+  const destroy = effect.create();
   effect.destroy = destroy;
   if (isValue(destroy) && !isFunction(destroy)) {
     throw new Error(

@@ -17,6 +17,7 @@ import { NanoWheelEvent } from './event/wheel-event';
 import {
   useCallback,
   useContext,
+  useEffect,
   useLayoutEffect,
   useMemo,
   useReducer,
@@ -31,12 +32,14 @@ import * as JSX from './jsx/runtime';
 
 export {
   render,
+  // Classes and types
   NanoElementKey,
   NanoNode,
   NanoComponent,
   NanoElement,
   NanoRef,
   NanoEventType,
+  // Events
   NanoEvent,
   NanoClipboardEvent,
   NanoFocusEvent,
@@ -45,16 +48,20 @@ export {
   NanoMouseEvent,
   NanoPointerEvent,
   NanoWheelEvent,
+  // Hooks
   useCallback,
   useContext,
+  useEffect,
   useLayoutEffect,
   useMemo,
   useReducer,
   useRef,
   useState,
   useStyle,
+  // Styles
   css,
   keyframes,
   NanoStyle,
+  // JSX
   JSX,
 };
