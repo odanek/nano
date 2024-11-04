@@ -1,6 +1,7 @@
 import { isFlag } from '@nano-ui/util';
 import { NanoFiber, unmarkInstanceFiber } from '../fiber';
 import {
+  NanoHostTextProps,
   NanoHostTextStateNode,
   resetHostTextContent,
   updateHostTextInstance,
@@ -73,31 +74,29 @@ function placeHostComponent(
   parent.insertBefore(stateNode, before);
 }
 
+export function commitStyleMutation(
+  current: NanoFiber | null,
+  finishedWork: NanoFiber,
+): void {
+  // TODO Better name
+  mountStyleEffects(current, finishedWork);
+}
+
 export function commitMutation(
   current: NanoFiber | null,
   finishedWork: NanoFiber,
 ): void {
   switch (finishedWork.tag) {
-    case NanoElementTag.FunctionComponent:
-      commitFunctionComponentMutation(current, finishedWork);
-      return;
     case NanoElementTag.HostComponent:
       commitHostComponentMutation(current, finishedWork);
       return;
     case NanoElementTag.HostText:
       commitHostTextMutation(
-        current as NanoFiber<string>,
-        finishedWork as NanoFiber<string>,
+        current as NanoFiber<NanoHostTextProps>,
+        finishedWork as NanoFiber<NanoHostTextProps>,
       );
       return;
   }
-}
-
-function commitFunctionComponentMutation(
-  current: NanoFiber | null,
-  finishedWork: NanoFiber,
-): void {
-  mountStyleEffects(current, finishedWork);
 }
 
 function commitHostComponentMutation(

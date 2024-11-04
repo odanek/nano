@@ -19,7 +19,7 @@ export class NanoHook<P = unknown> {
 
 const hookTagCounter = new Counter();
 export enum NanoHookTag {
-  LayoutEffect = hookTagCounter.next(),
+  Effect = hookTagCounter.next(),
   Context = hookTagCounter.next(),
   Style = hookTagCounter.next(),
   Reducer = hookTagCounter.next(),
@@ -33,7 +33,7 @@ export type NanoEffectCleanup = () => void;
 export type NanoEffectCreator = () => NanoEffectCleanup | undefined;
 
 export type NanoStateHook = <T>(initialState: T) => [T, (value: T) => void];
-export type NanoLayoutEffectHook = (
+export type NanoEffectHook = (
   create: NanoEffectCreator,
   deps?: unknown[],
 ) => void;
@@ -54,7 +54,8 @@ export type NanoMemoHook = <T>(create: () => T, deps?: unknown[]) => T;
 
 export type NanoHookDispatcher = {
   useState: NanoStateHook;
-  useLayoutEffect: NanoLayoutEffectHook;
+  useEffect: NanoEffectHook;
+  useLayoutEffect: NanoEffectHook;
   useContext: NanoContextHook;
   useStyle: NanoStyleHook;
   useReducer: NanoReducerHook;
@@ -66,6 +67,7 @@ export type NanoHookDispatcher = {
 export type NanoEffectHookPayload = {
   create: NanoEffectCreator;
   destroy: NanoEffectCleanup | undefined;
+  flags: number;
   deps: unknown[] | undefined;
 };
 

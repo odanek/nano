@@ -1,14 +1,13 @@
 import { NanoElementTag } from '../element';
 import { NanoFiber } from '../fiber';
-import { unmountLifecycleEffects } from '../function-component';
+import { runEffects, cleanupEffects } from '../effect';
 import { visitFibersDepthFirst } from '../traversal';
 
-export function commitBeforeLifecycleEffects(
+export function commitBeforeMutation(
   current: NanoFiber | null,
-  finishedWork: NanoFiber,
 ): void {
   if (current !== null) {
-    unmountLifecycleEffects(current, finishedWork);
+    runEffects(current);
   }
 }
 
@@ -25,5 +24,5 @@ function commitBeforeUnmount(current: NanoFiber): void {
 }
 
 function commitBeforeUnmountFunctionComponent(current: NanoFiber): void {
-  unmountLifecycleEffects(current, null);
+  cleanupEffects(current);
 }

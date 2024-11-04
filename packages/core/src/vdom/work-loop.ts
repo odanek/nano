@@ -5,7 +5,7 @@ import { beginWork } from './update/begin-work';
 import { completeWork } from './update/complete-work';
 import {
   commitBeforeDeletion,
-  commitBeforeLifecycleEffects,
+  commitBeforeMutation,
 } from './update/before-mutation';
 import {
   commitDeletion,
@@ -13,19 +13,24 @@ import {
   commitMutation,
   commitPlacement,
   commitResetTextContent,
+  commitStyleMutation,
 } from './update/mutation';
 import { commitAfterMutation, commitAttachRef } from './update/after-mutation';
 import { visitFibersDepthFirst } from './traversal';
-import { NanoEffectTag } from './effect';
+import { NanoEffectTag, runPassiveEffects, schedulePassiveEffects } from './effect';
 
 export function performSyncWorkOnRoot(root: NanoFiberRoot): void {
   const start = performance.now();
+
+  runPassiveEffects();
 
   const workInProgress = createWorkInProgress(root.current, null);
   root.workInProgress = workInProgress;
 
   workLoopSync(workInProgress as NanoFiber<unknown>);
   commitRoot(root);
+
+  schedulePassiveEffects();
 
   const end = performance.now();
   console.log('Updated in: ', end - start, ' milliseconds');
@@ -70,7 +75,7 @@ function completeUnitOfWork(unitOfWork: NanoFiber): NanoFiber | null {
 
 function commitRoot(root: NanoFiberRoot): void {
   const finishedWork = root.workInProgress as NanoFiber;
-  visitFibersDepthFirst(finishedWork, commitBeforeMutationEffects, null);
+  visitFibersDepthFirst(finishedWork, fiberBeforeMutation, null);
   visitFibersDepthFirst(
     finishedWork,
     commitDeletionEffects,
@@ -78,15 +83,15 @@ function commitRoot(root: NanoFiberRoot): void {
   );
   root.current = finishedWork as NanoFiber<NanoFiberRootProps>;
   root.workInProgress = null;
-  visitFibersDepthFirst(finishedWork, null, commitAfterMutationEffects);
+  visitFibersDepthFirst(finishedWork, null, fiberAfterMutation);
 }
 
-function commitBeforeMutationEffects(fiber: NanoFiber): void {
+function fiberBeforeMutation(fiber: NanoFiber): void {
   const current = fiber.alternate;
   const effectTag = fiber.effectTag;
 
-  if (isFlag(effectTag, NanoEffectTag.Lifecycle)) {
-    commitBeforeLifecycleEffects(current, fiber);
+  if (isFlag(effectTag, NanoEffectTag.Effect)) {
+    commitBeforeMutation(current);
   }
 
   const deletions = fiber.deletions;
@@ -120,17 +125,19 @@ function commitMutationEffects(fiber: NanoFiber): void {
   if (isFlag(effectTag, NanoEffectTag.Placement)) {
     commitPlacement(fiber);
   }
+  if (isFlag(effectTag, NanoEffectTag.Style)) {
+    commitStyleMutation(current, fiber);
+  }
   if (isFlag(effectTag, NanoEffectTag.Update)) {
     commitMutation(current, fiber);
   }
 }
 
-function commitAfterMutationEffects(fiber: NanoFiber): void {
-  const current = fiber.alternate;
+function fiberAfterMutation(fiber: NanoFiber): void {
   const effectTag = fiber.effectTag;
 
-  if (isFlag(effectTag, NanoEffectTag.Lifecycle)) {
-    commitAfterMutation(current, fiber);
+  if (isFlag(effectTag, NanoEffectTag.Effect)) {
+    commitAfterMutation(fiber);
   }
 
   if (isFlag(effectTag, NanoEffectTag.Ref)) {

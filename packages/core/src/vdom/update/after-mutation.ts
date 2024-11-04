@@ -1,11 +1,10 @@
 import { NanoFiber } from '../fiber';
-import { mountLifecycleEffects } from '../function-component';
+import { runEffects } from '../effect';
 
 export function commitAfterMutation(
-  current: NanoFiber | null,
   finishedWork: NanoFiber,
 ): void {
-  mountLifecycleEffects(current, finishedWork);
+  runEffects(finishedWork);
 }
 
 export function commitAttachRef(finishedWork: NanoFiber): void {
