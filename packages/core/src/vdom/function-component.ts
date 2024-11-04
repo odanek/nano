@@ -247,7 +247,7 @@ function createEffectPayload(
   deps: unknown[] | undefined,
   flags: number,
 ): NanoEffectHookPayload {
-  return {    
+  return {
     create,
     destroy: undefined,
     flags,
@@ -313,7 +313,11 @@ function mountState<T>(initialState: T): [T, (value: T) => void] {
 
 function mountEffect(create: NanoEffectCreator, deps?: unknown[]): void {
   const hook = mountWorkInProgressHook(NanoHookTag.Effect);
-  const payload = createEffectPayload(create, deps, NanoEffectFlag.Create | NanoEffectFlag.Passive);
+  const payload = createEffectPayload(
+    create,
+    deps,
+    NanoEffectFlag.Create | NanoEffectFlag.Passive,
+  );
   hook.payload = payload;
   pushPassiveEffect(payload);
 }
@@ -391,9 +395,13 @@ function updateEffect(create: NanoEffectCreator, deps?: unknown[]): void {
   if (deps === undefined || !arrayEquals(payload.deps as unknown[], deps)) {
     payload.flags |= NanoEffectFlag.Destroy;
     pushPassiveEffect(payload);
-    const updatedPayload = createEffectPayload(create, deps, NanoEffectFlag.Create | NanoEffectFlag.Passive);
+    const updatedPayload = createEffectPayload(
+      create,
+      deps,
+      NanoEffectFlag.Create | NanoEffectFlag.Passive,
+    );
     hook.payload = updatedPayload;
-    pushPassiveEffect(updatedPayload);    
+    pushPassiveEffect(updatedPayload);
   }
 }
 

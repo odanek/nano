@@ -17,7 +17,11 @@ import {
 } from './update/mutation';
 import { commitAfterMutation, commitAttachRef } from './update/after-mutation';
 import { visitFibersDepthFirst } from './traversal';
-import { NanoEffectTag, runPassiveEffects, schedulePassiveEffects } from './effect';
+import {
+  NanoEffectTag,
+  runPassiveEffects,
+  schedulePassiveEffects,
+} from './effect';
 
 export function performSyncWorkOnRoot(root: NanoFiberRoot): void {
   const start = performance.now();

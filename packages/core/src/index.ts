@@ -14,6 +14,17 @@ import { NanoMouseEvent } from './event/mouse-event';
 import { NanoPointerEvent } from './event/pointer-event';
 import { NanoWheelEvent } from './event/wheel-event';
 
+import {
+  useCallback,
+  useContext,
+  useLayoutEffect,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+  useStyle,
+} from './vdom/function-component';
+
 import { css, keyframes, NanoStyle } from './style/style';
 
 import * as JSX from './jsx/runtime';
@@ -34,6 +45,14 @@ export {
   NanoMouseEvent,
   NanoPointerEvent,
   NanoWheelEvent,
+  useCallback,
+  useContext,
+  useLayoutEffect,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+  useStyle,
   css,
   keyframes,
   NanoStyle,

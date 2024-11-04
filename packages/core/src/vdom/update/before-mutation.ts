@@ -3,9 +3,7 @@ import { NanoFiber } from '../fiber';
 import { runEffects, cleanupEffects } from '../effect';
 import { visitFibersDepthFirst } from '../traversal';
 
-export function commitBeforeMutation(
-  current: NanoFiber | null,
-): void {
+export function commitBeforeMutation(current: NanoFiber | null): void {
   if (current !== null) {
     runEffects(current);
   }

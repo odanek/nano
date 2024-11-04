@@ -27,77 +27,87 @@ export let passiveEffects: NanoEffectHookPayload[] = [];
 let passiveEffectHandle: number | null = null;
 
 export function runEffects(fiber: NanoFiber): void {
-    for (let hook = fiber.memoizedState as NanoHook | null; hook !== null; hook = hook.next) {
-        const effect = hook.payload as NanoEffectHookPayload;
-        const passive = isFlag(effect.flags, NanoEffectFlag.Passive);
-        if (!passive) {
-            if (isFlag(effect.flags, NanoEffectFlag.Create)) {
-                createEffect(effect);
-            } else if (isFlag(effect.flags, NanoEffectFlag.Destroy)) {
-                destroyEffect(effect);
-            }
-        }
+  for (
+    let hook = fiber.memoizedState as NanoHook | null;
+    hook !== null;
+    hook = hook.next
+  ) {
+    const effect = hook.payload as NanoEffectHookPayload;
+    const passive = isFlag(effect.flags, NanoEffectFlag.Passive);
+    if (!passive) {
+      if (isFlag(effect.flags, NanoEffectFlag.Create)) {
+        createEffect(effect);
+      } else if (isFlag(effect.flags, NanoEffectFlag.Destroy)) {
+        destroyEffect(effect);
+      }
     }
+  }
 }
 
 export function cleanupEffects(fiber: NanoFiber): void {
-    for (let hook = fiber.memoizedState as NanoHook | null; hook !== null; hook = hook.next) {
-        if (hook.tag === NanoHookTag.Effect) {
-            const effect = hook.payload as NanoEffectHookPayload;
-            const passive = isFlag(effect.flags, NanoEffectFlag.Passive);
-            if (passive) {
-                effect.flags |= NanoEffectFlag.Destroy;
-                passiveEffects.push(effect);
-            } else {
-                destroyEffect(effect);
-            }
-        }
+  for (
+    let hook = fiber.memoizedState as NanoHook | null;
+    hook !== null;
+    hook = hook.next
+  ) {
+    if (hook.tag === NanoHookTag.Effect) {
+      const effect = hook.payload as NanoEffectHookPayload;
+      const passive = isFlag(effect.flags, NanoEffectFlag.Passive);
+      if (passive) {
+        effect.flags |= NanoEffectFlag.Destroy;
+        passiveEffects.push(effect);
+      } else {
+        destroyEffect(effect);
+      }
     }
+  }
 }
 
 export function pushPassiveEffect(effect: NanoEffectHookPayload): void {
-    passiveEffects.push(effect);
+  passiveEffects.push(effect);
 }
 
 export function schedulePassiveEffects(): void {
-    if (passiveEffects.length === 0) {
-        return;
-    }
+  if (passiveEffects.length === 0) {
+    return;
+  }
 
-    passiveEffectHandle = window.setTimeout((): void => {
-        passiveEffectHandle = null;
-        runPassiveEffects();
-    }, 0);
+  passiveEffectHandle = window.setTimeout((): void => {
+    passiveEffectHandle = null;
+    runPassiveEffects();
+  }, 0);
 }
 
 export function runPassiveEffects(): void {
-    if (passiveEffectHandle !== null) {
-        clearTimeout(passiveEffectHandle);
-        passiveEffectHandle = null;
-    }
+  if (passiveEffectHandle !== null) {
+    clearTimeout(passiveEffectHandle);
+    passiveEffectHandle = null;
+  }
 
-    const effects = passiveEffects;
-    passiveEffects = [];
+  const effects = passiveEffects;
+  passiveEffects = [];
 
-    for (const effect of effects) {
-        if (isFlag(effect.flags, NanoEffectFlag.Create)) {
-            createEffect(effect);
-        } else if (isFlag(effect.flags, NanoEffectFlag.Destroy)) {
-            destroyEffect(effect);
-        }
+  for (const effect of effects) {
+    if (isFlag(effect.flags, NanoEffectFlag.Create)) {
+      createEffect(effect);
+    } else if (isFlag(effect.flags, NanoEffectFlag.Destroy)) {
+      destroyEffect(effect);
     }
+  }
 }
 
 function createEffect(effect: NanoEffectHookPayload): void {
-    effect.flags &= ~NanoEffectFlag.Create;
-    const destroy = effect.destroy;
-    effect.destroy = destroy;
-    if (isValue(destroy) && !isFunction(destroy)) {
-        throw new Error('The return value of useEffect and useLayoutEffect must be a function or undefined');
-    }
+  effect.flags &= ~NanoEffectFlag.Create;
+  const destroy = effect.destroy;
+  effect.destroy = destroy;
+  if (isValue(destroy) && !isFunction(destroy)) {
+    throw new Error(
+      'The return value of useEffect and useLayoutEffect must be a function or undefined',
+    );
+  }
 }
 
 function destroyEffect(effect: NanoEffectHookPayload): void {
-    effect.flags &= ~NanoEffectFlag.Destroy;
-    effect.destroy?.();
+  effect.flags &= ~NanoEffectFlag.Destroy;
+  effect.destroy?.();
 }

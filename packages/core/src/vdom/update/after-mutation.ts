@@ -1,9 +1,7 @@
 import { NanoFiber } from '../fiber';
 import { runEffects } from '../effect';
 
-export function commitAfterMutation(
-  finishedWork: NanoFiber,
-): void {
+export function commitAfterMutation(finishedWork: NanoFiber): void {
   runEffects(finishedWork);
 }
 
