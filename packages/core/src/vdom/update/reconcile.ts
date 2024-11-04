@@ -5,19 +5,15 @@ import {
   isString,
   isValue,
 } from '@nano-ui/type';
-import { NanoElement } from '../element';
+import { NanoElement, NanoElementKey, NanoElementTag } from '../element';
 import {
   createFiberFromElement,
   createWorkInProgress,
   NanoFiber,
 } from '../fiber';
-import {
-  NanoEffectTag,
-  NanoElementKey,
-  NanoElementTag,
-  NanoNode,
-} from '../type';
+import { NanoNode } from '../type';
 import { NanoFragmentProps } from '../fragment';
+import { NanoEffectTag } from '../effect';
 
 type NanoReconciler = (
   returnFiber: NanoFiber,

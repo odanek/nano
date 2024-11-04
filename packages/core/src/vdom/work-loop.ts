@@ -7,7 +7,6 @@ import {
   commitBeforeDeletion,
   commitBeforeLifecycleEffects,
 } from './update/before-mutation';
-import { NanoEffectTag } from './type';
 import {
   commitDeletion,
   commitDetachRef,
@@ -17,6 +16,7 @@ import {
 } from './update/mutation';
 import { commitAfterMutation, commitAttachRef } from './update/after-mutation';
 import { visitFibersDepthFirst } from './traversal';
+import { NanoEffectTag } from './effect';
 
 export function performSyncWorkOnRoot(root: NanoFiberRoot): void {
   const start = performance.now();

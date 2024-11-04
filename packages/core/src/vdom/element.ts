@@ -1,16 +1,26 @@
-import {
-  NanoElementTag,
-  NanoElementKey,
-  NanoElementType,
-  NanoNode,
-  NanoComponent,
-} from './type';
+import { NanoNode, NanoComponent } from './type';
 import { NanoRef } from './ref';
 import { NanoHostComponentProps } from './host-component';
 import { NanoHostTextProps } from './host-text';
 import { NanoFragmentProps } from './fragment';
 
-export type NanoFragmentElementProps = { children: NanoElement[] };
+export enum NanoElementTag {
+  HostRoot,
+  HostComponent,
+  HostText,
+  HostPortal,
+  FunctionComponent,
+  Fragment,
+  Context,
+}
+
+export type NanoElementKey = unknown;
+export type NanoElementType<P = unknown> =
+  | null
+  | string
+  | HTMLElement
+  | SVGElement
+  | NanoComponent<P>;
 
 export class NanoElement<P = unknown> {
   public tag: NanoElementTag;

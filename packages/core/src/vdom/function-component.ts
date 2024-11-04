@@ -25,7 +25,8 @@ import {
 } from './hook';
 import { NanoRef } from './ref';
 import { findFiberRoot } from './traversal';
-import { NanoChildren, NanoComponent, NanoEffectTag } from './type';
+import { NanoChildren, NanoComponent } from './type';
+import { NanoEffectTag } from './effect';
 
 type NanoFunctionComponentProps = PlainObject;
 type NanoHookVisitCallback = (

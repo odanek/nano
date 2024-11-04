@@ -1,7 +1,7 @@
+import { NanoElementTag } from '../element';
 import { NanoFiber } from '../fiber';
 import { unmountLifecycleEffects } from '../function-component';
 import { visitFibersDepthFirst } from '../traversal';
-import { NanoElementTag } from '../type';
 
 export function commitBeforeLifecycleEffects(
   current: NanoFiber | null,

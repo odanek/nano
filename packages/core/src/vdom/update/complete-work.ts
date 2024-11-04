@@ -1,6 +1,7 @@
+import { NanoEffectTag } from '../effect';
+import { NanoElementTag } from '../element';
 import { NanoFiber } from '../fiber';
 import { diffProperties } from '../host-component';
-import { NanoEffectTag, NanoElementTag } from '../type';
 
 export function completeWork(
   current: NanoFiber | null,

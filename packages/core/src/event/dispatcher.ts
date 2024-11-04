@@ -7,12 +7,12 @@ import { NanoWheelEvent } from './wheel-event.js';
 import { NanoInputEvent } from './input-event.js';
 import { NanoClipboardEvent } from './clipboard-event.js';
 import { NanoEvent } from './event.js';
-import { NanoElementTag } from '../vdom/type.js';
 import {
   NanoHostComponentBubbleEventProps,
   NanoHostComponentCaptureEventProps,
   NanoHostComponentProps,
 } from '../vdom/host-component.js';
+import { NanoElementTag } from '../vdom/element.js';
 
 export type NanoEventDispatchResult = {
   handled: boolean;

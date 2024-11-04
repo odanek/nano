@@ -10,13 +10,14 @@ import {
   getHostParentNode,
   getPlacedHostSibling,
 } from '../traversal';
-import { NanoEffectTag, NanoElementTag } from '../type';
 import {
   NanoHostComponentPropsDiff,
   NanoHostComponentStateNode,
   updateHostComponentInstance,
 } from '../host-component';
 import { mountStyleEffects } from '../function-component';
+import { NanoEffectTag } from '../effect';
+import { NanoElementTag } from '../element';
 
 export function commitResetTextContent(fiber: NanoFiber): void {
   resetHostTextContent(fiber.stateNode as NanoHostTextStateNode);

@@ -1,7 +1,7 @@
 import { render } from './vdom/render';
 
-import { NanoElementKey, NanoNode, NanoComponent } from './vdom/type';
-import { NanoElement } from './vdom/element';
+import { NanoNode, NanoComponent } from './vdom/type';
+import { NanoElement, NanoElementKey } from './vdom/element';
 import { NanoRef } from './vdom/ref';
 
 import { NanoEventType } from './event/event-type';

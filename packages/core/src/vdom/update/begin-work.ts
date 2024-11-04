@@ -6,12 +6,7 @@ import {
 } from '../host-component';
 import { createHostTextInstance } from '../host-text';
 import { NanoFiberRootState } from '../fiber-root';
-import {
-  NanoChildren,
-  NanoEffectTag,
-  NanoElementTag,
-  NanoPropsWithChildren,
-} from '../type';
+import { NanoChildren, NanoPropsWithChildren } from '../type';
 import {
   cloneChildFibers,
   mountChildFibers,
@@ -27,6 +22,8 @@ import {
   renderFunctionComponent,
   updateFunctionComponent,
 } from '../function-component';
+import { NanoElementTag } from '../element';
+import { NanoEffectTag } from '../effect';
 
 export function beginWork(
   current: NanoFiber | null,
@@ -48,6 +45,7 @@ export function beginWork(
     case NanoElementTag.Context:
       return beginElement(current, workInProgress);
   }
+  return null;
 }
 
 function propagateContext(workInProgress: NanoFiber): void {
