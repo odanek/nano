@@ -33,9 +33,7 @@ export type NanoElementType<P = unknown> =
 
 export type NanoNode = NanoElement | string | number | null;
 export type NanoChildren = undefined | NanoNode | NanoNode[];
-export type NanoComponent<T = unknown> = (
-  props: T,
-) => Exclude<NanoChildren, undefined>;
+export type NanoComponent<T = unknown> = (props: T) => NanoNode;
 
 export type NanoChildrenProp = {
   children?: NanoChildren;
