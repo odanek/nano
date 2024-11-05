@@ -2,13 +2,15 @@ import { NanoNode } from '../vdom/type';
 import { NanoIntrinsicElements } from './intrinsic-elements';
 
 export { jsx, jsxs, jsxDEV } from './factory';
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Element = NanoNode;
 export type IntrinsicElements = NanoIntrinsicElements;
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace JSX {
-    type Element = NanoNode;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    type Element = NanoNode<any>;
     type IntrinsicElements = NanoIntrinsicElements;
   }
 }

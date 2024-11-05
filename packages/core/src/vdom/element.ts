@@ -3,6 +3,7 @@ import { NanoRef } from './ref';
 import { NanoHostComponentProps } from './host-component';
 import { NanoHostTextProps } from './host-text';
 import { NanoFragmentProps } from './fragment';
+import { NanoContext, NanoContextProps } from './context';
 
 export enum NanoElementTag {
   HostRoot,
@@ -73,6 +74,13 @@ export class NanoElement<P = unknown> {
       null,
       props,
     );
+  }
+
+  static context<T>(
+    context: NanoContext<T>,
+    props: NanoContextProps<T>,
+  ): NanoElement<NanoContextProps<T>> {
+    return new NanoElement(NanoElementTag.Context, context, null, null, props);
   }
 
   // TODO <Fragment> element, ktery bere i key

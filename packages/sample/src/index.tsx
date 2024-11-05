@@ -1,4 +1,12 @@
-import { JSX, render, useEffect } from '@nano-ui/core';
+import { JSX, render, useContext, useEffect } from '@nano-ui/core';
+import { createContext } from '../../core/dist/vdom/context';
+
+const MyContext = createContext<boolean>('MyContext');
+
+function Bar(): JSX.Element {
+  const my = useContext(MyContext);
+  return <div>{my ? 'true' : 'false'}</div>;
+}
 
 function Foo(): JSX.Element {
   useEffect((): undefined => {
@@ -6,9 +14,11 @@ function Foo(): JSX.Element {
   });
 
   return (
-    <div class={'foo'}>
-      Hello <div>Nic se nedeje</div>
-    </div>
+    <MyContext value={true}>
+      <div class={'foo'}>
+        Hello: <Bar />
+      </div>
+    </MyContext>
   );
 }
 

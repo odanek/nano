@@ -1,3 +1,4 @@
+import { NanoElement } from './element';
 import { NanoFiber } from './fiber';
 import { NanoComponent, NanoPropsWithChildren } from './type';
 
@@ -6,13 +7,14 @@ export type NanoContext<T = unknown> = NanoComponent<NanoContextProps<T>>;
 export type NanoContextProps<T = unknown> = NanoPropsWithChildren<{ value: T }>;
 
 let id = 1;
-const contextMarker = Symbol('nano-context-marker');
+const contextKeyMarker = Symbol('nano-context-key');
+const contextNameMarker = Symbol('nano-context-name');
 export const emptyContext: Record<string, unknown> = Object.freeze({});
 
-// TODO Specify context name?
-export function createContext<T>(): NanoContext<T> {
-  const Context = (): null => null; // TODO: Return NanoElement.context() here so that no special casing is needed in jsx
-  Context[contextMarker] = id++;
+export function createContext<T>(name: string): NanoContext<T> {
+  const Context = (props: NanoContextProps<T>): NanoElement<NanoContextProps<T>> => NanoElement.context(Context, props);
+  Context[contextKeyMarker] = id++;
+  Context[contextNameMarker] = name;
   return Context;
 }
 
@@ -57,5 +59,10 @@ export function compareContext(
 
 export function getContextKey<T>(context: NanoContext<T>): NanoContextKey {
   // @ts-expect-error Marker is always set
-  return context[contextMarker];
+  return context[contextKeyMarker];
+}
+
+export function getContextName<T>(context: NanoContext<T>): string {
+  // @ts-expect-error Marker is always set
+  return context[contextNameMarker];
 }
