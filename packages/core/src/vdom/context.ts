@@ -12,7 +12,9 @@ const contextNameMarker = Symbol('nano-context-name');
 export const emptyContext: Record<string, unknown> = Object.freeze({});
 
 export function createContext<T>(name: string): NanoContext<T> {
-  const Context = (props: NanoContextProps<T>): NanoElement<NanoContextProps<T>> => NanoElement.context(Context, props);
+  const Context = (
+    props: NanoContextProps<T>,
+  ): NanoElement<NanoContextProps<T>> => NanoElement.context(Context, props);
   Context[contextKeyMarker] = id++;
   Context[contextNameMarker] = name;
   return Context;

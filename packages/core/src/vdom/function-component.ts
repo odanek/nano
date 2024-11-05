@@ -335,7 +335,9 @@ function mountContext<T>(context: NanoContext<T>): T {
   addContextType(workInProgressFiber as NanoFiber, key);
   const fullContext = (workInProgressFiber as NanoFiber).fullContext;
   if (fullContext === null || !objectHasOwnProperty(fullContext, key)) {
-    throw new Error(`Context value for context '${getContextName(context)}' not defined`);
+    throw new Error(
+      `Context value for context '${getContextName(context)}' not defined`,
+    );
   }
   return fullContext[key] as T;
 }
