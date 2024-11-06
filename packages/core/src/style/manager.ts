@@ -1,5 +1,5 @@
 import { isNumber } from '@nano-ui/type';
-import { NanoStyle, NanoStyleBundle } from './style.js';
+import { NanoStyle, NanoStyleSheet } from './style.js';
 
 type RefCountMap<T> = Map<T, number>;
 
@@ -7,12 +7,12 @@ const styleSheet = document.createElement('style');
 styleSheet.classList.add('nano-styles');
 
 const activeStyles: RefCountMap<NanoStyle> = new Map();
-const activeBundles: RefCountMap<NanoStyleBundle> = new Map();
+const activeBundles: RefCountMap<NanoStyleSheet> = new Map();
 const cleanupTimeout: number = 2000;
 let totalRuleCount = 0;
 let cleanupHandle: number | null = null;
 
-export function connectBundle(bundle: NanoStyleBundle): void {
+export function connectBundle(bundle: NanoStyleSheet): void {
   if (retain(activeBundles, bundle)) {
     for (const style of Object.values(bundle)) {
       if (style instanceof NanoStyle) {
@@ -24,7 +24,7 @@ export function connectBundle(bundle: NanoStyleBundle): void {
   }
 }
 
-export function disconnectBundle(bundle: NanoStyleBundle): void {
+export function disconnectBundle(bundle: NanoStyleSheet): void {
   if (release(activeBundles, bundle)) {
     scheduleCleanup();
   }
@@ -50,7 +50,7 @@ function cleanup(): void {
 }
 
 function cleanupBundles(): void {
-  const cleanedBundles = new Set<NanoStyleBundle>();
+  const cleanedBundles = new Set<NanoStyleSheet>();
   for (const [bundle, referenceCount] of activeBundles.entries()) {
     if (referenceCount === 0 && !cleanedBundles.has(bundle)) {
       cleanupBundle(bundle, cleanedBundles);
@@ -63,8 +63,8 @@ function cleanupBundles(): void {
 }
 
 function cleanupBundle(
-  bundle: NanoStyleBundle,
-  cleanedBundles: Set<NanoStyleBundle>,
+  bundle: NanoStyleSheet,
+  cleanedBundles: Set<NanoStyleSheet>,
 ): void {
   cleanedBundles.add(bundle);
   for (const style of Object.values(bundle)) {

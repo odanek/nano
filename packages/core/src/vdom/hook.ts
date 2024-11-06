@@ -1,6 +1,6 @@
 import { Counter } from '@nano-ui/util';
 import { NanoContext } from './context';
-import { NanoStyleBundle, NanoStyleProvider } from '../style/style';
+import { NanoStyleSheet, NanoStyleSheetProvider } from '../style/style';
 import { NanoRef } from './ref';
 import { AnyFunction } from '@nano-ui/type';
 import { NanoFiber } from './fiber';
@@ -38,8 +38,9 @@ export type NanoEffectHook = (
   deps?: unknown[],
 ) => void;
 export type NanoContextHook = <T>(context: NanoContext<T>) => T;
-export type NanoStyleHook = <T extends NanoStyleBundle>(
-  provider: NanoStyleProvider<T>,
+export type NanoStyleSheetHook = <T extends NanoStyleSheet, A>(
+  provider: T | NanoStyleSheetProvider<T, A>,
+  args: A,
 ) => T;
 export type NanoReducerHook = <T, A>(
   reducer: NanoReducer<T, A>,
@@ -57,7 +58,7 @@ export type NanoHookDispatcher = {
   useEffect: NanoEffectHook;
   useLayoutEffect: NanoEffectHook;
   useContext: NanoContextHook;
-  useStyle: NanoStyleHook;
+  useStyleSheet: NanoStyleSheetHook;
   useReducer: NanoReducerHook;
   useRef: NanoRefHook;
   useCallback: NanoCallbackHook;
@@ -89,8 +90,9 @@ export type NanoMemoHookPayload<T> = {
   deps: unknown[] | undefined;
 };
 
-export type NanoStyleHookPayload<T extends NanoStyleBundle = NanoStyleBundle> =
+export type NanoStyleSheetHookPayload<T extends NanoStyleSheet, A> =
   {
-    provider: NanoStyleProvider<T>;
+    args: A,
+    provider: NanoStyleSheetProvider<T,A> | null;
     bundle: T;
   };

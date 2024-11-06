@@ -23,10 +23,10 @@ import {
   useReducer,
   useRef,
   useState,
-  useStyle,
+  useStyleSheet,
 } from './vdom/function-component';
 
-import { css, keyframes, NanoStyle } from './style/style';
+import { css, keyframes, NanoStyle, NanoStyleSheet } from './style/style';
 
 import * as JSX from './jsx/runtime';
 
@@ -57,11 +57,12 @@ export {
   useReducer,
   useRef,
   useState,
-  useStyle,
+  useStyleSheet,
   // Styles
   css,
   keyframes,
   NanoStyle,
+  NanoStyleSheet,
   // JSX
   JSX,
 };
