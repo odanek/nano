@@ -1,6 +1,7 @@
 export type NanoStyleId = string;
-export type NanoStyleSheetProvider<T extends NanoStyleSheet, A> =
-  (args: A) => T;
+export type NanoStyleSheetProvider<T extends NanoStyleSheet, A> = (
+  args: A,
+) => T;
 export type NanoStyleSheet = {
   [key: string]: NanoStyle | NanoStyleSheet;
 };
@@ -24,14 +25,20 @@ function nextId(): NanoStyleId {
   return 's' + ++lastId;
 }
 
-export function css(strings: TemplateStringsArray, ...values: unknown[]): NanoStyle {
+export function css(
+  strings: TemplateStringsArray,
+  ...values: unknown[]
+): NanoStyle {
   const id = nextId();
   const definition = join(strings, values);
   const rule = `.${id} {${definition}}`;
   return new NanoStyle(id, rule);
 }
 
-export function keyframes(strings: TemplateStringsArray, ...values: unknown[]): NanoStyle {
+export function keyframes(
+  strings: TemplateStringsArray,
+  ...values: unknown[]
+): NanoStyle {
   const id = nextId();
   const definition = join(strings, values);
   const rule = `@keyframes ${id} {${definition}}`;

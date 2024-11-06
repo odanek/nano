@@ -1,25 +1,27 @@
-import { css, JSX, render, useContext, useEffect, useStyleSheet } from '@nano-ui/core';
+import {
+  css,
+  JSX,
+  render,
+  useContext,
+  useEffect,
+  useStyleSheet,
+} from '@nano-ui/core';
 import { createContext } from '../../core/dist/vdom/context';
 
 const MyContext = createContext<boolean>('MyContext');
 
 function Bar(): JSX.Element {
   const my = useContext(MyContext);
-  // TODO useStyleSheet(styleSheet) vs useParametrizedStyleSheet(provider, arg)
-  // TODO parametrized  
-  const css = useStyleSheet(barStyleSheet, undefined);  
+  // TODO useParametrizedStyleSheet(provider, arg) s cachovanim
+  const css = useStyleSheet(barStyleSheet);
   return <div class={css.root}>{my ? 'true' : 'false'}</div>;
 }
 
-// TODO
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-function barStyleSheet() {
-    return {
-        root: css`
-            color: red;
-        `,
-    };
-}
+const barStyleSheet = {
+  root: css`
+    color: red;
+  `,
+};
 
 function Foo(): JSX.Element {
   useEffect((): undefined => {

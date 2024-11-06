@@ -1,7 +1,7 @@
-import { AnyFunction, isFunction, PlainObject } from '@nano-ui/type';
+import { AnyFunction, PlainObject } from '@nano-ui/type';
 import { arrayEquals, objectEquals, objectHasOwnProperty } from '@nano-ui/util';
 import { connectBundle, disconnectBundle } from '../style/manager';
-import { NanoStyleSheet, NanoStyleSheetProvider } from '../style/style';
+import { NanoStyleSheet } from '../style/style';
 import {
   compareContext,
   getContextKey,
@@ -142,23 +142,25 @@ export function mountStyleEffects(
 ): void {
   visitHooks(current, finishedWork, (currentHook, finishedWorkHook) => {
     if (currentHook !== null && currentHook.tag === NanoHookTag.Style) {
-      const payload = currentHook.payload as NanoStyleSheetHookPayload<NanoStyleSheet,unknown>;
+      const payload =
+        currentHook.payload as NanoStyleSheetHookPayload<NanoStyleSheet>;
       if (finishedWorkHook == null) {
-        disconnectBundle(payload.bundle);
+        disconnectBundle(payload.styleSheet);
       } else {
         const finishedWorkPayload =
-          finishedWorkHook.payload as NanoStyleSheetHookPayload<NanoStyleSheet,unknown>;
-        if (finishedWorkPayload.bundle !== payload.bundle) {
-          disconnectBundle(payload.bundle);
-          connectBundle(finishedWorkPayload.bundle);
+          finishedWorkHook.payload as NanoStyleSheetHookPayload<NanoStyleSheet>;
+        if (finishedWorkPayload.styleSheet !== payload.styleSheet) {
+          disconnectBundle(payload.styleSheet);
+          connectBundle(finishedWorkPayload.styleSheet);
         }
       }
     } else if (
       finishedWorkHook !== null &&
       finishedWorkHook.tag === NanoHookTag.Style
     ) {
-      const payload = finishedWorkHook.payload as NanoStyleSheetHookPayload<NanoStyleSheet,unknown>;
-      connectBundle(payload.bundle);
+      const payload =
+        finishedWorkHook.payload as NanoStyleSheetHookPayload<NanoStyleSheet>;
+      connectBundle(payload.styleSheet);
     }
   });
 }
@@ -290,15 +292,11 @@ function createMemoPayload<T>(
   };
 }
 
-function createStyleSheetPayload<T extends NanoStyleSheet,A>(
-  provider: T | NanoStyleSheetProvider<T,A>,
-  args: A,
-): NanoStyleSheetHookPayload<T,A> {
-  const hasProvider = isFunction(provider);
+function createStyleSheetPayload<S extends NanoStyleSheet>(
+  styleSheet: S,
+): NanoStyleSheetHookPayload<S> {
   return {
-    args,
-    provider: hasProvider ? provider : null,
-    bundle: hasProvider ? provider(args) : provider,
+    styleSheet,
   };
 }
 
@@ -346,15 +344,12 @@ function mountContext<T>(context: NanoContext<T>): T {
 }
 
 // TODO: Convert Style objects to just class names?
-function mountStyleSheet<T extends NanoStyleSheet,A>(
-  provider: T | NanoStyleSheetProvider<T,A>,
-  args: A
-): T {
+function mountStyleSheet<S extends NanoStyleSheet>(styleSheet: S): S {
   const hook = mountWorkInProgressHook(NanoHookTag.Style);
-  const payload = createStyleSheetPayload(provider, args);
+  const payload = createStyleSheetPayload(styleSheet);
   hook.payload = payload;
   (workInProgressFiber as NanoFiber).effectTag |= NanoEffectTag.Style;
-  return payload.bundle;
+  return styleSheet;
 }
 
 function mountReducer<T, A>(
@@ -431,18 +426,15 @@ function updateContext<T>(context: NanoContext<T>): T {
   return memoizedContext[key] as T;
 }
 
-function updateStyleSheet<T extends NanoStyleSheet,A>(
-  provider: T | NanoStyleSheetProvider<T,A>,
-  args: A
-): T {
+function updateStyleSheet<S extends NanoStyleSheet>(styleSheet: S): S {
   const hook = updateWorkInProgressHook(NanoHookTag.Style);
-  let payload = hook.payload as NanoStyleSheetHookPayload<T,A>;
-  if (payload.provider !== provider || payload.args !== args) {
-    payload = createStyleSheetPayload(provider, args);
+  let payload = hook.payload as NanoStyleSheetHookPayload<S>;
+  if (payload.styleSheet !== styleSheet) {
+    payload = createStyleSheetPayload(styleSheet);
     hook.payload = payload;
     (workInProgressFiber as NanoFiber).effectTag |= NanoEffectTag.Style;
   }
-  return payload.bundle;
+  return styleSheet;
 }
 
 function updateReducer<T, A>(
@@ -516,11 +508,8 @@ export function useContext<T>(context: NanoContext<T>): T {
   return (hookDispatcher as NanoHookDispatcher).useContext(context);
 }
 
-export function useStyleSheet<T extends NanoStyleSheet,A>(
-  create: T | NanoStyleSheetProvider<T,A>,
-  args: A
-): T {
-  return (hookDispatcher as NanoHookDispatcher).useStyleSheet(create, args);
+export function useStyleSheet<S extends NanoStyleSheet>(styleSheet: S): S {
+  return (hookDispatcher as NanoHookDispatcher).useStyleSheet(styleSheet);
 }
 
 export function useReducer<T, A>(

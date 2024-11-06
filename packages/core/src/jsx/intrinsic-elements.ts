@@ -1,4 +1,4 @@
-import { NanoStyle } from "../style/style";
+import { NanoStyle } from '../style/style';
 
 export type NanoIntrinsicElements = {
   div: {
