@@ -4,26 +4,35 @@ import {
   render,
   useContext,
   useEffect,
+  useState,
   useStyleSheet,
 } from '@nano-ui/core';
 import { createContext } from '../../core/dist/vdom/context';
 
 const MyContext = createContext<boolean>('MyContext');
 
-function Bar(): JSX.Element {
+function Bar({bold}: {bold: boolean}): JSX.Element {
   const my = useContext(MyContext);
-  // TODO useParametrizedStyleSheet(provider, arg) s cachovanim
   const css = useStyleSheet(barStyleSheet);
-  return <div class={css.root}>{my ? 'true' : 'false'}</div>;
+  return (
+    <div class={[css.root, [css.bold, bold]]}>
+      {my ? 'true' : 'false'}
+    </div>
+  );
 }
 
 const barStyleSheet = {
   root: css`
     color: red;
   `,
+  bold: css`
+    font-weight: bold;
+  `,
 };
 
 function Foo(): JSX.Element {
+    const [bold, setBold] = useState(true);
+
   useEffect((): undefined => {
     console.log('Rendered passive');
   });
@@ -31,7 +40,8 @@ function Foo(): JSX.Element {
   return (
     <MyContext value={true}>
       <div class={'foo'}>
-        Hello: <Bar />
+        Hello: <Bar bold={bold} />
+        <button onClick={() => setBold(!bold)}>Toggle bold</button>
       </div>
     </MyContext>
   );

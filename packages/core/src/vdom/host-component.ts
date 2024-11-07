@@ -1,12 +1,16 @@
-import { isString, isNumber } from '@nano-ui/type';
+import { isString, isNumber, isArray } from '@nano-ui/type';
 import { setHostTextContent } from './host-text';
 import { NanoFiber } from './fiber';
 
 import { NanoEventHandler } from '../event/dispatcher';
 import { NanoChildrenProp, NanoRefProp } from './type';
+import { NanoStyle } from '../style/style';
 
+// TODO How to represent this?
+export type NanoHostComponentClassAttributeObject = [(string | NanoStyle), boolean];
+export type NanoHostComponentClassAttribute = string | NanoStyle | (string | NanoStyle | NanoHostComponentClassAttributeObject)[];
 export type NanoHostComponentStateNode = HTMLElement | SVGElement;
-export type NanoHostComponentStyle = Record<string, string>;
+export type NanoHostComponentStyleAttribute = Record<string, string>;
 
 // TODO Merge somehow with intrinsic elements?
 export type NanoHostComponentCaptureEventProps = {
@@ -21,8 +25,9 @@ export type NanoHostComponentEventProps = NanoHostComponentCaptureEventProps &
   NanoHostComponentBubbleEventProps;
 
 export type NanoHostComponentAttributeProps = {
-  class?: string;
-  style: NanoHostComponentStyle;
+  id?: string;
+  class?: NanoHostComponentClassAttribute;
+  style?: NanoHostComponentStyleAttribute;
 };
 
 // TODO Explicitly name all style props
@@ -32,12 +37,6 @@ export type NanoHostComponentProps = NanoChildrenProp &
   NanoHostComponentEventProps;
 
 export type NanoHostComponentPropsDiff = Array<string | null>;
-type DiffFunc = (
-  diff: NanoHostComponentPropsDiff,
-  key: string,
-  oldValue: unknown,
-  newValue: unknown,
-) => void;
 
 // TODO Determine this automatically based on whether we are inside svg or not
 const svgNamespace = 'http://www.w3.org/2000/svg';
@@ -123,9 +122,11 @@ function setInitialProperties(
       continue;
     }
 
-    if (key === 'style') {
+    if (key === 'class') {
+      node.setAttribute('class', classNames(value as NanoHostComponentClassAttribute));
+    } else if (key === 'style') {
       for (const [styleKey, styleValue] of Object.entries(
-        value as NanoHostComponentStyle,
+        value as NanoHostComponentStyleAttribute,
       )) {
         // @ts-expect-error Setting a custom style
         node.style[styleKey] = styleValue;
@@ -157,7 +158,7 @@ export function diffProperties(
   }
 
   const diff: NanoHostComponentPropsDiff = [];
-  diffObjects(diff, oldProps, newProps, diffPropertyChange);
+  diffObjects(diff, oldProps, newProps);
   return diff.length === 0 ? null : diff;
 }
 
@@ -165,20 +166,19 @@ function diffObjects(
   diff: NanoHostComponentPropsDiff,
   left: object,
   right: object,
-  handler: DiffFunc,
 ): void {
   for (const [key, value] of Object.entries(left)) {
     // @ts-expect-error TODO
     const newValue = right[key];
     if (value !== newValue) {
-      handler(diff, key, value, newValue);
+      diffPropertyChange(diff, key, value, newValue);
     }
   }
   for (const [key, value] of Object.entries(right)) {
     // @ts-expect-error TODO
     const oldValue = left[key];
     if (oldValue === undefined) {
-      handler(diff, key, oldValue, value);
+      diffPropertyChange(diff, key, oldValue, value);
     }
   }
 }
@@ -189,16 +189,22 @@ function diffPropertyChange(
   oldValue: unknown,
   newValue: unknown,
 ): void {
+  // TODO class?  
   if (key === 'children') {
     if (isString(newValue) || isNumber(newValue)) {
       diff.push(SET_TEXT_CHILD, newValue.toString());
     }
+  } else if (key === 'class') {
+    const oldClassName = classNames(oldValue as NanoHostComponentClassAttribute);
+    const newClassName = classNames(newValue as NanoHostComponentClassAttribute);
+    if (oldClassName !== newClassName) {
+      diff.push(key, newClassName);
+    }
   } else if (key === 'style') {
-    diffObjects(
+    diffStyle(
       diff,
-      oldValue ?? emptyObject,
-      newValue ?? emptyObject,
-      diffStyleChange,
+      (oldValue ?? emptyStyle) as NanoHostComponentStyleAttribute,
+      (newValue ?? emptyStyle) as NanoHostComponentStyleAttribute,
     );
   } else if (!key.startsWith('on')) {
     // @ts-expect-error TODO
@@ -206,16 +212,49 @@ function diffPropertyChange(
   }
 }
 
-function diffStyleChange(
+function diffStyle(
   diff: NanoHostComponentPropsDiff,
-  key: string,
-  oldValue: unknown,
-  newValue: unknown,
+  oldStyle: NanoHostComponentStyleAttribute,
+  newStyle: NanoHostComponentStyleAttribute,
 ): void {
-  // @ts-expect-error TODO
-  diff.push(SET_STYLE, key, newValue === undefined ? null : newValue);
+  for (const [key, value] of Object.entries(newStyle)) {
+    const oldValue = oldStyle[key];
+    if (value !== oldValue) {
+      diff.push(SET_STYLE, key, value === undefined ? null : value);
+    }
+  }
+  for (const key of Object.keys(oldStyle)) {
+    const newValue = newStyle[key];
+    if (newValue === undefined) {
+      diff.push(SET_STYLE, key, null);
+    }
+  }
+}
+
+export function classNames(names: NanoHostComponentClassAttribute): string {  
+	const result: string[] = [];
+  if (isArray(names)) {
+    for (const name of names) {
+      addClassNames(result, name);
+    }
+  } else {
+    addClassNames(result, names);
+  }  
+	return result.join(' ');
+}
+
+function addClassNames(result: string[], name: string | NanoStyle | NanoHostComponentClassAttributeObject): void {
+  if (isString(name)) {
+    result.push(name);
+  } else if (name instanceof NanoStyle) {
+    result.push(name.id);
+  } else if (isArray(name)) {    
+    if (name[1]) {
+      result.push(name[0].toString());
+    }
+  }
 }
 
 const SET_STYLE = '%1';
 const SET_TEXT_CHILD = '%2';
-const emptyObject = {};
+const emptyStyle = {};

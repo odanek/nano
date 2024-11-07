@@ -1,8 +1,7 @@
-import { NanoStyle } from '../style/style';
+import { NanoHostComponentProps } from '../vdom/host-component';
 
 export type NanoIntrinsicElements = {
-  div: {
-    id?: string;
-    class?: string | NanoStyle | (string | NanoStyle)[];
-  };
+  div: NanoHostComponentProps;
+  span: NanoHostComponentProps;
+  button: NanoHostComponentProps;
 };
