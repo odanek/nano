@@ -38,7 +38,9 @@ export type NanoEffectHook = (
   deps?: unknown[],
 ) => void;
 export type NanoContextHook = <T>(context: NanoContext<T>) => T;
-export type NanoStyleSheetHook = <S extends NanoStyleSheet>(styleSheet: S) => S;
+export type NanoStyleSheetHook = <S extends NanoStyleSheet>(
+  styleSheet: S,
+) => Record<keyof S, string>;
 export type NanoReducerHook = <T, A>(
   reducer: NanoReducer<T, A>,
   initialState: T,
@@ -89,4 +91,5 @@ export type NanoMemoHookPayload<T> = {
 
 export type NanoStyleSheetHookPayload<S extends NanoStyleSheet> = {
   styleSheet: S;
+  bundle: Record<keyof S, string>;
 };

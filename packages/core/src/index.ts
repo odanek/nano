@@ -3,6 +3,7 @@ import { render } from './vdom/render';
 import { NanoNode, NanoComponent } from './vdom/type';
 import { NanoElement, NanoElementKey } from './vdom/element';
 import { NanoRef } from './vdom/ref';
+import { classNames } from './vdom/host-component';
 
 import { NanoEventType } from './event/event-type';
 import { NanoEvent } from './event/event';
@@ -39,6 +40,7 @@ export {
   NanoElement,
   NanoRef,
   NanoEventType,
+  classNames,
   // Events
   NanoEvent,
   NanoClipboardEvent,

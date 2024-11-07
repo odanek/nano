@@ -1,14 +1,11 @@
-import { isString, isNumber, isArray } from '@nano-ui/type';
+import { isString, isNumber } from '@nano-ui/type';
 import { setHostTextContent } from './host-text';
 import { NanoFiber } from './fiber';
 
 import { NanoEventHandler } from '../event/dispatcher';
 import { NanoChildrenProp, NanoRefProp } from './type';
-import { NanoStyle } from '../style/style';
 
-// TODO How to represent this?
-export type NanoHostComponentClassAttributeObject = [(string | NanoStyle), boolean];
-export type NanoHostComponentClassAttribute = string | NanoStyle | (string | NanoStyle | NanoHostComponentClassAttributeObject)[];
+export type NanoHostComponentClassAttribute = string | string[];
 export type NanoHostComponentStateNode = HTMLElement | SVGElement;
 export type NanoHostComponentStyleAttribute = Record<string, string>;
 
@@ -123,7 +120,12 @@ function setInitialProperties(
     }
 
     if (key === 'class') {
-      node.setAttribute('class', classNames(value as NanoHostComponentClassAttribute));
+      const className = classNameString(
+        value as NanoHostComponentClassAttribute,
+      );
+      if (className !== null) {
+        node.setAttribute('class', className);
+      }
     } else if (key === 'style') {
       for (const [styleKey, styleValue] of Object.entries(
         value as NanoHostComponentStyleAttribute,
@@ -189,14 +191,18 @@ function diffPropertyChange(
   oldValue: unknown,
   newValue: unknown,
 ): void {
-  // TODO class?  
+  // TODO class?
   if (key === 'children') {
     if (isString(newValue) || isNumber(newValue)) {
       diff.push(SET_TEXT_CHILD, newValue.toString());
     }
   } else if (key === 'class') {
-    const oldClassName = classNames(oldValue as NanoHostComponentClassAttribute);
-    const newClassName = classNames(newValue as NanoHostComponentClassAttribute);
+    const oldClassName = classNameString(
+      oldValue as NanoHostComponentClassAttribute,
+    );
+    const newClassName = classNameString(
+      newValue as NanoHostComponentClassAttribute,
+    );
     if (oldClassName !== newClassName) {
       diff.push(key, newClassName);
     }
@@ -231,28 +237,21 @@ function diffStyle(
   }
 }
 
-export function classNames(names: NanoHostComponentClassAttribute): string {  
-	const result: string[] = [];
-  if (isArray(names)) {
-    for (const name of names) {
-      addClassNames(result, name);
-    }
-  } else {
-    addClassNames(result, names);
-  }  
-	return result.join(' ');
+function classNameString(name: string | string[]): string | null {
+  if (name === null || undefined) {
+    return null;
+  }
+  return isString(name) ? name : name.join(' ');
 }
 
-function addClassNames(result: string[], name: string | NanoStyle | NanoHostComponentClassAttributeObject): void {
-  if (isString(name)) {
-    result.push(name);
-  } else if (name instanceof NanoStyle) {
-    result.push(name.id);
-  } else if (isArray(name)) {    
-    if (name[1]) {
-      result.push(name[0].toString());
+export function classNames(names: Record<string, boolean>): string {
+  const result: string[] = [];
+  for (const [key, value] of Object.entries(names)) {
+    if (value) {
+      result.push(key);
     }
   }
+  return result.join(' ');
 }
 
 const SET_STYLE = '%1';

@@ -1,4 +1,5 @@
 import {
+  classNames,
   css,
   JSX,
   render,
@@ -11,11 +12,16 @@ import { createContext } from '../../core/dist/vdom/context';
 
 const MyContext = createContext<boolean>('MyContext');
 
-function Bar({bold}: {bold: boolean}): JSX.Element {
+function Bar({ bold }: { bold: boolean }): JSX.Element {
   const my = useContext(MyContext);
   const css = useStyleSheet(barStyleSheet);
   return (
-    <div class={[css.root, [css.bold, bold]]}>
+    <div
+      class={classNames({
+        [css.root]: true,
+        [css.bold]: bold,
+      })}
+    >
       {my ? 'true' : 'false'}
     </div>
   );
@@ -31,11 +37,11 @@ const barStyleSheet = {
 };
 
 function Foo(): JSX.Element {
-    const [bold, setBold] = useState(true);
+  const [bold, setBold] = useState(false);
 
   useEffect((): undefined => {
     console.log('Rendered passive');
-  });
+  }, []);
 
   return (
     <MyContext value={true}>

@@ -3,7 +3,7 @@ export type NanoStyleSheetProvider<T extends NanoStyleSheet, A> = (
   args: A,
 ) => T;
 export type NanoStyleSheet = {
-  [key: string]: NanoStyle | NanoStyleSheet;
+  [key: string]: NanoStyle;
 };
 
 export class NanoStyle {

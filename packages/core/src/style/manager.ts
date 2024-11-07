@@ -15,11 +15,7 @@ let cleanupHandle: number | null = null;
 export function connectBundle(bundle: NanoStyleSheet): void {
   if (retain(activeBundles, bundle)) {
     for (const style of Object.values(bundle)) {
-      if (style instanceof NanoStyle) {
-        connectStyle(style);
-      } else {
-        connectBundle(style);
-      }
+      connectStyle(style);
     }
   }
 }
@@ -68,11 +64,7 @@ function cleanupBundle(
 ): void {
   cleanedBundles.add(bundle);
   for (const style of Object.values(bundle)) {
-    if (style instanceof NanoStyle) {
-      disconnectStyle(style, false);
-    } else if (release(activeBundles, style)) {
-      cleanupBundle(style, cleanedBundles);
-    }
+    disconnectStyle(style, false);
   }
 }
 
