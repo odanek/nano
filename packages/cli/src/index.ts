@@ -1,3 +1,0 @@
-import { bundle } from './bundle.js';
-
-export { bundle };
