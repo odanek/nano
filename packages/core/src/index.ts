@@ -2,6 +2,7 @@ import { render } from './vdom/render';
 
 import { NanoNode, NanoComponent } from './vdom/type';
 import { NanoElement, NanoElementKey } from './vdom/element';
+import { NanoFragment } from './vdom/fragment';
 import { NanoRef } from './vdom/ref';
 import { classNames } from './vdom/host-component';
 
@@ -38,6 +39,7 @@ export {
   NanoNode,
   NanoComponent,
   NanoElement,
+  NanoFragment,
   NanoRef,
   NanoEventType,
   classNames,

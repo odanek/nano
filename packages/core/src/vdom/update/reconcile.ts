@@ -96,7 +96,7 @@ function coerceElement(element: unknown): NanoElement {
     return NanoElement.text(element.toString()) as NanoElement<unknown>;
   } else if (isArray(element) || isIterable(element)) {
     return NanoElement.fragment(
-      element as NanoNode[],
+      { children: element as NanoNode[] },
       null,
     ) as NanoElement<unknown>;
   } else {

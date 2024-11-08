@@ -1,4 +1,4 @@
-import { NanoNode, NanoComponent } from './type';
+import { NanoComponent } from './type';
 import { NanoRef } from './ref';
 import { NanoHostComponentProps } from './host-component';
 import { NanoHostTextProps } from './host-text';
@@ -83,13 +83,10 @@ export class NanoElement<P = unknown> {
     return new NanoElement(NanoElementTag.Context, context, null, null, props);
   }
 
-  // TODO <Fragment> element, ktery bere i key
   static fragment(
-    children: NanoNode[],
+    props: NanoFragmentProps,
     key: NanoElementKey,
   ): NanoElement<NanoFragmentProps> {
-    return new NanoElement(NanoElementTag.Fragment, null, key, null, {
-      children,
-    });
+    return new NanoElement(NanoElementTag.Fragment, null, key, null, props);
   }
 }

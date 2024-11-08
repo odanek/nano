@@ -12,6 +12,16 @@ import { createContext } from '../../../packages/core/dist/vdom/context';
 
 const MyContext = createContext<boolean>('MyContext');
 
+function Baz(): JSX.Element {
+  return (
+    <>
+      <div>a</div>
+      <div>b</div>
+      <div>c</div>
+    </>
+  );
+}
+
 function Bar({ bold }: { bold: boolean }): JSX.Element {
   const my = useContext(MyContext);
   const css = useStyleSheet(barStyleSheet);
@@ -48,6 +58,7 @@ function Foo(): JSX.Element {
       <div class={'foo'}>
         Hello: <Bar bold={bold} />
         <button onClick={() => setBold(!bold)}>Toggle bold</button>
+        <Baz />
       </div>
     </MyContext>
   );

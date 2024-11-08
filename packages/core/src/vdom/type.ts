@@ -11,4 +11,6 @@ export type NanoChildrenProp = {
 export type NanoRefProp = {
   ref?: NanoRef;
 };
-export type NanoPropsWithChildren<T = unknown> = T & NanoChildrenProp;
+export type NanoKeyProp = {
+  key?: unknown;
+};

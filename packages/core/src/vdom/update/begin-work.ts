@@ -6,7 +6,7 @@ import {
 } from '../host-component';
 import { createHostTextInstance } from '../host-text';
 import { NanoFiberRootState } from '../fiber-root';
-import { NanoChildren, NanoPropsWithChildren } from '../type';
+import { NanoChildren, NanoChildrenProp } from '../type';
 import {
   cloneChildFibers,
   mountChildFibers,
@@ -154,7 +154,7 @@ function beginElement(
   current: NanoFiber | null,
   workInProgress: NanoFiber,
 ): NanoFiber | null {
-  const nextChildren = (workInProgress.pendingProps as NanoPropsWithChildren)
+  const nextChildren = (workInProgress.pendingProps as NanoChildrenProp)
     .children;
   reconcileChildren(current, workInProgress, nextChildren);
   return workInProgress.child;

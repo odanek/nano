@@ -1,5 +1,7 @@
 import { strictEquals } from './function';
 
+export const emptyArray = Object.freeze([]);
+
 export function arrayEquals<T>(
   left: T[],
   right: T[],

@@ -1,9 +1,11 @@
+import { NanoFragment } from '../vdom/fragment';
 import { NanoNode } from '../vdom/type';
 import { NanoIntrinsicElements } from './intrinsic-elements';
 
 export { jsx, jsxs, jsxDEV } from './factory';
 
 export type Element = NanoNode;
+export const Fragment = NanoFragment;
 export type IntrinsicElements = NanoIntrinsicElements;
 
 declare global {
