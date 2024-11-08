@@ -35,7 +35,7 @@
     "@nano-ui/util": "file:../util"
   },
   "devDependencies": {
-    "typescript": "~5.5.0"
+    "typescript": "^5.6.0"
   },
   "scripts": {
     "clean": "tsc --build --clean",

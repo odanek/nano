@@ -8,7 +8,7 @@ import {
   useState,
   useStyleSheet,
 } from '@nano-ui/core';
-import { createContext } from '../../core/dist/vdom/context';
+import { createContext } from '../../../packages/core/dist/vdom/context';
 
 const MyContext = createContext<boolean>('MyContext');
 
