@@ -7,8 +7,8 @@ import {
 import { NanoRef } from './ref';
 import { NanoFiberRoot } from './fiber-root';
 import { PlainObject } from '@nano-ui/type';
-import { NanoHostComponentStateNode } from './host-component';
-import { NanoHostTextStateNode } from './host-text';
+import { NanoHostComponentStateNode } from './host/component';
+import { NanoHostTextStateNode } from './host/text';
 import { NanoContextKey } from './context';
 import { NanoEffectTag } from './effect';
 

@@ -1,4 +1,4 @@
-import { NanoEventType } from './event-type';
+import { NanoEventType } from './type';
 
 export class NanoEvent {
   public type: NanoEventType;

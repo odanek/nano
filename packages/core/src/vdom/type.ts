@@ -5,12 +5,12 @@ export type NanoNode<P = unknown> = NanoElement<P> | string | number | null;
 export type NanoChildren = undefined | NanoNode | NanoNode[];
 export type NanoComponent<P = unknown> = (props: P) => NanoNode<P>;
 
-export type NanoChildrenProp = {
+export type NanoChildrenProps = {
   children?: NanoChildren;
 };
-export type NanoRefProp = {
+export type NanoRefProps = {
   ref?: NanoRef;
 };
-export type NanoKeyProp = {
+export type NanoKeyProps = {
   key?: unknown;
 };

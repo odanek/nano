@@ -1,5 +1,5 @@
 import { NanoEvent } from './event';
-import { NanoEventType } from './event-type';
+import { NanoEventType } from './type';
 
 type NanoMouseEventType = NanoEventType.DblClick;
 

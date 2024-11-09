@@ -78,7 +78,9 @@ export const isInstanceOf = function (Class: Function): TypePredicate<unknown> {
   return (value: unknown): value is unknown => value instanceof Class;
 };
 
-export function isEnumValue<T extends AnyEnum>(Enum: T): TypePredicate<ValueOf<T>> {
+export function isEnumValue<T extends AnyEnum>(
+  Enum: T,
+): TypePredicate<ValueOf<T>> {
   const values = new Set<unknown>(Object.values(Enum));
   return (value: unknown): value is ValueOf<T> => values.has(value);
 }

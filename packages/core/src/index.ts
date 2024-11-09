@@ -4,9 +4,9 @@ import { NanoNode, NanoComponent } from './vdom/type';
 import { NanoElement, NanoElementKey } from './vdom/element';
 import { NanoFragment } from './vdom/fragment';
 import { NanoRef } from './vdom/ref';
-import { classNames } from './vdom/host-component';
+import { classNames } from './vdom/host/component';
 
-import { NanoEventType } from './event/event-type';
+import { NanoEventType } from './event/type';
 import { NanoEvent } from './event/event';
 import { NanoClipboardEvent } from './event/clipboard-event';
 import { NanoFocusEvent } from './event/focus-event';

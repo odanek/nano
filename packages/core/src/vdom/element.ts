@@ -1,9 +1,9 @@
 import { NanoComponent } from './type';
 import { NanoRef } from './ref';
-import { NanoHostComponentProps } from './host-component';
-import { NanoHostTextProps } from './host-text';
+import { NanoHostTextProps } from './host/text';
 import { NanoFragmentProps } from './fragment';
 import { NanoContext, NanoContextProps } from './context';
+import { NanoHostComponentProps } from './host/type';
 
 export enum NanoElementTag {
   HostRoot,

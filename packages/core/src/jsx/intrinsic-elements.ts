@@ -1,4 +1,4 @@
-import { NanoHostComponentProps } from '../vdom/host-component';
+import { NanoHostComponentProps } from '../vdom/host/type';
 
 export type NanoIntrinsicElements = {
   div: NanoHostComponentProps;

@@ -1,11 +1,9 @@
 import { isNumber, isString } from '@nano-ui/type';
 import { markInstanceFiber, NanoFiber } from '../fiber';
-import {
-  createHostComponentInstance,
-} from '../host-component';
-import { createHostTextInstance } from '../host-text';
+import { createHostComponentInstance } from '../host/component';
+import { createHostTextInstance } from '../host/text';
 import { NanoFiberRootState } from '../fiber-root';
-import { NanoChildren, NanoChildrenProp } from '../type';
+import { NanoChildren, NanoChildrenProps } from '../type';
 import {
   cloneChildFibers,
   mountChildFibers,
@@ -112,9 +110,9 @@ function beginHostComponent(
     workInProgress.stateNode = createHostComponentInstance(workInProgress);
   }
 
-  const nextProps = workInProgress.pendingProps as NanoChildrenProp;
+  const nextProps = workInProgress.pendingProps as NanoChildrenProps;
   const prevProps =
-    current !== null ? (current.memoizedProps as NanoChildrenProp) : null;
+    current !== null ? (current.memoizedProps as NanoChildrenProps) : null;
 
   let nextChildren = nextProps.children as NanoChildren;
   // Direct text child optimization - do not create a new fiber
@@ -153,7 +151,7 @@ function beginElement(
   current: NanoFiber | null,
   workInProgress: NanoFiber,
 ): NanoFiber | null {
-  const nextChildren = (workInProgress.pendingProps as NanoChildrenProp)
+  const nextChildren = (workInProgress.pendingProps as NanoChildrenProps)
     .children;
   reconcileChildren(current, workInProgress, nextChildren);
   return workInProgress.child;

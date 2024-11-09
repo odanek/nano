@@ -1,11 +1,11 @@
 import { NanoElement } from './element';
 import { NanoFiber } from './fiber';
-import { NanoChildrenProp, NanoComponent, NanoKeyProp } from './type';
+import { NanoChildrenProps, NanoComponent, NanoKeyProps } from './type';
 
 export type NanoContextKey = number;
 export type NanoContext<T = unknown> = NanoComponent<NanoContextProps<T>>;
-export type NanoContextProps<T = unknown> = { value: T } & NanoChildrenProp &
-  NanoKeyProp;
+export type NanoContextProps<T = unknown> = { value: T } & NanoChildrenProps &
+  NanoKeyProps;
 
 let id = 1;
 const contextKeyMarker = Symbol('nano-context-key');

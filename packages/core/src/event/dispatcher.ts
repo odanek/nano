@@ -7,30 +7,14 @@ import { NanoWheelEvent } from './wheel-event.js';
 import { NanoInputEvent } from './input-event.js';
 import { NanoClipboardEvent } from './clipboard-event.js';
 import { NanoEvent } from './event.js';
-import {
-  NanoHostComponentBubbleEventProps,
-  NanoHostComponentCaptureEventProps,
-  NanoHostComponentEventProps,
-} from '../vdom/host-component.js';
 import { NanoElementTag } from '../vdom/element.js';
-
-export type NanoEventDispatchResult = {
-  handled: boolean;
-  executeDefault: boolean;
-};
-export type NanoEventFilter = (
-  event: NanoEvent,
-  result: NanoEventDispatchResult,
-  next: NanoEventHandler,
-) => void;
-export type NanoEventHandler = (
-  event: NanoEvent,
-  result: NanoEventDispatchResult,
-) => void;
-export type NanoCaptureEventHandlerName =
-  keyof NanoHostComponentCaptureEventProps;
-export type NanoBubbleEventHandlerName =
-  keyof NanoHostComponentBubbleEventProps;
+import {
+  NanoBubbleEventHandlerName,
+  NanoCaptureEventHandlerName,
+  NanoEventDispatchResult,
+  NanoEventHandler,
+} from './type.js';
+import { NanoHostComponentEventProps } from '../vdom/host/type.js';
 
 export class NanoEventDispatcher {
   private eventHandler: (event: Event) => void;
@@ -115,7 +99,7 @@ export class NanoEventDispatcher {
       const fiber = fiberChain[i] as NanoFiber;
       const props = fiber.memoizedProps as NanoHostComponentEventProps;
       const captureHandler = props[captureHandlerName] as
-        | NanoEventHandler
+        | NanoEventHandler<NanoEvent>
         | undefined;
       captureHandler?.(event, result);
     }
@@ -124,7 +108,7 @@ export class NanoEventDispatcher {
       const fiber = fiberChain[i] as NanoFiber;
       const props = fiber.memoizedProps as NanoHostComponentEventProps;
       const bubbleHandler = props[bubbleHandlerName] as
-        | NanoEventHandler
+        | NanoEventHandler<NanoEvent>
         | undefined;
       bubbleHandler?.(event, result);
     }

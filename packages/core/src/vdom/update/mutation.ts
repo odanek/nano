@@ -5,7 +5,7 @@ import {
   NanoHostTextStateNode,
   resetHostTextContent,
   updateHostTextInstance,
-} from '../host-text';
+} from '../host/text';
 import {
   getHostParentFiber,
   getHostParentNode,
@@ -15,7 +15,7 @@ import {
   NanoHostComponentPropsDiff,
   NanoHostComponentStateNode,
   updateHostComponentInstance,
-} from '../host-component';
+} from '../host/component';
 import { mountStyleEffects } from '../function-component';
 import { NanoEffectTag } from '../effect';
 import { NanoElementTag } from '../element';

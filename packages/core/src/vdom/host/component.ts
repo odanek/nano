@@ -1,38 +1,13 @@
 import { isString, isNumber } from '@nano-ui/type';
-import { setHostTextContent } from './host-text';
-import { NanoFiber } from './fiber';
+import { setHostTextContent } from './text';
+import { NanoFiber } from '../fiber';
+import {
+  NanoHostComponentClassPropValue,
+  NanoHostComponentProps,
+  NanoHostComponentStylePropValue,
+} from './type';
 
-import { NanoEventHandler } from '../event/dispatcher';
-import { NanoChildrenProp, NanoRefProp } from './type';
-
-export type NanoHostComponentClassAttribute = string | string[];
 export type NanoHostComponentStateNode = HTMLElement | SVGElement;
-export type NanoHostComponentStyleAttribute = Record<string, string>;
-
-// TODO Merge somehow with intrinsic elements?
-export type NanoHostComponentCaptureEventProps = {
-  // TODO
-  onCaptureClick?: NanoEventHandler;
-};
-export type NanoHostComponentBubbleEventProps = {
-  // TODO
-  onClick?: NanoEventHandler;
-};
-export type NanoHostComponentEventProps = NanoHostComponentCaptureEventProps &
-  NanoHostComponentBubbleEventProps;
-
-export type NanoHostComponentAttributeProps = {
-  id?: string;
-  class?: NanoHostComponentClassAttribute;
-  style?: NanoHostComponentStyleAttribute;
-};
-
-// TODO Explicitly name all style props
-export type NanoHostComponentProps = NanoChildrenProp &
-  NanoRefProp &
-  NanoHostComponentAttributeProps &
-  NanoHostComponentEventProps;
-
 export type NanoHostComponentPropsDiff = Array<string | null>;
 
 // TODO Determine this automatically based on whether we are inside svg or not
@@ -121,14 +96,14 @@ function setInitialProperties(
 
     if (key === 'class') {
       const className = classNameString(
-        value as NanoHostComponentClassAttribute,
+        value as NanoHostComponentClassPropValue,
       );
       if (className !== null) {
         node.setAttribute('class', className);
       }
     } else if (key === 'style') {
       for (const [styleKey, styleValue] of Object.entries(
-        value as NanoHostComponentStyleAttribute,
+        value as NanoHostComponentStylePropValue,
       )) {
         // @ts-expect-error Setting a custom style
         node.style[styleKey] = styleValue;
@@ -198,10 +173,10 @@ function diffPropertyChange(
     }
   } else if (key === 'class') {
     const oldClassName = classNameString(
-      oldValue as NanoHostComponentClassAttribute,
+      oldValue as NanoHostComponentClassPropValue,
     );
     const newClassName = classNameString(
-      newValue as NanoHostComponentClassAttribute,
+      newValue as NanoHostComponentClassPropValue,
     );
     if (oldClassName !== newClassName) {
       diff.push(key, newClassName);
@@ -209,8 +184,8 @@ function diffPropertyChange(
   } else if (key === 'style') {
     diffStyle(
       diff,
-      (oldValue ?? emptyStyle) as NanoHostComponentStyleAttribute,
-      (newValue ?? emptyStyle) as NanoHostComponentStyleAttribute,
+      (oldValue ?? emptyStyle) as NanoHostComponentStylePropValue,
+      (newValue ?? emptyStyle) as NanoHostComponentStylePropValue,
     );
   } else if (!key.startsWith('on')) {
     // @ts-expect-error TODO
@@ -220,8 +195,8 @@ function diffPropertyChange(
 
 function diffStyle(
   diff: NanoHostComponentPropsDiff,
-  oldStyle: NanoHostComponentStyleAttribute,
-  newStyle: NanoHostComponentStyleAttribute,
+  oldStyle: NanoHostComponentStylePropValue,
+  newStyle: NanoHostComponentStylePropValue,
 ): void {
   for (const [key, value] of Object.entries(newStyle)) {
     const oldValue = oldStyle[key];
