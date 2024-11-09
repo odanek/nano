@@ -2,7 +2,6 @@ import { isNumber, isString } from '@nano-ui/type';
 import { markInstanceFiber, NanoFiber } from '../fiber';
 import {
   createHostComponentInstance,
-  NanoHostComponentProps,
 } from '../host-component';
 import { createHostTextInstance } from '../host-text';
 import { NanoFiberRootState } from '../fiber-root';
@@ -113,9 +112,9 @@ function beginHostComponent(
     workInProgress.stateNode = createHostComponentInstance(workInProgress);
   }
 
-  const nextProps = workInProgress.pendingProps as NanoHostComponentProps;
+  const nextProps = workInProgress.pendingProps as NanoChildrenProp;
   const prevProps =
-    current !== null ? (current.memoizedProps as NanoHostComponentProps) : null;
+    current !== null ? (current.memoizedProps as NanoChildrenProp) : null;
 
   let nextChildren = nextProps.children as NanoChildren;
   // Direct text child optimization - do not create a new fiber

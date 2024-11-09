@@ -10,7 +10,7 @@ import { NanoEvent } from './event.js';
 import {
   NanoHostComponentBubbleEventProps,
   NanoHostComponentCaptureEventProps,
-  NanoHostComponentProps,
+  NanoHostComponentEventProps,
 } from '../vdom/host-component.js';
 import { NanoElementTag } from '../vdom/element.js';
 
@@ -113,7 +113,7 @@ export class NanoEventDispatcher {
 
     for (let i = length - 1; i >= 0 && !result.handled; i--) {
       const fiber = fiberChain[i] as NanoFiber;
-      const props = fiber.memoizedProps as NanoHostComponentProps;
+      const props = fiber.memoizedProps as NanoHostComponentEventProps;
       const captureHandler = props[captureHandlerName] as
         | NanoEventHandler
         | undefined;
@@ -122,7 +122,7 @@ export class NanoEventDispatcher {
 
     for (let i = 0; i < length && !result.handled; i++) {
       const fiber = fiberChain[i] as NanoFiber;
-      const props = fiber.memoizedProps as NanoHostComponentProps;
+      const props = fiber.memoizedProps as NanoHostComponentEventProps;
       const bubbleHandler = props[bubbleHandlerName] as
         | NanoEventHandler
         | undefined;

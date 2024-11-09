@@ -4,13 +4,15 @@ import {
   isArrayOf,
   isBoolean,
   isElement,
-  isEnum,
+  isEmptyString,
+  isEnumValue,
   isFunction,
   isHtmlElement,
   isInstanceOf,
   isInteger,
   isIterable,
   isNegativeInteger,
+  isNonEmptyString,
   isNonNegativeInteger,
   isNoValue,
   isNull,
@@ -43,8 +45,15 @@ export const Type = {
   null: makeType(isNull, 'null'),
   value: makeType(isValue, 'any value'),
   noValue: makeType(isNoValue, 'null or undefined'),
+  optional: function <T>(
+    type: TypeMatcher<T>,
+  ): TypeMatcher<T | null | undefined> {
+    return makeType(isOptional(type.predicate), type.name + ' or no value');
+  },
   boolean: makeType(isBoolean, 'boolean'),
   string: makeType(isString, 'string'),
+  emptyString: makeType(isEmptyString, 'empty string'),
+  nonEmptyString: makeType(isNonEmptyString, 'non-empty string'),
   number: makeType(isNumber, 'number'),
   integer: makeType(isInteger, 'integer'),
   positiveInteger: makeType(isPositiveInteger, 'positive integer'),
@@ -70,15 +79,10 @@ export const Type = {
   instanceOf: function (clazz: Function): TypeMatcher<unknown> {
     return makeType(isInstanceOf(clazz), 'instance of ' + clazz.name);
   },
-  optional: function <T>(
-    type: TypeMatcher<T>,
-  ): TypeMatcher<T | null | undefined> {
-    return makeType(isOptional(type.predicate), type.name + ' or no value');
-  },
-  enum: function <T extends AnyEnum>(
+  enumValue: function <T extends AnyEnum>(
     Enum: T,
     name: string,
   ): TypeMatcher<ValueOf<T>> {
-    return makeType(isEnum(Enum), name);
+    return makeType(isEnumValue(Enum), name);
   },
 };
