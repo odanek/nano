@@ -6,6 +6,7 @@ import {
   isElement,
   isEnum,
   isFunction,
+  isHtmlElement,
   isInstanceOf,
   isInteger,
   isIterable,
@@ -14,29 +15,34 @@ import {
   isNoValue,
   isNull,
   isNumber,
-  isObject,
   isOptional,
   isPlainObject,
   isPositiveInteger,
   isString,
+  isSvgElement,
   isUndefined,
   isValue,
   TypePredicate,
 } from './predicate';
-import { ValueOf } from './type';
+import { AnyEnum, ValueOf } from './type';
 
 export type TypeMatcher<T> = {
-  check: TypePredicate<T>;
+  predicate: TypePredicate<T>;
   name: string;
 };
 
-function makeType<T>(check: TypePredicate<T>, name: string): TypeMatcher<T> {
-  return { check, name };
+function makeType<T>(
+  predicate: TypePredicate<T>,
+  name: string,
+): TypeMatcher<T> {
+  return { predicate, name };
 }
 
 export const Type = {
   undefined: makeType(isUndefined, 'undefined'),
   null: makeType(isNull, 'null'),
+  value: makeType(isValue, 'any value'),
+  noValue: makeType(isNoValue, 'null or undefined'),
   boolean: makeType(isBoolean, 'boolean'),
   string: makeType(isString, 'string'),
   number: makeType(isNumber, 'number'),
@@ -45,19 +51,18 @@ export const Type = {
   negativeInteger: makeType(isNegativeInteger, 'negative integer'),
   nonNegativeInteger: makeType(isNonNegativeInteger, 'non-negative integer'),
   function: makeType(isFunction, 'function'),
-  object: makeType(isObject, 'object'),
   plainObject: makeType(isPlainObject, 'plain object'),
-  value: makeType(isValue, 'any value'),
-  noValue: makeType(isNoValue, 'null or undefined'),
   array: makeType(isArray, 'array'),
   arrayOf: function <T>(type: TypeMatcher<T>): TypeMatcher<T[]> {
-    return makeType(isArrayOf(type.check), 'array of ' + type.name);
+    return makeType(isArrayOf(type.predicate), 'array of ' + type.name);
   },
   iterable: makeType(isIterable, 'iterable'),
   element: makeType(isElement, 'element'),
+  htmlElement: makeType(isHtmlElement, 'HTMLElement'),
+  svgElement: makeType(isSvgElement, 'SVGElement'),
   anyOf: function (...types: TypeMatcher<unknown>[]): TypeMatcher<unknown> {
     return makeType(
-      isAnyOf(...types.map((type) => type.check)),
+      isAnyOf(...types.map((type) => type.predicate)),
       types.map((type) => type.name).join(' or '),
     );
   },
@@ -68,9 +73,9 @@ export const Type = {
   optional: function <T>(
     type: TypeMatcher<T>,
   ): TypeMatcher<T | null | undefined> {
-    return makeType(isOptional(type.check), type.name + ' or no value');
+    return makeType(isOptional(type.predicate), type.name + ' or no value');
   },
-  enum: function <T extends object>(
+  enum: function <T extends AnyEnum>(
     Enum: T,
     name: string,
   ): TypeMatcher<ValueOf<T>> {
