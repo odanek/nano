@@ -46,7 +46,7 @@ const typeNamespace: Record<string, string> = Object.freeze({
 export function createHostComponentInstance(
   fiber: NanoFiber,
 ): NanoHostComponentStateNode {
-  const props = fiber.pendingProps as NanoHostComponentProps;
+  const props = fiber.pendingProps as NanoHostComponentProps<unknown>;
   const node = createElement(fiber.type as string);
   setInitialProperties(node, props);
   setInitialChildren(node, props);
@@ -87,7 +87,7 @@ function createElement(type: string): NanoHostComponentStateNode {
 
 function setInitialProperties(
   node: NanoHostComponentStateNode,
-  props: NanoHostComponentProps,
+  props: NanoHostComponentProps<unknown>,
 ): void {
   for (const [key, value] of Object.entries(props)) {
     if (value === null || value === undefined) {
@@ -116,7 +116,7 @@ function setInitialProperties(
 
 function setInitialChildren(
   node: NanoHostComponentStateNode,
-  props: NanoHostComponentProps,
+  props: NanoHostComponentProps<unknown>,
 ): void {
   const children = props.children;
   if (isString(children) || isNumber(children)) {
@@ -128,8 +128,9 @@ export function diffProperties(
   current: NanoFiber,
   workInProgress: NanoFiber,
 ): NanoHostComponentPropsDiff | null {
-  const oldProps = current.memoizedProps as NanoHostComponentProps;
-  const newProps = workInProgress.pendingProps as NanoHostComponentProps;
+  const oldProps = current.memoizedProps as NanoHostComponentProps<unknown>;
+  const newProps =
+    workInProgress.pendingProps as NanoHostComponentProps<unknown>;
   if (oldProps === newProps) {
     return null;
   }
@@ -199,13 +200,13 @@ function diffStyle(
   newStyle: NanoHostComponentStylePropValue,
 ): void {
   for (const [key, value] of Object.entries(newStyle)) {
-    const oldValue = oldStyle[key];
+    const oldValue = oldStyle[key as keyof NanoHostComponentStylePropValue];
     if (value !== oldValue) {
       diff.push(SET_STYLE, key, value === undefined ? null : value);
     }
   }
   for (const key of Object.keys(oldStyle)) {
-    const newValue = newStyle[key];
+    const newValue = newStyle[key as keyof NanoHostComponentStylePropValue];
     if (newValue === undefined) {
       diff.push(SET_STYLE, key, null);
     }

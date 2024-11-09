@@ -6,17 +6,17 @@ type NanoClipboardEventType =
   | NanoEventType.Copy
   | NanoEventType.Paste;
 
-interface Options {
+interface Options<T> {
   type: NanoClipboardEventType;
-  target: EventTarget | null;
+  target: T;
 }
 
-export class NanoClipboardEvent extends NanoEvent {
-  constructor(options: Options) {
+export class NanoClipboardEvent<T> extends NanoEvent<T> {
+  constructor(options: Options<T>) {
     super(options.type, options.target);
   }
 
-  static fromNative(nativeEvent: ClipboardEvent): NanoClipboardEvent {
+  static fromNative(nativeEvent: ClipboardEvent): NanoClipboardEvent<unknown> {
     return new NanoClipboardEvent({
       target: nativeEvent.target,
       type: NanoClipboardEvent.getType(nativeEvent.type),

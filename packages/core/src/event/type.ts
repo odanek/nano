@@ -2,11 +2,12 @@ import {
   NanoHostComponentBubbleEventProps,
   NanoHostComponentCaptureEventProps,
 } from '../vdom/host/type';
-import { NanoEvent } from './event';
 
 export enum NanoEventType {
   PointerEnter = 'pointerEnter',
   PointerLeave = 'pointerLeave',
+  PointerOver = 'pointerOver',
+  PointerOut = 'pointerOut',
   PointerDown = 'pointerDown',
   PointerUp = 'pointerUp',
   PointerMove = 'pointerMove',
@@ -34,19 +35,19 @@ export type NanoEventDispatchResult = {
   executeDefault: boolean;
 };
 
-export type NanoEventFilter<E extends NanoEvent> = (
+export type NanoEventFilter<E> = (
   event: E,
   result: NanoEventDispatchResult,
-  next: NanoEventHandler<NanoEvent>,
+  next: NanoEventHandler<unknown>,
 ) => void;
 
-export type NanoEventHandler<E extends NanoEvent> = (
+export type NanoEventHandler<E> = (
   event: E,
   result: NanoEventDispatchResult,
 ) => void;
 
 export type NanoCaptureEventHandlerName =
-  keyof NanoHostComponentCaptureEventProps;
+  keyof NanoHostComponentCaptureEventProps<unknown>;
 
 export type NanoBubbleEventHandlerName =
-  keyof NanoHostComponentBubbleEventProps;
+  keyof NanoHostComponentBubbleEventProps<unknown>;

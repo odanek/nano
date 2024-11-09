@@ -6,18 +6,18 @@ type NanoKeyboardEventType =
   | NanoEventType.KeyUp
   | NanoEventType.KeyPress;
 
-interface Options {
+interface Options<T> {
   type: NanoKeyboardEventType;
-  target: EventTarget | null;
+  target: T;
   key: string;
 }
 
-export class NanoKeyboardEvent extends NanoEvent {
-  constructor(options: Options) {
+export class NanoKeyboardEvent<T> extends NanoEvent<T> {
+  constructor(options: Options<T>) {
     super(options.type, options.target);
   }
 
-  static fromNative(nativeEvent: KeyboardEvent): NanoKeyboardEvent {
+  static fromNative(nativeEvent: KeyboardEvent): NanoKeyboardEvent<unknown> {
     return new NanoKeyboardEvent({
       target: nativeEvent.target,
       type: NanoKeyboardEvent.getType(nativeEvent.type),

@@ -3,17 +3,17 @@ import { NanoEventType } from './type';
 
 type NanoFocusEventType = NanoEventType.FocusIn | NanoEventType.FocusOut;
 
-interface Options {
+interface Options<T> {
   type: NanoFocusEventType;
-  target: EventTarget | null;
+  target: T;
 }
 
-export class NanoFocusEvent extends NanoEvent {
-  constructor(options: Options) {
+export class NanoFocusEvent<T> extends NanoEvent<T> {
+  constructor(options: Options<T>) {
     super(options.type, options.target);
   }
 
-  static fromNative(nativeEvent: FocusEvent): NanoFocusEvent {
+  static fromNative(nativeEvent: FocusEvent): NanoFocusEvent<unknown> {
     return new NanoFocusEvent({
       target: nativeEvent.target,
       type: NanoFocusEvent.getType(nativeEvent.type),

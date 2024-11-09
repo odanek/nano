@@ -55,10 +55,10 @@ export class NanoElement<P = unknown> {
 
   static hostComponent(
     type: string,
-    props: NanoHostComponentProps,
+    props: NanoHostComponentProps<unknown>,
     ref: NanoRef | null,
     key: NanoElementKey,
-  ): NanoElement<NanoHostComponentProps> {
+  ): NanoElement<NanoHostComponentProps<unknown>> {
     return new NanoElement(NanoElementTag.HostComponent, type, key, ref, props);
   }
 

@@ -12,7 +12,7 @@ export function jsx(
   if (isString(type)) {
     return jsxHostComponent(
       type,
-      props as NanoHostComponentProps,
+      props as NanoHostComponentProps<unknown>,
       key,
     ) as NanoElement<unknown>;
   } else if (isFunction(type)) {
@@ -27,9 +27,9 @@ export const jsxDEV = jsx;
 
 function jsxHostComponent(
   type: string,
-  props: NanoHostComponentProps,
+  props: NanoHostComponentProps<unknown>,
   key?: NanoElementKey,
-): NanoElement<NanoHostComponentProps> {
+): NanoElement<NanoHostComponentProps<unknown>> {
   const { ref, ...other } = props ?? emptyObject;
   return NanoElement.hostComponent(type, other, ref ?? null, key);
 }

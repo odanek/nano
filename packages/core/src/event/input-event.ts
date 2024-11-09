@@ -3,17 +3,17 @@ import { NanoEventType } from './type';
 
 type NanoInputEventType = NanoEventType.Input | NanoEventType.BeforeInput;
 
-interface Options {
+interface Options<T> {
   type: NanoInputEventType;
-  target: EventTarget | null;
+  target: T;
 }
 
-export class NanoInputEvent extends NanoEvent {
-  constructor(options: Options) {
+export class NanoInputEvent<T> extends NanoEvent<T> {
+  constructor(options: Options<T>) {
     super(options.type, options.target);
   }
 
-  static fromNative(nativeEvent: InputEvent): NanoInputEvent {
+  static fromNative(nativeEvent: InputEvent): NanoInputEvent<unknown> {
     return new NanoInputEvent({
       target: nativeEvent.target,
       type: NanoInputEvent.getType(nativeEvent.type),

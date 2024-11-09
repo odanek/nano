@@ -85,7 +85,7 @@ export class NanoEventDispatcher {
 
   private runHandlerChain(
     fiberChain: NanoFiber[],
-    event: NanoEvent,
+    event: NanoEvent<unknown>,
     captureHandlerName: NanoCaptureEventHandlerName,
     bubbleHandlerName: NanoBubbleEventHandlerName,
   ): NanoEventDispatchResult {
@@ -97,18 +97,18 @@ export class NanoEventDispatcher {
 
     for (let i = length - 1; i >= 0 && !result.handled; i--) {
       const fiber = fiberChain[i] as NanoFiber;
-      const props = fiber.memoizedProps as NanoHostComponentEventProps;
+      const props = fiber.memoizedProps as NanoHostComponentEventProps<unknown>;
       const captureHandler = props[captureHandlerName] as
-        | NanoEventHandler<NanoEvent>
+        | NanoEventHandler<NanoEvent<unknown>>
         | undefined;
       captureHandler?.(event, result);
     }
 
     for (let i = 0; i < length && !result.handled; i++) {
       const fiber = fiberChain[i] as NanoFiber;
-      const props = fiber.memoizedProps as NanoHostComponentEventProps;
+      const props = fiber.memoizedProps as NanoHostComponentEventProps<unknown>;
       const bubbleHandler = props[bubbleHandlerName] as
-        | NanoEventHandler<NanoEvent>
+        | NanoEventHandler<NanoEvent<unknown>>
         | undefined;
       bubbleHandler?.(event, result);
     }
@@ -116,13 +116,15 @@ export class NanoEventDispatcher {
     return result;
   }
 
-  private createEvent(nativeEvent: Event): NanoEvent | null {
+  private createEvent(nativeEvent: Event): NanoEvent<unknown> | null {
     switch (nativeEvent.type) {
       case 'focusin':
       case 'focusout':
         return NanoFocusEvent.fromNative(nativeEvent as FocusEvent);
       case 'pointerenter':
       case 'pointerleave':
+      case 'pointerover':
+      case 'pointerout':
       case 'pointerdown':
       case 'pointerup':
       case 'pointermove':
@@ -157,6 +159,8 @@ const nativeEventType = [
   'pointerup',
   'pointerenter',
   'pointerleave',
+  'pointerover',
+  'pointerout',
   'pointermove',
   'click',
   'dblclick',
@@ -169,6 +173,7 @@ const nativeEventType = [
   'focusin',
   'focusout',
   'input',
+  'beforeinput',
   'change',
   'cut',
   'copy',
