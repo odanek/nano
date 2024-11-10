@@ -1,7 +1,7 @@
 import { NanoEvent } from './event';
 import { NanoEventType } from './type';
 
-type NanoWheelEventType = NanoEventType.Wheel;
+export type NanoWheelEventType = NanoEventType.Wheel;
 interface Options<T> {
   type: NanoWheelEventType;
   target: T;
@@ -9,7 +9,7 @@ interface Options<T> {
 
 export class NanoWheelEvent<T> extends NanoEvent<T> {
   constructor(options: Options<T>) {
-    super(options.type, options.target);
+    super(options);
   }
 
   static fromNative(nativeEvent: WheelEvent): NanoWheelEvent<unknown> {

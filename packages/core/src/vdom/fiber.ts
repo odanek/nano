@@ -128,7 +128,7 @@ export function unmarkInstanceFiber(node: Node): void {
   node[fiberKey] = null;
 }
 
-export function getInstanceFiber(node: Node): NanoFiber | undefined {
+export function getInstanceFiber(node: Node): NanoFiber | null {
   // @ts-expect-error Conversion to any
-  return node[fiberKey];
+  return node[fiberKey] ?? null;
 }

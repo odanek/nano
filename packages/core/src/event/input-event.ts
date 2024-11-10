@@ -1,7 +1,7 @@
 import { NanoEvent } from './event';
 import { NanoEventType } from './type';
 
-type NanoInputEventType = NanoEventType.Input | NanoEventType.BeforeInput;
+export type NanoInputEventType = NanoEventType.Input | NanoEventType.BeforeInput;
 
 interface Options<T> {
   type: NanoInputEventType;
@@ -10,7 +10,7 @@ interface Options<T> {
 
 export class NanoInputEvent<T> extends NanoEvent<T> {
   constructor(options: Options<T>) {
-    super(options.type, options.target);
+    super(options);
   }
 
   static fromNative(nativeEvent: InputEvent): NanoInputEvent<unknown> {

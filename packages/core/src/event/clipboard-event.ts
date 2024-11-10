@@ -1,7 +1,7 @@
 import { NanoEvent } from './event';
 import { NanoEventType } from './type';
 
-type NanoClipboardEventType =
+export type NanoClipboardEventType =
   | NanoEventType.Cut
   | NanoEventType.Copy
   | NanoEventType.Paste;
@@ -13,7 +13,7 @@ interface Options<T> {
 
 export class NanoClipboardEvent<T> extends NanoEvent<T> {
   constructor(options: Options<T>) {
-    super(options.type, options.target);
+    super(options);
   }
 
   static fromNative(nativeEvent: ClipboardEvent): NanoClipboardEvent<unknown> {

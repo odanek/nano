@@ -13,8 +13,11 @@ import {
   NanoCaptureEventHandlerName,
   NanoEventDispatchResult,
   NanoEventHandler,
+  NanoEventType,
 } from './type.js';
 import { NanoHostComponentEventProps } from '../vdom/host/type.js';
+import { NanoMouseEvent } from './mouse-event.js';
+import { NanoGenericEvent } from './generic-event.js';
 
 export class NanoEventDispatcher {
   private eventHandler: (event: Event) => void;
@@ -50,7 +53,8 @@ export class NanoEventDispatcher {
     if (!(target instanceof Node)) {
       return;
     }
-    const fiberChain = this.getFiberChain(target);
+    const bubbles = this.isBubblingEvent(event);
+    const fiberChain = this.getFiberChain(target, bubbles);
     const type = capitalizeFirstLetter(event.type);
     const captureHandler = ('onCapture' + type) as NanoCaptureEventHandlerName;
     const bubbleHandler = ('on' + type) as NanoBubbleEventHandlerName;
@@ -70,15 +74,24 @@ export class NanoEventDispatcher {
     }
   }
 
-  private getFiberChain(target: Node): NanoFiber[] {
+  private getFiberChain(target: Node, bubbles: boolean): NanoFiber[] {
     const chain: NanoFiber[] = [];
     let current: Node | null = target;
-    while (current !== null) {
-      const fiber = getInstanceFiber(current);
+    let fiber: NanoFiber | null = null;
+    while (current !== null && fiber === null) {
+      fiber = getInstanceFiber(current);
+      current = current.parentNode;
+    }
+
+    while (fiber !== null) {
       if (fiber?.tag === NanoElementTag.HostComponent) {
+        // TODO || NanoElementTag.MessageFilter
+        if (!bubbles && fiber.stateNode !== target) {
+          return chain;
+        }
         chain.push(fiber);
       }
-      current = current.parentNode;
+      fiber = fiber.return;
     }
     return chain;
   }
@@ -129,10 +142,10 @@ export class NanoEventDispatcher {
       case 'pointerup':
       case 'pointermove':
       case 'click':
+      case 'contextmenu':
         return NanoPointerEvent.fromNative(nativeEvent as PointerEvent);
-      // case NativeEventType.dblClick:
-      // case NativeEventType.contextMenu:
-      // case NativeEventType.select:
+      case 'dblclick':
+        return NanoMouseEvent.fromNative(nativeEvent as MouseEvent);
       case 'keydown':
       case 'keyup':
       case 'keypress':
@@ -146,11 +159,17 @@ export class NanoEventDispatcher {
       case 'copy':
       case 'paste':
         return NanoClipboardEvent.fromNative(nativeEvent as ClipboardEvent);
-      //   case 'scroll':
-      //     return ViewEvent.fromNative(nativeEvent);
+      case 'change':
+      case 'select':
+      case 'scroll':
+        return NanoGenericEvent.fromNative(nativeEvent);
       default:
         return null;
     }
+  }
+
+  private isBubblingEvent(event: NanoEvent<unknown>): boolean {
+    return !nonBubblingEvents.includes(event.type);
   }
 }
 
@@ -181,5 +200,7 @@ const nativeEventType = [
   'select',
 ];
 
-// TODO Non-bubbling events pointer enter and leave
-// TODO MessageFilter
+const nonBubblingEvents = [
+  NanoEventType.PointerEnter,
+  NanoEventType.PointerLeave,
+];

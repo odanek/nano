@@ -1,7 +1,7 @@
 import { NanoEvent } from './event';
 import { NanoEventType } from './type';
 
-type NanoMouseEventType = NanoEventType.DblClick;
+export type NanoMouseEventType = NanoEventType.DblClick;
 
 interface Options<T> {
   type: NanoMouseEventType;
@@ -10,7 +10,7 @@ interface Options<T> {
 
 export class NanoMouseEvent<T> extends NanoEvent<T> {
   constructor(options: Options<T>) {
-    super(options.type, options.target);
+    super(options);
   }
 
   static fromNative(nativeEvent: MouseEvent): NanoMouseEvent<unknown> {

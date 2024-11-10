@@ -69,5 +69,3 @@ function run(): void {
 }
 
 window.addEventListener('DOMContentLoaded', run);
-
-// TODO Tets fragments and specify jsxFragment in esbuild config if it doesn't work

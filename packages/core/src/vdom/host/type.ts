@@ -8,6 +8,7 @@ import { NanoFocusEvent } from '../../event/focus-event';
 import { NanoClipboardEvent } from '../../event/clipboard-event';
 import { NanoKeyboardEvent } from '../../event/keyboard-event';
 import { NanoInputEvent } from '../../event/input-event';
+import { NanoGenericEvent } from '../../event/generic-event';
 
 type Booleanish = boolean | 'true' | 'false';
 
@@ -15,6 +16,7 @@ export type NanoHostComponentClassPropValue = string | string[];
 export type NanoHostComponentStylePropValue = CSS.Properties<string | number>;
 
 export type NanoHostComponentCaptureEventProps<T> = {
+  // Pointer
   onCapturePointerDown?: NanoEventHandler<NanoPointerEvent<T>>;
   onCapturePointerUp?: NanoEventHandler<NanoPointerEvent<T>>;
   onCapturePointerEnter?: NanoEventHandler<NanoPointerEvent<T>>;
@@ -23,22 +25,34 @@ export type NanoHostComponentCaptureEventProps<T> = {
   onCapturePointerOut?: NanoEventHandler<NanoPointerEvent<T>>;
   onCapturePointerMove?: NanoEventHandler<NanoPointerEvent<T>>;
   onCaptureClick?: NanoEventHandler<NanoPointerEvent<T>>;
+  onCaptureContextMenu?: NanoEventHandler<NanoPointerEvent<T>>;
+  // Mouse
   onCaptureDblClick?: NanoEventHandler<NanoMouseEvent<T>>;
+  // Wheel
   onCaptureWheel?: NanoEventHandler<NanoWheelEvent<T>>;
+  // Focus
   onCaptureFocusIn?: NanoEventHandler<NanoFocusEvent<T>>;
   onCaptureFocusOut?: NanoEventHandler<NanoFocusEvent<T>>;
+  // Clipboard
   onCaptureCut?: NanoEventHandler<NanoClipboardEvent<T>>;
   onCaptureCopy?: NanoEventHandler<NanoClipboardEvent<T>>;
   onCapturePaste?: NanoEventHandler<NanoClipboardEvent<T>>;
+  // Keyboard
   onCaptureKeyDown?: NanoEventHandler<NanoKeyboardEvent<T>>;
   onCaptureKeyUp?: NanoEventHandler<NanoKeyboardEvent<T>>;
   onCaptureKeyPress?: NanoEventHandler<NanoKeyboardEvent<T>>;
+  // Input
   onCaptureInput?: NanoEventHandler<NanoInputEvent<T>>;
   onCaptureBeforeInput?: NanoEventHandler<NanoInputEvent<T>>;
+  // Generic
+  onCaptureChange?: NanoEventHandler<NanoGenericEvent<T>>;
+  onCaptureSelect?: NanoEventHandler<NanoGenericEvent<T>>;
+  onCaptureScroll?: NanoEventHandler<NanoGenericEvent<T>>;
   // TODO
 };
 
 export type NanoHostComponentBubbleEventProps<T> = {
+  // Pointer
   onPointerDown?: NanoEventHandler<NanoPointerEvent<T>>;
   onPointerUp?: NanoEventHandler<NanoPointerEvent<T>>;
   onPointerEnter?: NanoEventHandler<NanoPointerEvent<T>>;
@@ -47,18 +61,29 @@ export type NanoHostComponentBubbleEventProps<T> = {
   onPointerOut?: NanoEventHandler<NanoPointerEvent<T>>;
   onPointerMove?: NanoEventHandler<NanoPointerEvent<T>>;
   onClick?: NanoEventHandler<NanoPointerEvent<T>>;
+  onContextMenu?: NanoEventHandler<NanoPointerEvent<T>>;
+  // Mouse
   onDblClick?: NanoEventHandler<NanoMouseEvent<T>>;
+  // Wheel
   onWheel?: NanoEventHandler<NanoWheelEvent<T>>;
+  // Focus
   onFocusIn?: NanoEventHandler<NanoFocusEvent<T>>;
   onFocusOut?: NanoEventHandler<NanoFocusEvent<T>>;
+  // Clipboard
   onCut?: NanoEventHandler<NanoClipboardEvent<T>>;
   onCopy?: NanoEventHandler<NanoClipboardEvent<T>>;
   onPaste?: NanoEventHandler<NanoClipboardEvent<T>>;
+  // Keyboard
   onKeyDown?: NanoEventHandler<NanoKeyboardEvent<T>>;
   onKeyUp?: NanoEventHandler<NanoKeyboardEvent<T>>;
   onKeyPress?: NanoEventHandler<NanoKeyboardEvent<T>>;
+  // Input
   onInput?: NanoEventHandler<NanoInputEvent<T>>;
   onBeforeInput?: NanoEventHandler<NanoInputEvent<T>>;
+  // Generic
+  onChange?: NanoEventHandler<NanoGenericEvent<T>>;
+  onSelect?: NanoEventHandler<NanoGenericEvent<T>>;
+  onScroll?: NanoEventHandler<NanoGenericEvent<T>>;
   // TODO
 };
 export type NanoHostComponentEventProps<T> =

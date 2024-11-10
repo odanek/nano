@@ -1,7 +1,7 @@
 import { NanoEvent } from './event';
 import { NanoEventType } from './type';
 
-type NanoKeyboardEventType =
+export type NanoKeyboardEventType =
   | NanoEventType.KeyDown
   | NanoEventType.KeyUp
   | NanoEventType.KeyPress;
@@ -14,7 +14,7 @@ interface Options<T> {
 
 export class NanoKeyboardEvent<T> extends NanoEvent<T> {
   constructor(options: Options<T>) {
-    super(options.type, options.target);
+    super(options);
   }
 
   static fromNative(nativeEvent: KeyboardEvent): NanoKeyboardEvent<unknown> {

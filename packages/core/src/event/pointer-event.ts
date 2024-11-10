@@ -1,7 +1,7 @@
 import { NanoEvent } from './event';
 import { NanoEventType } from './type';
 
-type NanoPointerEventType =
+export type NanoPointerEventType =
   | NanoEventType.PointerDown
   | NanoEventType.PointerUp
   | NanoEventType.PointerEnter
@@ -9,7 +9,8 @@ type NanoPointerEventType =
   | NanoEventType.PointerOver
   | NanoEventType.PointerOut
   | NanoEventType.PointerMove
-  | NanoEventType.Click;
+  | NanoEventType.Click
+  | NanoEventType.ContextMenu;
 
 interface Options<T> {
   type: NanoPointerEventType;
@@ -18,7 +19,7 @@ interface Options<T> {
 
 export class NanoPointerEvent<T> extends NanoEvent<T> {
   constructor(options: Options<T>) {
-    super(options.type, options.target);
+    super(options);
   }
 
   static fromNative(nativeEvent: PointerEvent): NanoPointerEvent<unknown> {
@@ -46,6 +47,8 @@ export class NanoPointerEvent<T> extends NanoEvent<T> {
         return NanoEventType.PointerMove;
       case 'click':
         return NanoEventType.Click;
+        case 'contextmenu':
+          return NanoEventType.ContextMenu;
       default:
         throw new Error(`Event type ${type} is not a pointer event`);
     }
