@@ -5,6 +5,7 @@ import {
   NanoHostComponentClassPropValue,
   NanoHostComponentProps,
   NanoHostComponentStylePropValue,
+  NanoHtmlProps,
 } from './type';
 
 export type NanoHostComponentStateNode = HTMLElement | SVGElement;
@@ -46,7 +47,7 @@ const typeNamespace: Record<string, string> = Object.freeze({
 export function createHostComponentInstance(
   fiber: NanoFiber,
 ): NanoHostComponentStateNode {
-  const props = fiber.pendingProps as NanoHostComponentProps<unknown>;
+  const props = fiber.pendingProps as NanoHostComponentProps<NanoHtmlProps<unknown>>;
   const node = createElement(fiber.type as string);
   setInitialProperties(node, props);
   setInitialChildren(node, props);
@@ -87,7 +88,7 @@ function createElement(type: string): NanoHostComponentStateNode {
 
 function setInitialProperties(
   node: NanoHostComponentStateNode,
-  props: NanoHostComponentProps<unknown>,
+  props: NanoHostComponentProps<NanoHtmlProps<unknown>>,
 ): void {
   for (const [key, value] of Object.entries(props)) {
     if (value === null || value === undefined) {
@@ -116,7 +117,7 @@ function setInitialProperties(
 
 function setInitialChildren(
   node: NanoHostComponentStateNode,
-  props: NanoHostComponentProps<unknown>,
+  props: NanoHostComponentProps<NanoHtmlProps<unknown>>,
 ): void {
   const children = props.children;
   if (isString(children) || isNumber(children)) {

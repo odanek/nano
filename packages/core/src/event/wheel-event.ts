@@ -2,6 +2,7 @@ import { NanoEvent } from './event';
 import { NanoEventType } from './type';
 
 export type NanoWheelEventType = NanoEventType.Wheel;
+
 interface Options<T> {
   type: NanoWheelEventType;
   target: T;

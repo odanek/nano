@@ -53,12 +53,12 @@ export class NanoElement<P = unknown> {
     return new NanoElement(NanoElementTag.HostText, null, null, null, text);
   }
 
-  static hostComponent(
+  static hostComponent<P,E>(
     type: string,
-    props: NanoHostComponentProps<unknown>,
+    props: NanoHostComponentProps<P,E>,
     ref: NanoRef | null,
     key: NanoElementKey,
-  ): NanoElement<NanoHostComponentProps<unknown>> {
+  ): NanoElement<NanoHostComponentProps<P,E>> {
     return new NanoElement(NanoElementTag.HostComponent, type, key, ref, props);
   }
 

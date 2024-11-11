@@ -2,7 +2,7 @@ import { isFunction, isString } from '@nano-ui/type';
 import { NanoComponent } from '../vdom/type';
 import { NanoElement, NanoElementKey, NanoElementType } from '../vdom/element';
 import { emptyObject } from '@nano-ui/util';
-import { NanoHostComponentProps } from '../vdom/host/type';
+import { NanoHostComponentProps, NanoHtmlProps } from '../vdom/host/type';
 
 export function jsx(
   type: NanoElementType,
@@ -12,7 +12,7 @@ export function jsx(
   if (isString(type)) {
     return jsxHostComponent(
       type,
-      props as NanoHostComponentProps<unknown>,
+      props,
       key,
     ) as NanoElement<unknown>;
   } else if (isFunction(type)) {
@@ -27,9 +27,9 @@ export const jsxDEV = jsx;
 
 function jsxHostComponent(
   type: string,
-  props: NanoHostComponentProps<unknown>,
+  props: unknown,
   key?: NanoElementKey,
-): NanoElement<NanoHostComponentProps<unknown>> {
+): NanoElement<unknown> {
   const { ref, ...other } = props ?? emptyObject;
   return NanoElement.hostComponent(type, other, ref ?? null, key);
 }

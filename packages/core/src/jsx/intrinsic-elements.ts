@@ -1,8 +1,3 @@
-import {
-  NanoHostComponentDomElement,
-  NanoHostComponentSvgElement,
-} from '../vdom/host/type';
+import { NanoDomElement, NanoSvgElement } from '../vdom/host/type';
 
-export interface NanoIntrinsicElements
-  extends NanoHostComponentDomElement,
-    NanoHostComponentSvgElement {}
+export interface NanoIntrinsicElements extends NanoDomElement, NanoSvgElement {}
