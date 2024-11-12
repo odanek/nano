@@ -15,9 +15,9 @@ import {
   NanoEventHandler,
   NanoEventType,
 } from './type.js';
-import { NanoHostComponentEventProps } from '../vdom/host/type.js';
 import { NanoMouseEvent } from './mouse-event.js';
 import { NanoGenericEvent } from './generic-event.js';
+import { NanoDomEventProps } from '../vdom/host/type.js';
 
 export class NanoEventDispatcher {
   private eventHandler: (event: Event) => void;
@@ -110,7 +110,7 @@ export class NanoEventDispatcher {
 
     for (let i = length - 1; i >= 0 && !result.handled; i--) {
       const fiber = fiberChain[i] as NanoFiber;
-      const props = fiber.memoizedProps as NanoHostComponentEventProps<unknown>;
+      const props = fiber.memoizedProps as NanoDomEventProps<unknown>;
       const captureHandler = props[captureHandlerName] as
         | NanoEventHandler<NanoEvent<unknown>>
         | undefined;
@@ -119,7 +119,7 @@ export class NanoEventDispatcher {
 
     for (let i = 0; i < length && !result.handled; i++) {
       const fiber = fiberChain[i] as NanoFiber;
-      const props = fiber.memoizedProps as NanoHostComponentEventProps<unknown>;
+      const props = fiber.memoizedProps as NanoDomEventProps<unknown>;
       const bubbleHandler = props[bubbleHandlerName] as
         | NanoEventHandler<NanoEvent<unknown>>
         | undefined;

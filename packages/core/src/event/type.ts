@@ -1,6 +1,6 @@
 import {
-  NanoHostComponentBubbleEventProps,
-  NanoHostComponentCaptureEventProps,
+  NanoDomBubbleEventProps,
+  NanoDomCaptureEventProps,
 } from '../vdom/host/type';
 
 export enum NanoEventType {
@@ -47,7 +47,6 @@ export type NanoEventHandler<E> = (
 ) => void;
 
 export type NanoCaptureEventHandlerName =
-  keyof NanoHostComponentCaptureEventProps<unknown>;
+  keyof NanoDomCaptureEventProps<unknown>;
 
-export type NanoBubbleEventHandlerName =
-  keyof NanoHostComponentBubbleEventProps<unknown>;
+export type NanoBubbleEventHandlerName = keyof NanoDomBubbleEventProps<unknown>;

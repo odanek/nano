@@ -12,12 +12,19 @@ import { NanoGenericEvent } from '../../event/generic-event';
 
 type Booleanish = boolean | 'true' | 'false';
 
-type CrossOrigin = "anonymous" | "use-credentials" | "" | undefined;
+type CrossOrigin = 'anonymous' | 'use-credentials' | '' | undefined;
 
-export type NanoHostComponentClassPropValue = string | string[];
-export type NanoHostComponentStylePropValue = CSS.Properties<string | number>;
+export type NanoHostComponentHtmlProps<
+  P extends NanoHtmlProps<E>,
+  E extends HTMLElement,
+> = NanoRefProps & P;
 
-export type NanoHostComponentCaptureEventProps<T> = {
+export type NanoHostComponentSvgProps<T> = NanoRefProps & NanoSvgProps<T>;
+
+export type NanoDomClassPropValue = string | string[];
+export type NanoDomStylePropValue = CSS.Properties<string | number>;
+
+export type NanoDomCaptureEventProps<T> = {
   // Pointer
   onCapturePointerDown?: NanoEventHandler<NanoPointerEvent<T>>;
   onCapturePointerUp?: NanoEventHandler<NanoPointerEvent<T>>;
@@ -53,7 +60,7 @@ export type NanoHostComponentCaptureEventProps<T> = {
   // TODO
 };
 
-export type NanoHostComponentBubbleEventProps<T> = {
+export type NanoDomBubbleEventProps<T> = {
   // Pointer
   onPointerDown?: NanoEventHandler<NanoPointerEvent<T>>;
   onPointerUp?: NanoEventHandler<NanoPointerEvent<T>>;
@@ -88,14 +95,14 @@ export type NanoHostComponentBubbleEventProps<T> = {
   onScroll?: NanoEventHandler<NanoGenericEvent<T>>;
   // TODO
 };
-export type NanoHostComponentEventProps<T> =
-  NanoHostComponentCaptureEventProps<T> & NanoHostComponentBubbleEventProps<T>;
+export type NanoDomEventProps<T> = NanoDomCaptureEventProps<T> &
+  NanoDomBubbleEventProps<T>;
 
-export type NanoHostComponentDomProps<T> = NanoHostComponentEventProps<T> & {
+export interface NanoDomProps<T> extends NanoDomEventProps<T> {
   children?: NanoChildren;
-};
+}
 
-export type NanoHtmlAriaProps = {
+export type NanoAriaProps = {
   'aria-activedescendant'?: string | undefined;
   'aria-atomic'?: Booleanish | undefined;
   'aria-autocomplete'?: 'none' | 'inline' | 'list' | 'both' | undefined;
@@ -193,7 +200,7 @@ export type NanoHtmlAriaProps = {
   'aria-valuetext'?: string | undefined;
 };
 
-export type NanoHtmlAriaRole =
+export type NanoAriaRole =
   | 'alert'
   | 'alertdialog'
   | 'application'
@@ -264,9 +271,7 @@ export type NanoHtmlAriaRole =
   | 'treegrid'
   | 'treeitem';
 
-export interface NanoHtmlProps<T>
-  extends NanoHtmlAriaProps,
-    NanoHostComponentDomProps<T> {
+export interface NanoHtmlProps<T> extends NanoAriaProps, NanoDomProps<T> {
   // Standard HTML Attributes
   accessKey?: string | undefined;
   autoCapitalize?:
@@ -279,7 +284,7 @@ export interface NanoHtmlProps<T>
     | undefined
     | (string & {});
   autoFocus?: boolean | undefined;
-  class?: NanoHostComponentClassPropValue | undefined;
+  class?: NanoDomClassPropValue | undefined;
   contentEditable?: Booleanish | 'inherit' | 'plaintext-only' | undefined;
   contextMenu?: string | undefined;
   dir?: string | undefined;
@@ -299,7 +304,7 @@ export interface NanoHtmlProps<T>
   nonce?: string | undefined;
   slot?: string | undefined;
   spellCheck?: Booleanish | undefined;
-  style?: NanoHostComponentStylePropValue | undefined;
+  style?: NanoDomStylePropValue | undefined;
   tabIndex?: number | undefined;
   title?: string | undefined;
   translate?: 'yes' | 'no' | undefined;
@@ -308,7 +313,7 @@ export interface NanoHtmlProps<T>
   radioGroup?: string | undefined; // <command>, <menuitem>
 
   // WAI-ARIA
-  role?: NanoHtmlAriaRole | undefined;
+  role?: NanoAriaRole | undefined;
 
   // RDFa Attributes
   about?: string | undefined;
@@ -350,8 +355,6 @@ export interface NanoHtmlProps<T>
   is?: string | undefined;
 }
 
-export type NanoHostComponentProps<P extends NanoHtmlProps<E>, E extends HTMLElement> = NanoRefProps & P;
-
 type HTMLAttributeReferrerPolicy =
   | ''
   | 'no-referrer'
@@ -370,8 +373,7 @@ type HTMLAttributeAnchorTarget =
   | '_top'
   | (string & {});
 
-export interface NanoHtmlAnchorProps<T>
-  extends NanoHtmlProps<T> {
+export interface NanoHtmlAnchorProps<T> extends NanoHtmlProps<T> {
   download?: unknown;
   href?: string | undefined;
   hrefLang?: string | undefined;
@@ -406,8 +408,7 @@ interface NanoHtmlBlockquoteProps<T> extends NanoHtmlProps<T> {
   cite?: string | undefined;
 }
 
-interface NanoHtmlButtonProps<T>
-  extends NanoHtmlProps<T> {
+interface NanoHtmlButtonProps<T> extends NanoHtmlProps<T> {
   disabled?: boolean | undefined;
   form?: string | undefined;
   formAction?: string | undefined;
@@ -434,128 +435,530 @@ interface NanoHtmlMediaProps<T> extends NanoHtmlProps<T> {
 }
 
 export interface NanoDomElement {
-  a: NanoHostComponentProps<NanoHtmlAnchorProps<HTMLAnchorElement>, HTMLAnchorElement>;
-  abbr: NanoHostComponentProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
-  address: NanoHostComponentProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
-  area: NanoHostComponentProps<NanoHtmlAreaProps<HTMLAreaElement>, HTMLAreaElement>;
-  article: NanoHostComponentProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
-  aside: NanoHostComponentProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
-  audio: NanoHostComponentProps<NanoHtmlAudioProps<HTMLAudioElement>, HTMLAudioElement>;
-  b: NanoHostComponentProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
-  base: NanoHostComponentProps<NanoHtmlBaseProps<HTMLBaseElement>, HTMLBaseElement>;
-  bdi: NanoHostComponentProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
-  bdo: NanoHostComponentProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
-  big: NanoHostComponentProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
-  blockquote: NanoHostComponentProps<NanoHtmlBlockquoteProps<HTMLQuoteElement>, HTMLQuoteElement>;
-  body: NanoHostComponentProps<NanoHtmlProps<HTMLBodyElement>, HTMLBodyElement>;
-  br: NanoHostComponentProps<NanoHtmlProps<HTMLBRElement>, HTMLBRElement>;
-  button: NanoHostComponentProps<NanoHtmlButtonProps<HTMLButtonElement>, HTMLButtonElement>;
+  a: NanoHostComponentHtmlProps<
+    NanoHtmlAnchorProps<HTMLAnchorElement>,
+    HTMLAnchorElement
+  >;
+  abbr: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
+  address: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
+  area: NanoHostComponentHtmlProps<
+    NanoHtmlAreaProps<HTMLAreaElement>,
+    HTMLAreaElement
+  >;
+  article: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
+  aside: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
+  audio: NanoHostComponentHtmlProps<
+    NanoHtmlAudioProps<HTMLAudioElement>,
+    HTMLAudioElement
+  >;
+  b: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
+  base: NanoHostComponentHtmlProps<
+    NanoHtmlBaseProps<HTMLBaseElement>,
+    HTMLBaseElement
+  >;
+  bdi: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
+  bdo: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
+  big: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
+  blockquote: NanoHostComponentHtmlProps<
+    NanoHtmlBlockquoteProps<HTMLQuoteElement>,
+    HTMLQuoteElement
+  >;
+  body: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLBodyElement>, HTMLBodyElement>;
+  br: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLBRElement>, HTMLBRElement>;
+  button: NanoHostComponentHtmlProps<
+    NanoHtmlButtonProps<HTMLButtonElement>,
+    HTMLButtonElement
+  >;
 
   // canvas: CanvasHTMLAttributes<HTMLCanvasElement>;
-  caption: NanoHostComponentProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
-  center: NanoHostComponentProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
-  cite: NanoHostComponentProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
-  code: NanoHostComponentProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
+  caption: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
+  center: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
+  cite: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
+  code: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
   // col: ColHTMLAttributes<HTMLTableColElement>;
   // colgroup: ColgroupHTMLAttributes<HTMLTableColElement>;
   // data: DataHTMLAttributes<HTMLDataElement>;
-  datalist: NanoHostComponentProps<NanoHtmlProps<HTMLDataListElement>, HTMLDataListElement>;
-  dd: NanoHostComponentProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
+  datalist: NanoHostComponentHtmlProps<
+    NanoHtmlProps<HTMLDataListElement>,
+    HTMLDataListElement
+  >;
+  dd: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
   // del: DelHTMLAttributes<HTMLModElement>;
   // details: DetailsHTMLAttributes<HTMLDetailsElement>;
-  dfn: NanoHostComponentProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
+  dfn: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
   // dialog: DialogHTMLAttributes<HTMLDialogElement>;
-  div: NanoHostComponentProps<NanoHtmlProps<HTMLDivElement>, HTMLDivElement>;
-  dl: NanoHostComponentProps<NanoHtmlProps<HTMLDListElement>, HTMLDListElement>;
-  dt: NanoHostComponentProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
-  em: NanoHostComponentProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
+  div: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLDivElement>, HTMLDivElement>;
+  dl: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLDListElement>, HTMLDListElement>;
+  dt: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
+  em: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
   // embed: EmbedHTMLAttributes<HTMLEmbedElement>;
   // fieldset: FieldsetHTMLAttributes<HTMLFieldSetElement>;
-  figcaption: NanoHostComponentProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
-  figure: NanoHostComponentProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
-  footer: NanoHostComponentProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
+  figcaption: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
+  figure: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
+  footer: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
   // form: FormHTMLAttributes<HTMLFormElement>;
-  h1: NanoHostComponentProps<NanoHtmlProps<HTMLHeadingElement>, HTMLHeadingElement>;
-  h2: NanoHostComponentProps<NanoHtmlProps<HTMLHeadingElement>, HTMLHeadingElement>;
-  h3: NanoHostComponentProps<NanoHtmlProps<HTMLHeadingElement>, HTMLHeadingElement>;
-  h4: NanoHostComponentProps<NanoHtmlProps<HTMLHeadingElement>, HTMLHeadingElement>;
-  h5: NanoHostComponentProps<NanoHtmlProps<HTMLHeadingElement>, HTMLHeadingElement>;
-  h6: NanoHostComponentProps<NanoHtmlProps<HTMLHeadingElement>, HTMLHeadingElement>;
-  head: NanoHostComponentProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
-  header: NanoHostComponentProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
-  hgroup: NanoHostComponentProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
+  h1: NanoHostComponentHtmlProps<
+    NanoHtmlProps<HTMLHeadingElement>,
+    HTMLHeadingElement
+  >;
+  h2: NanoHostComponentHtmlProps<
+    NanoHtmlProps<HTMLHeadingElement>,
+    HTMLHeadingElement
+  >;
+  h3: NanoHostComponentHtmlProps<
+    NanoHtmlProps<HTMLHeadingElement>,
+    HTMLHeadingElement
+  >;
+  h4: NanoHostComponentHtmlProps<
+    NanoHtmlProps<HTMLHeadingElement>,
+    HTMLHeadingElement
+  >;
+  h5: NanoHostComponentHtmlProps<
+    NanoHtmlProps<HTMLHeadingElement>,
+    HTMLHeadingElement
+  >;
+  h6: NanoHostComponentHtmlProps<
+    NanoHtmlProps<HTMLHeadingElement>,
+    HTMLHeadingElement
+  >;
+  head: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
+  header: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
+  hgroup: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
   // hr: NanoHostComponentProps<HTMLHRElement>;
   // html: HtmlHTMLAttributes<HTMLHtmlElement>;
-  i: NanoHostComponentProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
+  i: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
   // iframe: IframeHTMLAttributes<HTMLIFrameElement>;
   // img: ImgHTMLAttributes<HTMLImageElement>;
   // input: InputHTMLAttributes<HTMLInputElement>;
   // ins: InsHTMLAttributes<HTMLModElement>;
-  kbd: NanoHostComponentProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
+  kbd: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
   // keygen: KeygenHTMLAttributes<HTMLElement>;
   // label: LabelHTMLAttributes<HTMLLabelElement>;
-  legend: NanoHostComponentProps<NanoHtmlProps<HTMLLegendElement>, HTMLLegendElement>;
+  legend: NanoHostComponentHtmlProps<
+    NanoHtmlProps<HTMLLegendElement>,
+    HTMLLegendElement
+  >;
   // li: LiHTMLAttributes<HTMLLIElement>;
   // link: LinkHTMLAttributes<HTMLLinkElement>;
-  main: NanoHostComponentProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
+  main: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
   // map: MapHTMLAttributes<HTMLMapElement>;
-  mark: NanoHostComponentProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
+  mark: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
   // menu: MenuHTMLAttributes<HTMLElement>;
-  menuitem: NanoHostComponentProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
+  menuitem: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
   // meta: MetaHTMLAttributes<HTMLMetaElement>;
   // meter: MeterHTMLAttributes<HTMLMeterElement>;
-  nav: NanoHostComponentProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
-  noscript: NanoHostComponentProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
+  nav: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
+  noscript: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
   // object: ObjectHTMLAttributes<HTMLObjectElement>;
   // ol: OlHTMLAttributes<HTMLOListElement>;
   // optgroup: OptgroupHTMLAttributes<HTMLOptGroupElement>;
   // option: OptionHTMLAttributes<HTMLOptionElement>;
   // output: OutputHTMLAttributes<HTMLOutputElement>;
-  p: NanoHostComponentProps<NanoHtmlProps<HTMLParagraphElement>, HTMLParagraphElement>;
+  p: NanoHostComponentHtmlProps<
+    NanoHtmlProps<HTMLParagraphElement>,
+    HTMLParagraphElement
+  >;
   // param: ParamHTMLAttributes<HTMLParamElement>;
-  picture: NanoHostComponentProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
-  pre: NanoHostComponentProps<NanoHtmlProps<HTMLPreElement>, HTMLPreElement>;
+  picture: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
+  pre: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLPreElement>, HTMLPreElement>;
   // progress: ProgressHTMLAttributes<HTMLProgressElement>;
   // q: QuoteHTMLAttributes<HTMLQuoteElement>;
-  rp: NanoHostComponentProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
-  rt: NanoHostComponentProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
-  ruby: NanoHostComponentProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
-  s: NanoHostComponentProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
-  samp: NanoHostComponentProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
-  search: NanoHostComponentProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
+  rp: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
+  rt: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
+  ruby: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
+  s: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
+  samp: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
+  search: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
   // slot: SlotHTMLAttributes<HTMLSlotElement>;
   // script: ScriptHTMLAttributes<HTMLScriptElement>;
-  section: NanoHostComponentProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
+  section: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
   // select: SelectHTMLAttributes<HTMLSelectElement>;
-  small: NanoHostComponentProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
+  small: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
   // source: SourceHTMLAttributes<HTMLSourceElement>;
-  span: NanoHostComponentProps<NanoHtmlProps<HTMLSpanElement>, HTMLSpanElement>;
-  strong: NanoHostComponentProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
+  span: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLSpanElement>, HTMLSpanElement>;
+  strong: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
   // style: StyleHTMLAttributes<HTMLStyleElement>;
-  sub: NanoHostComponentProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
-  summary: NanoHostComponentProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
-  sup: NanoHostComponentProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
+  sub: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
+  summary: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
+  sup: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
   // table: TableHTMLAttributes<HTMLTableElement>;
-  template: NanoHostComponentProps<NanoHtmlProps<HTMLTemplateElement>, HTMLTemplateElement>;
-  tbody: NanoHostComponentProps<NanoHtmlProps<HTMLTableSectionElement>, HTMLTableSectionElement>;
+  template: NanoHostComponentHtmlProps<
+    NanoHtmlProps<HTMLTemplateElement>,
+    HTMLTemplateElement
+  >;
+  tbody: NanoHostComponentHtmlProps<
+    NanoHtmlProps<HTMLTableSectionElement>,
+    HTMLTableSectionElement
+  >;
   // td: TdHTMLAttributes<HTMLTableDataCellElement>;
   // textarea: TextareaHTMLAttributes<HTMLTextAreaElement>;
-  tfoot: NanoHostComponentProps<NanoHtmlProps<HTMLTableSectionElement>, HTMLTableSectionElement>;
+  tfoot: NanoHostComponentHtmlProps<
+    NanoHtmlProps<HTMLTableSectionElement>,
+    HTMLTableSectionElement
+  >;
   // th: ThHTMLAttributes<HTMLTableHeaderCellElement>;
-  thead: NanoHostComponentProps<NanoHtmlProps<HTMLTableSectionElement>, HTMLTableSectionElement>;
+  thead: NanoHostComponentHtmlProps<
+    NanoHtmlProps<HTMLTableSectionElement>,
+    HTMLTableSectionElement
+  >;
   // time: TimeHTMLAttributes<HTMLTimeElement>;
-  title: NanoHostComponentProps<NanoHtmlProps<HTMLTitleElement>, HTMLTitleElement>;
-  tr: NanoHostComponentProps<NanoHtmlProps<HTMLTableRowElement>, HTMLTableRowElement>;
+  title: NanoHostComponentHtmlProps<
+    NanoHtmlProps<HTMLTitleElement>,
+    HTMLTitleElement
+  >;
+  tr: NanoHostComponentHtmlProps<
+    NanoHtmlProps<HTMLTableRowElement>,
+    HTMLTableRowElement
+  >;
   // track: TrackHTMLAttributes<HTMLTrackElement>;
-  u: NanoHostComponentProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
-  ul: NanoHostComponentProps<NanoHtmlProps<HTMLUListElement>, HTMLUListElement>;
-  var: NanoHostComponentProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
+  u: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
+  ul: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLUListElement>, HTMLUListElement>;
+  var: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
   // video: VideoHTMLAttributes<HTMLVideoElement>;
-  wbr: NanoHostComponentProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
+  wbr: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
   // webview: WebViewHTMLAttributes<HTMLWebViewElement>;
 }
 
+export interface NanoSvgProps<T> extends NanoAriaProps, NanoDomProps<T> {
+    // Attributes which also defined in HTMLAttributes
+    // See comment in SVGDOMPropertyConfig.js
+    className?: string | undefined;
+    color?: string | undefined;
+    height?: number | string | undefined;
+    id?: string | undefined;
+    lang?: string | undefined;
+    max?: number | string | undefined;
+    media?: string | undefined;
+    method?: string | undefined;
+    min?: number | string | undefined;
+    name?: string | undefined;
+    style?: NanoDomStylePropValue | undefined;
+    target?: string | undefined;
+    type?: string | undefined;
+    width?: number | string | undefined;
+
+    // Other HTML properties supported by SVG elements in browsers
+    role?: NanoAriaRole | undefined;
+    tabIndex?: number | undefined;
+    crossOrigin?: CrossOrigin;
+
+    // SVG Specific attributes
+    accentHeight?: number | string | undefined;
+    accumulate?: "none" | "sum" | undefined;
+    additive?: "replace" | "sum" | undefined;
+    alignmentBaseline?:
+        | "auto"
+        | "baseline"
+        | "before-edge"
+        | "text-before-edge"
+        | "middle"
+        | "central"
+        | "after-edge"
+        | "text-after-edge"
+        | "ideographic"
+        | "alphabetic"
+        | "hanging"
+        | "mathematical"
+        | "inherit"
+        | undefined;
+    allowReorder?: "no" | "yes" | undefined;
+    alphabetic?: number | string | undefined;
+    amplitude?: number | string | undefined;
+    arabicForm?: "initial" | "medial" | "terminal" | "isolated" | undefined;
+    ascent?: number | string | undefined;
+    attributeName?: string | undefined;
+    attributeType?: string | undefined;
+    autoReverse?: Booleanish | undefined;
+    azimuth?: number | string | undefined;
+    baseFrequency?: number | string | undefined;
+    baselineShift?: number | string | undefined;
+    baseProfile?: number | string | undefined;
+    bbox?: number | string | undefined;
+    begin?: number | string | undefined;
+    bias?: number | string | undefined;
+    by?: number | string | undefined;
+    calcMode?: number | string | undefined;
+    capHeight?: number | string | undefined;
+    clip?: number | string | undefined;
+    clipPath?: string | undefined;
+    clipPathUnits?: number | string | undefined;
+    clipRule?: number | string | undefined;
+    colorInterpolation?: number | string | undefined;
+    colorInterpolationFilters?: "auto" | "sRGB" | "linearRGB" | "inherit" | undefined;
+    colorProfile?: number | string | undefined;
+    colorRendering?: number | string | undefined;
+    contentScriptType?: number | string | undefined;
+    contentStyleType?: number | string | undefined;
+    cursor?: number | string | undefined;
+    cx?: number | string | undefined;
+    cy?: number | string | undefined;
+    d?: string | undefined;
+    decelerate?: number | string | undefined;
+    descent?: number | string | undefined;
+    diffuseConstant?: number | string | undefined;
+    direction?: number | string | undefined;
+    display?: number | string | undefined;
+    divisor?: number | string | undefined;
+    dominantBaseline?: number | string | undefined;
+    dur?: number | string | undefined;
+    dx?: number | string | undefined;
+    dy?: number | string | undefined;
+    edgeMode?: number | string | undefined;
+    elevation?: number | string | undefined;
+    enableBackground?: number | string | undefined;
+    end?: number | string | undefined;
+    exponent?: number | string | undefined;
+    externalResourcesRequired?: Booleanish | undefined;
+    fill?: string | undefined;
+    fillOpacity?: number | string | undefined;
+    fillRule?: "nonzero" | "evenodd" | "inherit" | undefined;
+    filter?: string | undefined;
+    filterRes?: number | string | undefined;
+    filterUnits?: number | string | undefined;
+    floodColor?: number | string | undefined;
+    floodOpacity?: number | string | undefined;
+    focusable?: Booleanish | "auto" | undefined;
+    fontFamily?: string | undefined;
+    fontSize?: number | string | undefined;
+    fontSizeAdjust?: number | string | undefined;
+    fontStretch?: number | string | undefined;
+    fontStyle?: number | string | undefined;
+    fontVariant?: number | string | undefined;
+    fontWeight?: number | string | undefined;
+    format?: number | string | undefined;
+    fr?: number | string | undefined;
+    from?: number | string | undefined;
+    fx?: number | string | undefined;
+    fy?: number | string | undefined;
+    g1?: number | string | undefined;
+    g2?: number | string | undefined;
+    glyphName?: number | string | undefined;
+    glyphOrientationHorizontal?: number | string | undefined;
+    glyphOrientationVertical?: number | string | undefined;
+    glyphRef?: number | string | undefined;
+    gradientTransform?: string | undefined;
+    gradientUnits?: string | undefined;
+    hanging?: number | string | undefined;
+    horizAdvX?: number | string | undefined;
+    horizOriginX?: number | string | undefined;
+    href?: string | undefined;
+    ideographic?: number | string | undefined;
+    imageRendering?: number | string | undefined;
+    in2?: number | string | undefined;
+    in?: string | undefined;
+    intercept?: number | string | undefined;
+    k1?: number | string | undefined;
+    k2?: number | string | undefined;
+    k3?: number | string | undefined;
+    k4?: number | string | undefined;
+    k?: number | string | undefined;
+    kernelMatrix?: number | string | undefined;
+    kernelUnitLength?: number | string | undefined;
+    kerning?: number | string | undefined;
+    keyPoints?: number | string | undefined;
+    keySplines?: number | string | undefined;
+    keyTimes?: number | string | undefined;
+    lengthAdjust?: number | string | undefined;
+    letterSpacing?: number | string | undefined;
+    lightingColor?: number | string | undefined;
+    limitingConeAngle?: number | string | undefined;
+    local?: number | string | undefined;
+    markerEnd?: string | undefined;
+    markerHeight?: number | string | undefined;
+    markerMid?: string | undefined;
+    markerStart?: string | undefined;
+    markerUnits?: number | string | undefined;
+    markerWidth?: number | string | undefined;
+    mask?: string | undefined;
+    maskContentUnits?: number | string | undefined;
+    maskUnits?: number | string | undefined;
+    mathematical?: number | string | undefined;
+    mode?: number | string | undefined;
+    numOctaves?: number | string | undefined;
+    offset?: number | string | undefined;
+    opacity?: number | string | undefined;
+    operator?: number | string | undefined;
+    order?: number | string | undefined;
+    orient?: number | string | undefined;
+    orientation?: number | string | undefined;
+    origin?: number | string | undefined;
+    overflow?: number | string | undefined;
+    overlinePosition?: number | string | undefined;
+    overlineThickness?: number | string | undefined;
+    paintOrder?: number | string | undefined;
+    panose1?: number | string | undefined;
+    path?: string | undefined;
+    pathLength?: number | string | undefined;
+    patternContentUnits?: string | undefined;
+    patternTransform?: number | string | undefined;
+    patternUnits?: string | undefined;
+    pointerEvents?: number | string | undefined;
+    points?: string | undefined;
+    pointsAtX?: number | string | undefined;
+    pointsAtY?: number | string | undefined;
+    pointsAtZ?: number | string | undefined;
+    preserveAlpha?: Booleanish | undefined;
+    preserveAspectRatio?: string | undefined;
+    primitiveUnits?: number | string | undefined;
+    r?: number | string | undefined;
+    radius?: number | string | undefined;
+    refX?: number | string | undefined;
+    refY?: number | string | undefined;
+    renderingIntent?: number | string | undefined;
+    repeatCount?: number | string | undefined;
+    repeatDur?: number | string | undefined;
+    requiredExtensions?: number | string | undefined;
+    requiredFeatures?: number | string | undefined;
+    restart?: number | string | undefined;
+    result?: string | undefined;
+    rotate?: number | string | undefined;
+    rx?: number | string | undefined;
+    ry?: number | string | undefined;
+    scale?: number | string | undefined;
+    seed?: number | string | undefined;
+    shapeRendering?: number | string | undefined;
+    slope?: number | string | undefined;
+    spacing?: number | string | undefined;
+    specularConstant?: number | string | undefined;
+    specularExponent?: number | string | undefined;
+    speed?: number | string | undefined;
+    spreadMethod?: string | undefined;
+    startOffset?: number | string | undefined;
+    stdDeviation?: number | string | undefined;
+    stemh?: number | string | undefined;
+    stemv?: number | string | undefined;
+    stitchTiles?: number | string | undefined;
+    stopColor?: string | undefined;
+    stopOpacity?: number | string | undefined;
+    strikethroughPosition?: number | string | undefined;
+    strikethroughThickness?: number | string | undefined;
+    string?: number | string | undefined;
+    stroke?: string | undefined;
+    strokeDasharray?: string | number | undefined;
+    strokeDashoffset?: string | number | undefined;
+    strokeLinecap?: "butt" | "round" | "square" | "inherit" | undefined;
+    strokeLinejoin?: "miter" | "round" | "bevel" | "inherit" | undefined;
+    strokeMiterlimit?: number | string | undefined;
+    strokeOpacity?: number | string | undefined;
+    strokeWidth?: number | string | undefined;
+    surfaceScale?: number | string | undefined;
+    systemLanguage?: number | string | undefined;
+    tableValues?: number | string | undefined;
+    targetX?: number | string | undefined;
+    targetY?: number | string | undefined;
+    textAnchor?: string | undefined;
+    textDecoration?: number | string | undefined;
+    textLength?: number | string | undefined;
+    textRendering?: number | string | undefined;
+    to?: number | string | undefined;
+    transform?: string | undefined;
+    u1?: number | string | undefined;
+    u2?: number | string | undefined;
+    underlinePosition?: number | string | undefined;
+    underlineThickness?: number | string | undefined;
+    unicode?: number | string | undefined;
+    unicodeBidi?: number | string | undefined;
+    unicodeRange?: number | string | undefined;
+    unitsPerEm?: number | string | undefined;
+    vAlphabetic?: number | string | undefined;
+    values?: string | undefined;
+    vectorEffect?: number | string | undefined;
+    version?: string | undefined;
+    vertAdvY?: number | string | undefined;
+    vertOriginX?: number | string | undefined;
+    vertOriginY?: number | string | undefined;
+    vHanging?: number | string | undefined;
+    vIdeographic?: number | string | undefined;
+    viewBox?: string | undefined;
+    viewTarget?: number | string | undefined;
+    visibility?: number | string | undefined;
+    vMathematical?: number | string | undefined;
+    widths?: number | string | undefined;
+    wordSpacing?: number | string | undefined;
+    writingMode?: number | string | undefined;
+    x1?: number | string | undefined;
+    x2?: number | string | undefined;
+    x?: number | string | undefined;
+    xChannelSelector?: string | undefined;
+    xHeight?: number | string | undefined;
+    xlinkActuate?: string | undefined;
+    xlinkArcrole?: string | undefined;
+    xlinkHref?: string | undefined;
+    xlinkRole?: string | undefined;
+    xlinkShow?: string | undefined;
+    xlinkTitle?: string | undefined;
+    xlinkType?: string | undefined;
+    xmlBase?: string | undefined;
+    xmlLang?: string | undefined;
+    xmlns?: string | undefined;
+    xmlnsXlink?: string | undefined;
+    xmlSpace?: string | undefined;
+    y1?: number | string | undefined;
+    y2?: number | string | undefined;
+    y?: number | string | undefined;
+    yChannelSelector?: string | undefined;
+    z?: number | string | undefined;
+    zoomAndPan?: string | undefined;
+}
+
 export interface NanoSvgElement {
-  // TODO Fix
-  
+  svg: NanoHostComponentSvgProps<SVGSVGElement>;
+  animate: NanoHostComponentSvgProps<SVGAnimateElement>;
+  animateMotion: NanoHostComponentSvgProps<SVGElement>;
+  animateTransform: NanoHostComponentSvgProps<SVGAnimateTransformElement>;
+  circle: NanoHostComponentSvgProps<SVGCircleElement>;
+  clipPath: NanoHostComponentSvgProps<SVGClipPathElement>;
+  defs: NanoHostComponentSvgProps<SVGDefsElement>;
+  desc: NanoHostComponentSvgProps<SVGDescElement>;
+  ellipse: NanoHostComponentSvgProps<SVGEllipseElement>;
+  feBlend: NanoHostComponentSvgProps<SVGFEBlendElement>;
+  feColorMatrix: NanoHostComponentSvgProps<SVGFEColorMatrixElement>;
+  feComponentTransfer: NanoHostComponentSvgProps<SVGFEComponentTransferElement>;
+  feComposite: NanoHostComponentSvgProps<SVGFECompositeElement>;
+  feConvolveMatrix: NanoHostComponentSvgProps<SVGFEConvolveMatrixElement>;
+  feDiffuseLighting: NanoHostComponentSvgProps<SVGFEDiffuseLightingElement>;
+  feDisplacementMap: NanoHostComponentSvgProps<SVGFEDisplacementMapElement>;
+  feDistantLight: NanoHostComponentSvgProps<SVGFEDistantLightElement>;
+  feDropShadow: NanoHostComponentSvgProps<SVGFEDropShadowElement>;
+  feFlood: NanoHostComponentSvgProps<SVGFEFloodElement>;
+  feFuncA: NanoHostComponentSvgProps<SVGFEFuncAElement>;
+  feFuncB: NanoHostComponentSvgProps<SVGFEFuncBElement>;
+  feFuncG: NanoHostComponentSvgProps<SVGFEFuncGElement>;
+  feFuncR: NanoHostComponentSvgProps<SVGFEFuncRElement>;
+  feGaussianBlur: NanoHostComponentSvgProps<SVGFEGaussianBlurElement>;
+  feImage: NanoHostComponentSvgProps<SVGFEImageElement>;
+  feMerge: NanoHostComponentSvgProps<SVGFEMergeElement>;
+  feMergeNode: NanoHostComponentSvgProps<SVGFEMergeNodeElement>;
+  feMorphology: NanoHostComponentSvgProps<SVGFEMorphologyElement>;
+  feOffset: NanoHostComponentSvgProps<SVGFEOffsetElement>;
+  fePointLight: NanoHostComponentSvgProps<SVGFEPointLightElement>;
+  feSpecularLighting: NanoHostComponentSvgProps<SVGFESpecularLightingElement>;
+  feSpotLight: NanoHostComponentSvgProps<SVGFESpotLightElement>;
+  feTile: NanoHostComponentSvgProps<SVGFETileElement>;
+  feTurbulence: NanoHostComponentSvgProps<SVGFETurbulenceElement>;
+  filter: NanoHostComponentSvgProps<SVGFilterElement>;
+  foreignObject: NanoHostComponentSvgProps<SVGForeignObjectElement>;
+  g: NanoHostComponentSvgProps<SVGGElement>;
+  image: NanoHostComponentSvgProps<SVGImageElement>;
+  line: NanoHostComponentSvgProps<SVGLineElement>;
+  linearGradient: NanoHostComponentSvgProps<SVGLinearGradientElement>;
+  marker: NanoHostComponentSvgProps<SVGMarkerElement>;
+  mask: NanoHostComponentSvgProps<SVGMaskElement>;
+  metadata: NanoHostComponentSvgProps<SVGMetadataElement>;
+  mpath: NanoHostComponentSvgProps<SVGElement>;
+  path: NanoHostComponentSvgProps<SVGPathElement>;
+  pattern: NanoHostComponentSvgProps<SVGPatternElement>;
+  polygon: NanoHostComponentSvgProps<SVGPolygonElement>;
+  polyline: NanoHostComponentSvgProps<SVGPolylineElement>;
+  radialGradient: NanoHostComponentSvgProps<SVGRadialGradientElement>;
+  rect: NanoHostComponentSvgProps<SVGRectElement>;
+  set: NanoHostComponentSvgProps<SVGSetElement>;
+  stop: NanoHostComponentSvgProps<SVGStopElement>;
+  switch: NanoHostComponentSvgProps<SVGSwitchElement>;
+  symbol: NanoHostComponentSvgProps<SVGSymbolElement>;
+  text: NanoHostComponentSvgProps<SVGTextElement>;
+  textPath: NanoHostComponentSvgProps<SVGTextPathElement>;
+  tspan: NanoHostComponentSvgProps<SVGTSpanElement>;
+  use: NanoHostComponentSvgProps<SVGUseElement>;
+  view: NanoHostComponentSvgProps<SVGViewElement>;
 }
