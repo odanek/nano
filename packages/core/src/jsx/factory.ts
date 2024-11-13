@@ -9,11 +9,7 @@ export function jsx(
   key?: NanoElementKey,
 ): NanoElement {
   if (isString(type)) {
-    return jsxHostComponent(
-      type,
-      props,
-      key,
-    ) as NanoElement<unknown>;
+    return jsxHostComponent(type, props, key) as NanoElement<unknown>;
   } else if (isFunction(type)) {
     return jsxFunctionComponent(type, props, key) as NanoElement<unknown>;
   } else {

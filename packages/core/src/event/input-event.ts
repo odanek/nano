@@ -1,7 +1,9 @@
 import { NanoEvent } from './event';
 import { NanoEventType } from './type';
 
-export type NanoInputEventType = NanoEventType.Input | NanoEventType.BeforeInput;
+export type NanoInputEventType =
+  | NanoEventType.Input
+  | NanoEventType.BeforeInput;
 
 interface Options<T> {
   type: NanoInputEventType;

@@ -47,8 +47,8 @@ export class NanoPointerEvent<T> extends NanoEvent<T> {
         return NanoEventType.PointerMove;
       case 'click':
         return NanoEventType.Click;
-        case 'contextmenu':
-          return NanoEventType.ContextMenu;
+      case 'contextmenu':
+        return NanoEventType.ContextMenu;
       default:
         throw new Error(`Event type ${type} is not a pointer event`);
     }

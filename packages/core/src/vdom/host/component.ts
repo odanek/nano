@@ -92,9 +92,7 @@ function setInitialProperties(
     }
 
     if (key === 'class') {
-      const className = classNameString(
-        value as NanoDomClassPropValue,
-      );
+      const className = classNameString(value as NanoDomClassPropValue);
       if (className !== null) {
         node.setAttribute('class', className);
       }
@@ -126,8 +124,7 @@ export function diffProperties(
   workInProgress: NanoFiber,
 ): NanoHostComponentPropsDiff | null {
   const oldProps = current.memoizedProps as PlainObject;
-  const newProps =
-    workInProgress.pendingProps as PlainObject;
+  const newProps = workInProgress.pendingProps as PlainObject;
   if (oldProps === newProps) {
     return null;
   }
@@ -170,12 +167,8 @@ function diffPropertyChange(
       diff.push(SET_TEXT_CHILD, newValue.toString());
     }
   } else if (key === 'class') {
-    const oldClassName = classNameString(
-      oldValue as NanoDomClassPropValue,
-    );
-    const newClassName = classNameString(
-      newValue as NanoDomClassPropValue,
-    );
+    const oldClassName = classNameString(oldValue as NanoDomClassPropValue);
+    const newClassName = classNameString(newValue as NanoDomClassPropValue);
     if (oldClassName !== newClassName) {
       diff.push(key, newClassName);
     }

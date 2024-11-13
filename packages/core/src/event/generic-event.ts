@@ -1,11 +1,14 @@
 import { NanoEvent } from './event';
 import { NanoEventType } from './type';
 
-export type NanoGenericEventType = NanoEventType.Change | NanoEventType.Select | NanoEventType.Scroll;
+export type NanoGenericEventType =
+  | NanoEventType.Change
+  | NanoEventType.Select
+  | NanoEventType.Scroll;
 
 interface Options<T> {
-  type: NanoEventType,
-  target: T,
+  type: NanoEventType;
+  target: T;
 }
 
 export class NanoGenericEvent<T> extends NanoEvent<T> {
