@@ -421,6 +421,115 @@ interface NanoHtmlButtonProps<T> extends NanoHtmlProps<T> {
   value?: string | readonly string[] | number | undefined;
 }
 
+interface NanoHtmlCanvasProps<T> extends NanoHtmlProps<T> {
+  height?: number | string | undefined;
+  width?: number | string | undefined;
+}
+
+interface NanoHtmlColProps<T> extends NanoHtmlProps<T> {
+  span?: number | undefined;
+  width?: number | string | undefined;
+}
+
+interface NanoHtmlColgroupProps<T> extends NanoHtmlProps<T> {
+  span?: number | undefined;
+}
+
+interface NanoHtmlDataProps<T> extends NanoHtmlProps<T> {
+  value?: string | readonly string[] | number | undefined;
+}
+
+interface NanoHtmlDelProps<T> extends NanoHtmlProps<T> {
+  cite?: string | undefined;
+  dateTime?: string | undefined;
+}
+
+interface NanoHtmlDetailsProps<T> extends NanoHtmlProps<T> {
+  open?: boolean | undefined;
+  onToggle?: NanoEventHandler<NanoGenericEvent<T>> | undefined;
+  onCaptureToggle?: NanoEventHandler<NanoGenericEvent<T>> | undefined;
+  name?: string | undefined;
+}
+
+interface NanoHtmlDialogProps<T> extends NanoHtmlProps<T> {
+  onCancel?: NanoEventHandler<NanoGenericEvent<T>> | undefined;
+  onCaptureCancel?: NanoEventHandler<NanoGenericEvent<T>> | undefined;
+  onClose?: NanoEventHandler<NanoGenericEvent<T>> | undefined;
+  onCaptureClose?: NanoEventHandler<NanoGenericEvent<T>> | undefined;
+  open?: boolean | undefined;
+}
+
+interface NanoHtmlEmbedProps<T> extends NanoHtmlProps<T> {
+  height?: number | string | undefined;
+  src?: string | undefined;
+  type?: string | undefined;
+  width?: number | string | undefined;
+}
+
+interface NanoHtmlFieldsetProps<T> extends NanoHtmlProps<T> {
+  disabled?: boolean | undefined;
+  form?: string | undefined;
+  name?: string | undefined;
+}
+
+interface NanoHtmlFormProps<T> extends NanoHtmlProps<T> {
+  acceptCharset?: string | undefined;
+  action?: string | undefined;
+  autoComplete?: string | undefined;
+  encType?: string | undefined;
+  method?: string | undefined;
+  name?: string | undefined;
+  noValidate?: boolean | undefined;
+  target?: string | undefined;
+}
+
+interface NanoHtmlHtmlProps<T> extends NanoHtmlProps<T> {
+  manifest?: string | undefined;
+}
+
+interface NanoHtmlIframeProps<T> extends NanoHtmlProps<T> {
+  allow?: string | undefined;
+  allowFullScreen?: boolean | undefined;
+  allowTransparency?: boolean | undefined;
+  /** @deprecated */
+  frameBorder?: number | string | undefined;
+  height?: number | string | undefined;
+  loading?: "eager" | "lazy" | undefined;
+  /** @deprecated */
+  marginHeight?: number | undefined;
+  /** @deprecated */
+  marginWidth?: number | undefined;
+  name?: string | undefined;
+  referrerPolicy?: HTMLAttributeReferrerPolicy | undefined;
+  sandbox?: string | undefined;
+  /** @deprecated */
+  scrolling?: string | undefined;
+  seamless?: boolean | undefined;
+  src?: string | undefined;
+  srcDoc?: string | undefined;
+  width?: number | string | undefined;
+}
+
+interface NanoHtmlImgProps<T> extends NanoHtmlProps<T> {
+  alt?: string | undefined;
+  crossOrigin?: CrossOrigin;
+  decoding?: "async" | "auto" | "sync" | undefined;
+  fetchPriority?: "high" | "low" | "auto";
+  height?: number | string | undefined;
+  loading?: "eager" | "lazy" | undefined;
+  referrerPolicy?: HTMLAttributeReferrerPolicy | undefined;
+  sizes?: string | undefined;
+  src?: string | undefined;
+  srcSet?: string | undefined;
+  useMap?: string | undefined;
+  width?: number | string | undefined;
+}
+
+interface NanoHtmlInsProps<T> extends NanoHtmlProps<T> {
+  cite?: string | undefined;
+  dateTime?: string | undefined;
+}
+
 interface NanoHtmlMediaProps<T> extends NanoHtmlProps<T> {
   autoPlay?: boolean | undefined;
   controls?: boolean | undefined;
@@ -472,24 +581,44 @@ export interface NanoDomElement {
     NanoHtmlButtonProps<HTMLButtonElement>,
     HTMLButtonElement
   >;
-
-  // canvas: CanvasHTMLAttributes<HTMLCanvasElement>;
+  canvas: NanoHostComponentHtmlProps<
+    NanoHtmlCanvasProps<HTMLCanvasElement>,
+    HTMLCanvasElement
+  >;
   caption: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
   center: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
   cite: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
   code: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
-  // col: ColHTMLAttributes<HTMLTableColElement>;
-  // colgroup: ColgroupHTMLAttributes<HTMLTableColElement>;
-  // data: DataHTMLAttributes<HTMLDataElement>;
+  col: NanoHostComponentHtmlProps<
+    NanoHtmlColProps<HTMLTableColElement>,
+    HTMLTableColElement
+  >;
+  colgroup: NanoHostComponentHtmlProps<
+    NanoHtmlColgroupProps<HTMLTableColElement>,
+    HTMLTableColElement
+  >;
+  data: NanoHostComponentHtmlProps<
+    NanoHtmlDataProps<HTMLDataElement>,
+    HTMLDataElement
+  >;
   datalist: NanoHostComponentHtmlProps<
     NanoHtmlProps<HTMLDataListElement>,
     HTMLDataListElement
   >;
   dd: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
-  // del: DelHTMLAttributes<HTMLModElement>;
-  // details: DetailsHTMLAttributes<HTMLDetailsElement>;
+  del: NanoHostComponentHtmlProps<
+    NanoHtmlDelProps<HTMLModElement>,
+    HTMLModElement
+  >;
+  details: NanoHostComponentHtmlProps<
+    NanoHtmlDetailsProps<HTMLDetailsElement>,
+    HTMLDetailsElement
+  >;
   dfn: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
-  // dialog: DialogHTMLAttributes<HTMLDialogElement>;
+  dialog: NanoHostComponentHtmlProps<
+    NanoHtmlDialogProps<HTMLDialogElement>,
+    HTMLDialogElement
+  >;
   div: NanoHostComponentHtmlProps<
     NanoHtmlProps<HTMLDivElement>,
     HTMLDivElement
@@ -500,15 +629,24 @@ export interface NanoDomElement {
   >;
   dt: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
   em: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
-  // embed: EmbedHTMLAttributes<HTMLEmbedElement>;
-  // fieldset: FieldsetHTMLAttributes<HTMLFieldSetElement>;
+  embed: NanoHostComponentHtmlProps<
+    NanoHtmlEmbedProps<HTMLEmbedElement>,
+    HTMLEmbedElement
+  >;
+  fieldset: NanoHostComponentHtmlProps<
+    NanoHtmlFieldsetProps<HTMLFieldSetElement>,
+    HTMLFieldSetElement
+  >;
   figcaption: NanoHostComponentHtmlProps<
     NanoHtmlProps<HTMLElement>,
     HTMLElement
   >;
   figure: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
   footer: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
-  // form: FormHTMLAttributes<HTMLFormElement>;
+  form: NanoHostComponentHtmlProps<
+    NanoHtmlFormProps<HTMLFormElement>,
+    HTMLFormElement
+  >;
   h1: NanoHostComponentHtmlProps<
     NanoHtmlProps<HTMLHeadingElement>,
     HTMLHeadingElement
@@ -536,13 +674,16 @@ export interface NanoDomElement {
   head: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
   header: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
   hgroup: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
-  // hr: NanoHostComponentProps<HTMLHRElement>;
-  // html: HtmlHTMLAttributes<HTMLHtmlElement>;
+  hr: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLHRElement>, HTMLHRElement>;
+  html: NanoHostComponentHtmlProps<
+    NanoHtmlHtmlProps<HTMLHtmlElement>,
+    HTMLHtmlElement
+  >;
   i: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
-  // iframe: IframeHTMLAttributes<HTMLIFrameElement>;
-  // img: ImgHTMLAttributes<HTMLImageElement>;
+  iframe: NanoHostComponentHtmlProps<NanoHtmlIframeProps<HTMLIFrameElement>, HTMLIFrameElement>;
+  img: NanoHostComponentHtmlProps<NanoHtmlImgProps<HTMLImageElement>, HTMLImageElement>;
   // input: InputHTMLAttributes<HTMLInputElement>;
-  // ins: InsHTMLAttributes<HTMLModElement>;
+  ins: NanoHostComponentHtmlProps<NanoHtmlInsProps<HTMLModElement>, HTMLModElement>;
   kbd: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
   // keygen: KeygenHTMLAttributes<HTMLElement>;
   // label: LabelHTMLAttributes<HTMLLabelElement>;
