@@ -652,6 +652,48 @@ interface NanoHtmlInsProps<T> extends NanoHtmlProps<T> {
   dateTime?: string | undefined;
 }
 
+interface NanoHtmlKeygenProps<T> extends NanoHtmlProps<T> {
+  challenge?: string | undefined;
+  disabled?: boolean | undefined;
+  form?: string | undefined;
+  keyType?: string | undefined;
+  keyParams?: string | undefined;
+  name?: string | undefined;
+}
+
+interface NanoHtmlLabelProps<T> extends NanoHtmlProps<T> {
+  form?: string | undefined;
+  htmlFor?: string | undefined;
+}
+
+interface NanoHtmlLiProps<T> extends NanoHtmlProps<T> {
+  value?: string | readonly string[] | number | undefined;
+}
+
+interface NanoHtmlLinkProps<T> extends NanoHtmlProps<T> {
+  as?: string | undefined;
+  crossOrigin?: CrossOrigin;
+  fetchPriority?: 'high' | 'low' | 'auto';
+  href?: string | undefined;
+  hrefLang?: string | undefined;
+  integrity?: string | undefined;
+  media?: string | undefined;
+  imageSrcSet?: string | undefined;
+  imageSizes?: string | undefined;
+  referrerPolicy?: HTMLAttributeReferrerPolicy | undefined;
+  sizes?: string | undefined;
+  type?: string | undefined;
+  charSet?: string | undefined;
+}
+
+interface NanoHtmlMapProps<T> extends NanoHtmlProps<T> {
+  name?: string | undefined;
+}
+
+interface NanoHtmlMenuProps<T> extends NanoHtmlProps<T> {
+  type?: string | undefined;
+}
+
 interface NanoHtmlMediaProps<T> extends NanoHtmlProps<T> {
   autoPlay?: boolean | undefined;
   controls?: boolean | undefined;
@@ -663,6 +705,74 @@ interface NanoHtmlMediaProps<T> extends NanoHtmlProps<T> {
   playsInline?: boolean | undefined;
   preload?: string | undefined;
   src?: string | undefined;
+}
+
+interface NanoHtmlMetaProps<T> extends NanoHtmlProps<T> {
+  charSet?: string | undefined;
+  content?: string | undefined;
+  httpEquiv?: string | undefined;
+  media?: string | undefined;
+  name?: string | undefined;
+}
+
+interface NanoHtmlMeterProps<T> extends NanoHtmlProps<T> {
+  form?: string | undefined;
+  high?: number | undefined;
+  low?: number | undefined;
+  max?: number | string | undefined;
+  min?: number | string | undefined;
+  optimum?: number | undefined;
+  value?: string | readonly string[] | number | undefined;
+}
+
+interface NanoHtmlObjectProps<T> extends NanoHtmlProps<T> {
+  classID?: string | undefined;
+  data?: string | undefined;
+  form?: string | undefined;
+  height?: number | string | undefined;
+  name?: string | undefined;
+  type?: string | undefined;
+  useMap?: string | undefined;
+  width?: number | string | undefined;
+  wmode?: string | undefined;
+}
+
+interface NanoHtmlOlProps<T> extends NanoHtmlProps<T> {
+  reversed?: boolean | undefined;
+  start?: number | undefined;
+  type?: '1' | 'a' | 'A' | 'i' | 'I' | undefined;
+}
+
+interface NanoHtmlOptgroupProps<T> extends NanoHtmlProps<T> {
+  disabled?: boolean | undefined;
+  label?: string | undefined;
+}
+
+interface NanoHtmlOptionProps<T> extends NanoHtmlProps<T> {
+  disabled?: boolean | undefined;
+  label?: string | undefined;
+  selected?: boolean | undefined;
+  value?: string | readonly string[] | number | undefined;
+}
+
+interface NanoHtmlOutputProps<T> extends NanoHtmlProps<T> {
+  form?: string | undefined;
+  htmlFor?: string | undefined;
+  name?: string | undefined;
+}
+
+interface NanoHtmlParamProps<T> extends NanoHtmlProps<T> {
+  name?: string | undefined;
+  value?: string | readonly string[] | number | undefined;
+}
+
+interface NanoHtmlProgressProps<T> extends NanoHtmlProps<T> {
+  max?: number | string | undefined;
+  value?: string | readonly string[] | number | undefined;
+}
+
+interface NanoHtmlQuoteProps<T> extends NanoHtmlProps<T> {
+  cite?: string | undefined;
 }
 
 export interface NanoDomElement {
@@ -819,40 +929,82 @@ export interface NanoDomElement {
     HTMLModElement
   >;
   kbd: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
-  // keygen: KeygenHTMLAttributes<HTMLElement>;
-  // label: LabelHTMLAttributes<HTMLLabelElement>;
+  keygen: NanoHostComponentHtmlProps<
+    NanoHtmlKeygenProps<HTMLElement>,
+    HTMLElement
+  >;
+  label: NanoHostComponentHtmlProps<
+    NanoHtmlLabelProps<HTMLLabelElement>,
+    HTMLLabelElement
+  >;
   legend: NanoHostComponentHtmlProps<
     NanoHtmlProps<HTMLLegendElement>,
     HTMLLegendElement
   >;
-  // li: LiHTMLAttributes<HTMLLIElement>;
-  // link: LinkHTMLAttributes<HTMLLinkElement>;
+  li: NanoHostComponentHtmlProps<NanoHtmlLiProps<HTMLLIElement>, HTMLLIElement>;
+  link: NanoHostComponentHtmlProps<
+    NanoHtmlLinkProps<HTMLLinkElement>,
+    HTMLLinkElement
+  >;
   main: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
-  // map: MapHTMLAttributes<HTMLMapElement>;
+  map: NanoHostComponentHtmlProps<
+    NanoHtmlMapProps<HTMLMapElement>,
+    HTMLMapElement
+  >;
   mark: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
-  // menu: MenuHTMLAttributes<HTMLElement>;
+  menu: NanoHostComponentHtmlProps<NanoHtmlMenuProps<HTMLElement>, HTMLElement>;
   menuitem: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
-  // meta: MetaHTMLAttributes<HTMLMetaElement>;
-  // meter: MeterHTMLAttributes<HTMLMeterElement>;
+  meta: NanoHostComponentHtmlProps<
+    NanoHtmlMetaProps<HTMLMetaElement>,
+    HTMLMetaElement
+  >;
+  meter: NanoHostComponentHtmlProps<
+    NanoHtmlMeterProps<HTMLMeterElement>,
+    HTMLMeterElement
+  >;
   nav: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
   noscript: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
-  // object: ObjectHTMLAttributes<HTMLObjectElement>;
-  // ol: OlHTMLAttributes<HTMLOListElement>;
-  // optgroup: OptgroupHTMLAttributes<HTMLOptGroupElement>;
-  // option: OptionHTMLAttributes<HTMLOptionElement>;
-  // output: OutputHTMLAttributes<HTMLOutputElement>;
+  object: NanoHostComponentHtmlProps<
+    NanoHtmlObjectProps<HTMLObjectElement>,
+    HTMLObjectElement
+  >;
+  ol: NanoHostComponentHtmlProps<
+    NanoHtmlOlProps<HTMLOListElement>,
+    HTMLOListElement
+  >;
+  optgroup: NanoHostComponentHtmlProps<
+    NanoHtmlOptgroupProps<HTMLOptGroupElement>,
+    HTMLOptGroupElement
+  >;
+  option: NanoHostComponentHtmlProps<
+    NanoHtmlOptionProps<HTMLOptionElement>,
+    HTMLOptionElement
+  >;
+  output: NanoHostComponentHtmlProps<
+    NanoHtmlOutputProps<HTMLOutputElement>,
+    HTMLOutputElement
+  >;
   p: NanoHostComponentHtmlProps<
     NanoHtmlProps<HTMLParagraphElement>,
     HTMLParagraphElement
   >;
-  // param: ParamHTMLAttributes<HTMLParamElement>;
+  param: NanoHostComponentHtmlProps<
+    NanoHtmlParamProps<HTMLParamElement>,
+    HTMLParamElement
+  >;
   picture: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
   pre: NanoHostComponentHtmlProps<
     NanoHtmlProps<HTMLPreElement>,
     HTMLPreElement
   >;
-  // progress: ProgressHTMLAttributes<HTMLProgressElement>;
-  // q: QuoteHTMLAttributes<HTMLQuoteElement>;
+  progress: NanoHostComponentHtmlProps<
+    NanoHtmlProgressProps<HTMLProgressElement>,
+    HTMLProgressElement
+  >;
+  q: NanoHostComponentHtmlProps<
+    NanoHtmlQuoteProps<HTMLQuoteElement>,
+    HTMLQuoteElement
+  >;
   rp: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
   rt: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
   ruby: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
