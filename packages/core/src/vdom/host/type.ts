@@ -525,6 +525,128 @@ interface NanoHtmlImgProps<T> extends NanoHtmlProps<T> {
   width?: number | string | undefined;
 }
 
+type NanoHtmlInputTypeAttribute =
+  | 'button'
+  | 'checkbox'
+  | 'color'
+  | 'date'
+  | 'datetime-local'
+  | 'email'
+  | 'file'
+  | 'hidden'
+  | 'image'
+  | 'month'
+  | 'number'
+  | 'password'
+  | 'radio'
+  | 'range'
+  | 'reset'
+  | 'search'
+  | 'submit'
+  | 'tel'
+  | 'text'
+  | 'time'
+  | 'url'
+  | 'week'
+  | (string & {});
+
+type AutoFillAddressKind = 'billing' | 'shipping';
+type AutoFillBase = '' | 'off' | 'on';
+type AutoFillContactField =
+  | 'email'
+  | 'tel'
+  | 'tel-area-code'
+  | 'tel-country-code'
+  | 'tel-extension'
+  | 'tel-local'
+  | 'tel-local-prefix'
+  | 'tel-local-suffix'
+  | 'tel-national';
+type AutoFillContactKind = 'home' | 'mobile' | 'work';
+type AutoFillCredentialField = 'webauthn';
+type AutoFillNormalField =
+  | 'additional-name'
+  | 'address-level1'
+  | 'address-level2'
+  | 'address-level3'
+  | 'address-level4'
+  | 'address-line1'
+  | 'address-line2'
+  | 'address-line3'
+  | 'bday-day'
+  | 'bday-month'
+  | 'bday-year'
+  | 'cc-csc'
+  | 'cc-exp'
+  | 'cc-exp-month'
+  | 'cc-exp-year'
+  | 'cc-family-name'
+  | 'cc-given-name'
+  | 'cc-name'
+  | 'cc-number'
+  | 'cc-type'
+  | 'country'
+  | 'country-name'
+  | 'current-password'
+  | 'family-name'
+  | 'given-name'
+  | 'honorific-prefix'
+  | 'honorific-suffix'
+  | 'name'
+  | 'new-password'
+  | 'one-time-code'
+  | 'organization'
+  | 'postal-code'
+  | 'street-address'
+  | 'transaction-amount'
+  | 'transaction-currency'
+  | 'username';
+type OptionalPrefixToken<T extends string> = `${T} ` | '';
+type OptionalPostfixToken<T extends string> = ` ${T}` | '';
+type AutoFillField =
+  | AutoFillNormalField
+  | `${OptionalPrefixToken<AutoFillContactKind>}${AutoFillContactField}`;
+type AutoFillSection = `section-${string}`;
+type AutoFill =
+  | AutoFillBase
+  | `${OptionalPrefixToken<AutoFillSection>}${OptionalPrefixToken<AutoFillAddressKind>}${AutoFillField}${OptionalPostfixToken<AutoFillCredentialField>}`;
+type NanoHtmlInputAutoCompleteAttribute = AutoFill | (string & {});
+
+interface NanoHtmlInputProps<T> extends NanoHtmlProps<T> {
+  accept?: string | undefined;
+  alt?: string | undefined;
+  autoComplete?: NanoHtmlInputAutoCompleteAttribute | undefined;
+  capture?: boolean | 'user' | 'environment' | undefined;
+  checked?: boolean | undefined;
+  disabled?: boolean | undefined;
+  form?: string | undefined;
+  formAction?: string | undefined;
+  formEncType?: string | undefined;
+  formMethod?: string | undefined;
+  formNoValidate?: boolean | undefined;
+  formTarget?: string | undefined;
+  height?: number | string | undefined;
+  list?: string | undefined;
+  max?: number | string | undefined;
+  maxLength?: number | undefined;
+  min?: number | string | undefined;
+  minLength?: number | undefined;
+  multiple?: boolean | undefined;
+  name?: string | undefined;
+  pattern?: string | undefined;
+  placeholder?: string | undefined;
+  readOnly?: boolean | undefined;
+  required?: boolean | undefined;
+  size?: number | undefined;
+  src?: string | undefined;
+  step?: number | string | undefined;
+  type?: NanoHtmlInputTypeAttribute | undefined;
+  value?: string | readonly string[] | number | undefined;
+  width?: number | string | undefined;
+  onChange?: NanoEventHandler<NanoGenericEvent<T>> | undefined;
+  onCaptureChange?: NanoEventHandler<NanoGenericEvent<T>> | undefined;
+}
+
 interface NanoHtmlInsProps<T> extends NanoHtmlProps<T> {
   cite?: string | undefined;
   dateTime?: string | undefined;
@@ -688,7 +810,10 @@ export interface NanoDomElement {
     NanoHtmlImgProps<HTMLImageElement>,
     HTMLImageElement
   >;
-  // input: InputHTMLAttributes<HTMLInputElement>;
+  input: NanoHostComponentHtmlProps<
+    NanoHtmlInputProps<HTMLInputElement>,
+    HTMLInputElement
+  >;
   ins: NanoHostComponentHtmlProps<
     NanoHtmlInsProps<HTMLModElement>,
     HTMLModElement
