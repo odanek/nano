@@ -494,7 +494,7 @@ interface NanoHtmlIframeProps<T> extends NanoHtmlProps<T> {
   /** @deprecated */
   frameBorder?: number | string | undefined;
   height?: number | string | undefined;
-  loading?: "eager" | "lazy" | undefined;
+  loading?: 'eager' | 'lazy' | undefined;
   /** @deprecated */
   marginHeight?: number | undefined;
   /** @deprecated */
@@ -513,10 +513,10 @@ interface NanoHtmlIframeProps<T> extends NanoHtmlProps<T> {
 interface NanoHtmlImgProps<T> extends NanoHtmlProps<T> {
   alt?: string | undefined;
   crossOrigin?: CrossOrigin;
-  decoding?: "async" | "auto" | "sync" | undefined;
-  fetchPriority?: "high" | "low" | "auto";
+  decoding?: 'async' | 'auto' | 'sync' | undefined;
+  fetchPriority?: 'high' | 'low' | 'auto';
   height?: number | string | undefined;
-  loading?: "eager" | "lazy" | undefined;
+  loading?: 'eager' | 'lazy' | undefined;
   referrerPolicy?: HTMLAttributeReferrerPolicy | undefined;
   sizes?: string | undefined;
   src?: string | undefined;
@@ -680,10 +680,19 @@ export interface NanoDomElement {
     HTMLHtmlElement
   >;
   i: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
-  iframe: NanoHostComponentHtmlProps<NanoHtmlIframeProps<HTMLIFrameElement>, HTMLIFrameElement>;
-  img: NanoHostComponentHtmlProps<NanoHtmlImgProps<HTMLImageElement>, HTMLImageElement>;
+  iframe: NanoHostComponentHtmlProps<
+    NanoHtmlIframeProps<HTMLIFrameElement>,
+    HTMLIFrameElement
+  >;
+  img: NanoHostComponentHtmlProps<
+    NanoHtmlImgProps<HTMLImageElement>,
+    HTMLImageElement
+  >;
   // input: InputHTMLAttributes<HTMLInputElement>;
-  ins: NanoHostComponentHtmlProps<NanoHtmlInsProps<HTMLModElement>, HTMLModElement>;
+  ins: NanoHostComponentHtmlProps<
+    NanoHtmlInsProps<HTMLModElement>,
+    HTMLModElement
+  >;
   kbd: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
   // keygen: KeygenHTMLAttributes<HTMLElement>;
   // label: LabelHTMLAttributes<HTMLLabelElement>;
