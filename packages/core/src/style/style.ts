@@ -1,10 +1,13 @@
+import { isFunction } from '@nano-ui/type';
+
 export type NanoStyleId = string;
-export type NanoStyleSheetProvider<T extends NanoStyleSheet, A> = (
-  args: A,
-) => T;
-export type NanoStyleSheet = {
+export type NanoStyleBundle = {
   [key: string]: NanoStyle;
 };
+export interface NanoStyleSheet<B extends NanoStyleBundle> {
+  bundle: B;
+  classNames: Record<keyof B, string>;
+}
 
 export class NanoStyle {
   public id: NanoStyleId;
@@ -58,4 +61,22 @@ function join(strings: TemplateStringsArray, values: unknown[]): string {
     parts.push(valueString, strings[i + 1]);
   }
   return parts.join('');
+}
+
+export function createStyleSheet<B extends NanoStyleBundle>(
+  bundle: B | (() => B),
+): NanoStyleSheet<B> {
+  if (isFunction(bundle)) {
+    bundle = bundle();
+  }
+
+  const classNames = {} as Record<keyof B, string>;
+  for (const [key, value] of Object.entries(bundle)) {
+    classNames[key as keyof B] = value.id;
+  }
+
+  return {
+    bundle,
+    classNames,
+  };
 }

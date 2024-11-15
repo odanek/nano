@@ -28,7 +28,13 @@ import {
   useStyleSheet,
 } from './vdom/function-component';
 
-import { css, keyframes, NanoStyle, NanoStyleSheet } from './style/style';
+import {
+  css,
+  keyframes,
+  createStyleSheet,
+  NanoStyle,
+  NanoStyleSheet,
+} from './style/style';
 
 import * as JSX from './jsx/runtime';
 
@@ -65,6 +71,7 @@ export {
   // Styles
   css,
   keyframes,
+  createStyleSheet,
   NanoStyle,
   NanoStyleSheet,
   // JSX

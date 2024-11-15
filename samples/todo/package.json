@@ -1,8 +1,8 @@
 {
-  "name": "@nano-ui/sample",
+  "name": "@nano-ui/sample-todo",
   "version": "0.1.0",
   "private": true,
-  "description": "Nano UI library sample",
+  "description": "Nano UI library ToDo sample",
   "author": "Ondrej Danek",
   "license": "MIT",
   "type": "module",

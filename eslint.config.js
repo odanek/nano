@@ -23,6 +23,7 @@ export default [
   react.configs.flat.recommended,
   {
     rules: {
+      eqeqeq: 2,
       'react/react-in-jsx-scope': 'off',
       'react/no-unknown-property': [2, { ignore: ['class'] }],
       '@typescript-eslint/explicit-function-return-type': 2,

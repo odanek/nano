@@ -1,7 +1,7 @@
 import { AnyFunction, PlainObject } from '@nano-ui/type';
 import { arrayEquals, objectEquals, objectHasOwnProperty } from '@nano-ui/util';
 import { connectBundle, disconnectBundle } from '../style/manager';
-import { NanoStyleSheet } from '../style/style';
+import { NanoStyleBundle, NanoStyleSheet } from '../style/style';
 import {
   compareContext,
   getContextKey,
@@ -142,21 +142,21 @@ export function mountStyleEffects(
   while (currentHook !== null || finishedWorkHook !== null) {
     if (currentHook?.tag === NanoHookTag.Style) {
       const payload =
-        currentHook.payload as NanoStyleSheetHookPayload<NanoStyleSheet>;
-      if (finishedWorkHook == null) {
-        disconnectBundle(payload.styleSheet);
+        currentHook.payload as NanoStyleSheetHookPayload<NanoStyleBundle>;
+      if (finishedWorkHook === null) {
+        disconnectBundle(payload.bundle);
       } else {
         const finishedWorkPayload =
-          finishedWorkHook.payload as NanoStyleSheetHookPayload<NanoStyleSheet>;
-        if (finishedWorkPayload.styleSheet !== payload.styleSheet) {
-          disconnectBundle(payload.styleSheet);
-          connectBundle(finishedWorkPayload.styleSheet);
+          finishedWorkHook.payload as NanoStyleSheetHookPayload<NanoStyleBundle>;
+        if (finishedWorkPayload.bundle !== payload.bundle) {
+          disconnectBundle(payload.bundle);
+          connectBundle(finishedWorkPayload.bundle);
         }
       }
     } else if (finishedWorkHook?.tag === NanoHookTag.Style) {
       const payload =
-        finishedWorkHook.payload as NanoStyleSheetHookPayload<NanoStyleSheet>;
-      connectBundle(payload.styleSheet);
+        finishedWorkHook.payload as NanoStyleSheetHookPayload<NanoStyleBundle>;
+      connectBundle(payload.bundle);
     }
 
     currentHook = currentHook?.next ?? null;
@@ -268,20 +268,6 @@ function createMemoPayload<T>(
   };
 }
 
-function createStyleSheetPayload<S extends NanoStyleSheet>(
-  styleSheet: S,
-): NanoStyleSheetHookPayload<S> {
-  const bundle = {} as Record<keyof S, string>;
-  for (const [key, value] of Object.entries(styleSheet)) {
-    bundle[key as keyof S] = value.id;
-  }
-
-  return {
-    styleSheet,
-    bundle,
-  };
-}
-
 function addContextType(fiber: NanoFiber, key: NanoContextKey): void {
   const contextTypes = fiber.contextTypes ?? [];
   fiber.contextTypes = contextTypes;
@@ -325,14 +311,14 @@ function mountContext<T>(context: NanoContext<T>): T {
   return fullContext[key] as T;
 }
 
-function mountStyleSheet<S extends NanoStyleSheet>(
-  styleSheet: S,
+function mountStyleSheet<S extends NanoStyleBundle>(
+  styleSheet: NanoStyleSheet<S>,
 ): Record<keyof S, string> {
   const hook = mountWorkInProgressHook(NanoHookTag.Style);
-  const payload = createStyleSheetPayload(styleSheet);
+  const payload = styleSheet;
   hook.payload = payload;
   (workInProgressFiber as NanoFiber).effectTag |= NanoEffectTag.Style;
-  return payload.bundle;
+  return payload.classNames;
 }
 
 function mountReducer<T, A>(
@@ -409,17 +395,17 @@ function updateContext<T>(context: NanoContext<T>): T {
   return memoizedContext[key] as T;
 }
 
-function updateStyleSheet<S extends NanoStyleSheet>(
-  styleSheet: S,
+function updateStyleSheet<S extends NanoStyleBundle>(
+  styleSheet: NanoStyleSheet<S>,
 ): Record<keyof S, string> {
   const hook = updateWorkInProgressHook(NanoHookTag.Style);
   let payload = hook.payload as NanoStyleSheetHookPayload<S>;
-  if (payload.styleSheet !== styleSheet) {
-    payload = createStyleSheetPayload(styleSheet);
+  if (payload !== styleSheet) {
+    payload = styleSheet;
     hook.payload = payload;
     (workInProgressFiber as NanoFiber).effectTag |= NanoEffectTag.Style;
   }
-  return payload.bundle;
+  return payload.classNames;
 }
 
 function updateReducer<T, A>(
@@ -493,8 +479,8 @@ export function useContext<T>(context: NanoContext<T>): T {
   return (hookDispatcher as NanoHookDispatcher).useContext(context);
 }
 
-export function useStyleSheet<S extends NanoStyleSheet>(
-  styleSheet: S,
+export function useStyleSheet<S extends NanoStyleBundle>(
+  styleSheet: NanoStyleSheet<S>,
 ): Record<keyof S, string> {
   return (hookDispatcher as NanoHookDispatcher).useStyleSheet(styleSheet);
 }

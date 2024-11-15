@@ -1,6 +1,6 @@
 import { Counter } from '@nano-ui/util';
 import { NanoContext } from './context';
-import { NanoStyleSheet } from '../style/style';
+import { NanoStyleBundle, NanoStyleSheet } from '../style/style';
 import { NanoRef } from './ref';
 import { AnyFunction } from '@nano-ui/type';
 import { NanoFiber } from './fiber';
@@ -38,8 +38,8 @@ export type NanoEffectHook = (
   deps?: unknown[],
 ) => void;
 export type NanoContextHook = <T>(context: NanoContext<T>) => T;
-export type NanoStyleSheetHook = <S extends NanoStyleSheet>(
-  styleSheet: S,
+export type NanoStyleSheetHook = <S extends NanoStyleBundle>(
+  styleSheet: NanoStyleSheet<S>,
 ) => Record<keyof S, string>;
 export type NanoReducerHook = <T, A>(
   reducer: NanoReducer<T, A>,
@@ -89,7 +89,5 @@ export type NanoMemoHookPayload<T> = {
   deps: unknown[] | undefined;
 };
 
-export type NanoStyleSheetHookPayload<S extends NanoStyleSheet> = {
-  styleSheet: S;
-  bundle: Record<keyof S, string>;
-};
+export type NanoStyleSheetHookPayload<S extends NanoStyleBundle> =
+  NanoStyleSheet<S>;

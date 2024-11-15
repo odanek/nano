@@ -10,6 +10,8 @@ import { NanoKeyboardEvent } from '../../event/keyboard-event';
 import { NanoInputEvent } from '../../event/input-event';
 import { NanoGenericEvent } from '../../event/generic-event';
 
+// Largely taken from https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/react/index.d.ts
+
 type Booleanish = boolean | 'true' | 'false';
 
 type CrossOrigin = 'anonymous' | 'use-credentials' | '' | undefined;
@@ -775,6 +777,144 @@ interface NanoHtmlQuoteProps<T> extends NanoHtmlProps<T> {
   cite?: string | undefined;
 }
 
+interface NanoHtmlSlotProps<T> extends NanoHtmlProps<T> {
+  name?: string | undefined;
+}
+
+interface NanoHtmlScriptProps<T> extends NanoHtmlProps<T> {
+  async?: boolean | undefined;
+  /** @deprecated */
+  charSet?: string | undefined;
+  crossOrigin?: CrossOrigin;
+  defer?: boolean | undefined;
+  integrity?: string | undefined;
+  noModule?: boolean | undefined;
+  referrerPolicy?: HTMLAttributeReferrerPolicy | undefined;
+  src?: string | undefined;
+  type?: string | undefined;
+}
+
+interface NanoHtmlSelectProps<T> extends NanoHtmlProps<T> {
+  autoComplete?: string | undefined;
+  disabled?: boolean | undefined;
+  form?: string | undefined;
+  multiple?: boolean | undefined;
+  name?: string | undefined;
+  required?: boolean | undefined;
+  size?: number | undefined;
+  value?: string | readonly string[] | number | undefined;
+  onChange?: NanoEventHandler<NanoGenericEvent<T>> | undefined;
+  onCaptureChange?: NanoEventHandler<NanoGenericEvent<T>> | undefined;
+}
+
+interface NanoHtmlSourceProps<T> extends NanoHtmlProps<T> {
+  height?: number | string | undefined;
+  media?: string | undefined;
+  sizes?: string | undefined;
+  src?: string | undefined;
+  srcSet?: string | undefined;
+  type?: string | undefined;
+  width?: number | string | undefined;
+}
+
+interface NanoHtmlStyleProps<T> extends NanoHtmlProps<T> {
+  media?: string | undefined;
+  scoped?: boolean | undefined;
+  type?: string | undefined;
+}
+
+interface NanoHtmlTableProps<T> extends NanoHtmlProps<T> {
+  align?: 'left' | 'center' | 'right' | undefined;
+  bgcolor?: string | undefined;
+  border?: number | undefined;
+  cellPadding?: number | string | undefined;
+  cellSpacing?: number | string | undefined;
+  frame?: boolean | undefined;
+  rules?: 'none' | 'groups' | 'rows' | 'columns' | 'all' | undefined;
+  summary?: string | undefined;
+  width?: number | string | undefined;
+}
+
+interface NanoHtmlTextareaProps<T> extends NanoHtmlProps<T> {
+  autoComplete?: string | undefined;
+  cols?: number | undefined;
+  dirName?: string | undefined;
+  disabled?: boolean | undefined;
+  form?: string | undefined;
+  maxLength?: number | undefined;
+  minLength?: number | undefined;
+  name?: string | undefined;
+  placeholder?: string | undefined;
+  readOnly?: boolean | undefined;
+  required?: boolean | undefined;
+  rows?: number | undefined;
+  value?: string | readonly string[] | number | undefined;
+  wrap?: string | undefined;
+  onChange?: NanoEventHandler<NanoGenericEvent<T>> | undefined;
+  onCaptureChange?: NanoEventHandler<NanoGenericEvent<T>> | undefined;
+}
+
+interface NanoHtmlTdProps<T> extends NanoHtmlProps<T> {
+  align?: 'left' | 'center' | 'right' | 'justify' | 'char' | undefined;
+  colSpan?: number | undefined;
+  headers?: string | undefined;
+  rowSpan?: number | undefined;
+  scope?: string | undefined;
+  abbr?: string | undefined;
+  height?: number | string | undefined;
+  width?: number | string | undefined;
+  valign?: 'top' | 'middle' | 'bottom' | 'baseline' | undefined;
+}
+
+interface NanoHtmlThProps<T> extends NanoHtmlProps<T> {
+  align?: 'left' | 'center' | 'right' | 'justify' | 'char' | undefined;
+  colSpan?: number | undefined;
+  headers?: string | undefined;
+  rowSpan?: number | undefined;
+  scope?: string | undefined;
+  abbr?: string | undefined;
+}
+
+interface NanoHtmlTimeProps<T> extends NanoHtmlProps<T> {
+  dateTime?: string | undefined;
+}
+
+interface NanoHtmlTrackProps<T> extends NanoHtmlProps<T> {
+  default?: boolean | undefined;
+  kind?: string | undefined;
+  label?: string | undefined;
+  src?: string | undefined;
+  srcLang?: string | undefined;
+}
+
+interface NanoHtmlVideoProps<T> extends NanoHtmlProps<T> {
+  height?: number | string | undefined;
+  playsInline?: boolean | undefined;
+  poster?: string | undefined;
+  width?: number | string | undefined;
+  disablePictureInPicture?: boolean | undefined;
+  disableRemotePlayback?: boolean | undefined;
+}
+
+interface NanoHtmlWebViewProps<T> extends NanoHtmlProps<T> {
+  allowFullScreen?: boolean | undefined;
+  allowpopups?: boolean | undefined;
+  autosize?: boolean | undefined;
+  blinkfeatures?: string | undefined;
+  disableblinkfeatures?: string | undefined;
+  disableguestresize?: boolean | undefined;
+  disablewebsecurity?: boolean | undefined;
+  guestinstance?: string | undefined;
+  httpreferrer?: string | undefined;
+  nodeintegration?: boolean | undefined;
+  partition?: string | undefined;
+  plugins?: boolean | undefined;
+  preload?: string | undefined;
+  src?: string | undefined;
+  useragent?: string | undefined;
+  webpreferences?: string | undefined;
+}
+
 export interface NanoDomElement {
   a: NanoHostComponentHtmlProps<
     NanoHtmlAnchorProps<HTMLAnchorElement>,
@@ -1011,22 +1151,40 @@ export interface NanoDomElement {
   s: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
   samp: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
   search: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
-  // slot: SlotHTMLAttributes<HTMLSlotElement>;
-  // script: ScriptHTMLAttributes<HTMLScriptElement>;
+  slot: NanoHostComponentHtmlProps<
+    NanoHtmlSlotProps<HTMLSlotElement>,
+    HTMLSlotElement
+  >;
+  script: NanoHostComponentHtmlProps<
+    NanoHtmlScriptProps<HTMLScriptElement>,
+    HTMLScriptElement
+  >;
   section: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
-  // select: SelectHTMLAttributes<HTMLSelectElement>;
+  select: NanoHostComponentHtmlProps<
+    NanoHtmlSelectProps<HTMLSelectElement>,
+    HTMLSelectElement
+  >;
   small: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
-  // source: SourceHTMLAttributes<HTMLSourceElement>;
+  source: NanoHostComponentHtmlProps<
+    NanoHtmlSourceProps<HTMLSourceElement>,
+    HTMLSourceElement
+  >;
   span: NanoHostComponentHtmlProps<
     NanoHtmlProps<HTMLSpanElement>,
     HTMLSpanElement
   >;
   strong: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
-  // style: StyleHTMLAttributes<HTMLStyleElement>;
+  style: NanoHostComponentHtmlProps<
+    NanoHtmlStyleProps<HTMLStyleElement>,
+    HTMLStyleElement
+  >;
   sub: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
   summary: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
   sup: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
-  // table: TableHTMLAttributes<HTMLTableElement>;
+  table: NanoHostComponentHtmlProps<
+    NanoHtmlTableProps<HTMLTableElement>,
+    HTMLTableElement
+  >;
   template: NanoHostComponentHtmlProps<
     NanoHtmlProps<HTMLTemplateElement>,
     HTMLTemplateElement
@@ -1035,18 +1193,30 @@ export interface NanoDomElement {
     NanoHtmlProps<HTMLTableSectionElement>,
     HTMLTableSectionElement
   >;
-  // td: TdHTMLAttributes<HTMLTableDataCellElement>;
-  // textarea: TextareaHTMLAttributes<HTMLTextAreaElement>;
+  td: NanoHostComponentHtmlProps<
+    NanoHtmlTdProps<HTMLTableDataCellElement>,
+    HTMLTableDataCellElement
+  >;
+  textarea: NanoHostComponentHtmlProps<
+    NanoHtmlTextareaProps<HTMLTextAreaElement>,
+    HTMLTextAreaElement
+  >;
   tfoot: NanoHostComponentHtmlProps<
     NanoHtmlProps<HTMLTableSectionElement>,
     HTMLTableSectionElement
   >;
-  // th: ThHTMLAttributes<HTMLTableHeaderCellElement>;
+  th: NanoHostComponentHtmlProps<
+    NanoHtmlThProps<HTMLTableHeaderCellElement>,
+    HTMLTableHeaderCellElement
+  >;
   thead: NanoHostComponentHtmlProps<
     NanoHtmlProps<HTMLTableSectionElement>,
     HTMLTableSectionElement
   >;
-  // time: TimeHTMLAttributes<HTMLTimeElement>;
+  time: NanoHostComponentHtmlProps<
+    NanoHtmlTimeProps<HTMLTimeElement>,
+    HTMLTimeElement
+  >;
   title: NanoHostComponentHtmlProps<
     NanoHtmlProps<HTMLTitleElement>,
     HTMLTitleElement
@@ -1055,16 +1225,25 @@ export interface NanoDomElement {
     NanoHtmlProps<HTMLTableRowElement>,
     HTMLTableRowElement
   >;
-  // track: TrackHTMLAttributes<HTMLTrackElement>;
+  track: NanoHostComponentHtmlProps<
+    NanoHtmlTrackProps<HTMLTrackElement>,
+    HTMLTrackElement
+  >;
   u: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
   ul: NanoHostComponentHtmlProps<
     NanoHtmlProps<HTMLUListElement>,
     HTMLUListElement
   >;
   var: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
-  // video: VideoHTMLAttributes<HTMLVideoElement>;
+  video: NanoHostComponentHtmlProps<
+    NanoHtmlVideoProps<HTMLVideoElement>,
+    HTMLVideoElement
+  >;
   wbr: NanoHostComponentHtmlProps<NanoHtmlProps<HTMLElement>, HTMLElement>;
-  // webview: WebViewHTMLAttributes<HTMLWebViewElement>;
+  webview: NanoHostComponentHtmlProps<
+    NanoHtmlWebViewProps<HTMLElement>,
+    HTMLElement
+  >;
 }
 
 export interface NanoSvgProps<T> extends NanoAriaProps, NanoDomProps<T> {
