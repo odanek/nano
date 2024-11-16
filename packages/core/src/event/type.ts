@@ -30,21 +30,18 @@ export enum NanoEventType {
   Select = 'select',
 }
 
-export type NanoEventDispatchResult = {
+export type NanoEventResult = {
   handled: boolean;
   executeDefault: boolean;
 };
 
 export type NanoEventFilter<E> = (
   event: E,
-  result: NanoEventDispatchResult,
+  result: NanoEventResult,
   next: NanoEventHandler<unknown>,
 ) => void;
 
-export type NanoEventHandler<E> = (
-  event: E,
-  result: NanoEventDispatchResult,
-) => void;
+export type NanoEventHandler<E> = (event: E, result: NanoEventResult) => void;
 
 export type NanoCaptureEventHandlerName =
   keyof NanoDomCaptureEventProps<unknown>;

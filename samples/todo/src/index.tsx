@@ -1,13 +1,8 @@
-import { render, useState } from '@nano-ui/core';
-import { CheckBox } from './check-box';
-
-function App(): JSX.Element {
-  const [checked, setChecked] = useState<boolean>(false);
-  return <CheckBox checked={checked} onClick={setChecked} />;
-}
+import { render } from '@nano-ui/core';
+import { TodoApp } from './app';
 
 function run(): void {
-  render(<App />, document.body);
+  render(<TodoApp />, document.body);
 }
 
 window.addEventListener('DOMContentLoaded', run);

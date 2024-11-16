@@ -1,7 +1,7 @@
 import * as CSS from 'csstype';
 import { NanoPointerEvent } from '../../event/pointer-event';
 import { NanoEventHandler } from '../../event/type';
-import { NanoChildren, NanoRefProps } from '../type';
+import { NanoChildren, NanoKeyProps, NanoRefProps } from '../type';
 import { NanoMouseEvent } from '../../event/mouse-event';
 import { NanoWheelEvent } from '../../event/wheel-event';
 import { NanoFocusEvent } from '../../event/focus-event';
@@ -19,9 +19,11 @@ type CrossOrigin = 'anonymous' | 'use-credentials' | '' | undefined;
 export type NanoHostComponentHtmlProps<
   P extends NanoHtmlProps<E>,
   E extends HTMLElement,
-> = NanoRefProps & P;
+> = NanoRefProps & NanoKeyProps & P;
 
-export type NanoHostComponentSvgProps<T> = NanoRefProps & NanoSvgProps<T>;
+export type NanoHostComponentSvgProps<T> = NanoRefProps &
+  NanoKeyProps &
+  NanoSvgProps<T>;
 
 export type NanoDomClassPropValue = string | string[];
 export type NanoDomStylePropValue = CSS.Properties<string | number>;

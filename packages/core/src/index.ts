@@ -1,12 +1,13 @@
 import { render } from './vdom/render';
 
-import { NanoNode, NanoComponent } from './vdom/type';
+import { NanoNode, NanoComponent, NanoKeyProps } from './vdom/type';
 import { NanoElement, NanoElementKey } from './vdom/element';
 import { NanoFragment } from './vdom/fragment';
 import { NanoRef } from './vdom/ref';
+import { createContext, NanoContext } from './vdom/context';
 import { classNames } from './vdom/host/component';
 
-import { NanoEventType } from './event/type';
+import { NanoEventResult } from './event/type';
 import { NanoEvent } from './event/event';
 import { NanoClipboardEvent } from './event/clipboard-event';
 import { NanoFocusEvent } from './event/focus-event';
@@ -42,15 +43,18 @@ export {
   render,
   // Classes and types
   NanoElementKey,
+  NanoKeyProps,
   NanoNode,
   NanoComponent,
+  NanoContext,
   NanoElement,
   NanoFragment,
   NanoRef,
-  NanoEventType,
+  createContext,
   classNames,
   // Events
   NanoEvent,
+  NanoEventResult,
   NanoClipboardEvent,
   NanoFocusEvent,
   NanoInputEvent,

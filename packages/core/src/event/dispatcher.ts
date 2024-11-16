@@ -11,7 +11,7 @@ import { NanoElementTag } from '../vdom/element.js';
 import {
   NanoBubbleEventHandlerName,
   NanoCaptureEventHandlerName,
-  NanoEventDispatchResult,
+  NanoEventResult,
   NanoEventHandler,
   NanoEventType,
 } from './type.js';
@@ -19,6 +19,7 @@ import { NanoMouseEvent } from './mouse-event.js';
 import { NanoGenericEvent } from './generic-event.js';
 import { NanoDomEventProps } from '../vdom/host/type.js';
 
+// TODO Expose dispatcherContext to enable attaching filters
 export class NanoEventDispatcher {
   private eventHandler: (event: Event) => void;
 
@@ -101,8 +102,8 @@ export class NanoEventDispatcher {
     event: NanoEvent<unknown>,
     captureHandlerName: NanoCaptureEventHandlerName,
     bubbleHandlerName: NanoBubbleEventHandlerName,
-  ): NanoEventDispatchResult {
-    const result: NanoEventDispatchResult = {
+  ): NanoEventResult {
+    const result: NanoEventResult = {
       handled: false,
       executeDefault: true,
     };

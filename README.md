@@ -1,3 +1,9 @@
 # nano
 
-A tiny and fast functional UI library
+A tiny and fast UI library
+
+- Functional components
+- Hooks
+- Virtual DOM
+- JSX
+- CSS-in-JS

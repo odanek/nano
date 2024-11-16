@@ -13,8 +13,11 @@ interface Options<T> {
 }
 
 export class NanoKeyboardEvent<T> extends NanoEvent<T> {
+  public key: string;
+
   constructor(options: Options<T>) {
     super(options);
+    this.key = options.key;
   }
 
   static fromNative(nativeEvent: KeyboardEvent): NanoKeyboardEvent<unknown> {
