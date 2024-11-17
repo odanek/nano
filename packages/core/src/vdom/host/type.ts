@@ -8,7 +8,7 @@ import { NanoFocusEvent } from '../../event/focus-event';
 import { NanoClipboardEvent } from '../../event/clipboard-event';
 import { NanoKeyboardEvent } from '../../event/keyboard-event';
 import { NanoInputEvent } from '../../event/input-event';
-import { NanoGenericEvent } from '../../event/generic-event';
+import { NanoEvent } from '../../event/event';
 
 // Largely taken from https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/react/index.d.ts
 
@@ -40,7 +40,7 @@ export type NanoDomCaptureEventProps<T> = {
   onCaptureClick?: NanoEventHandler<NanoPointerEvent<T>>;
   onCaptureContextMenu?: NanoEventHandler<NanoPointerEvent<T>>;
   // Mouse
-  onCaptureDblClick?: NanoEventHandler<NanoMouseEvent<T>>;
+  onCaptureDblClick?: NanoEventHandler<NanoMouseEvent<MouseEvent, T>>;
   // Wheel
   onCaptureWheel?: NanoEventHandler<NanoWheelEvent<T>>;
   // Focus
@@ -58,9 +58,9 @@ export type NanoDomCaptureEventProps<T> = {
   onCaptureInput?: NanoEventHandler<NanoInputEvent<T>>;
   onCaptureBeforeInput?: NanoEventHandler<NanoInputEvent<T>>;
   // Generic
-  onCaptureChange?: NanoEventHandler<NanoGenericEvent<T>>;
-  onCaptureSelect?: NanoEventHandler<NanoGenericEvent<T>>;
-  onCaptureScroll?: NanoEventHandler<NanoGenericEvent<T>>;
+  onCaptureChange?: NanoEventHandler<NanoEvent<Event, T>>;
+  onCaptureSelect?: NanoEventHandler<NanoEvent<Event, T>>;
+  onCaptureScroll?: NanoEventHandler<NanoEvent<Event, T>>;
   // TODO
 };
 
@@ -76,7 +76,7 @@ export type NanoDomBubbleEventProps<T> = {
   onClick?: NanoEventHandler<NanoPointerEvent<T>>;
   onContextMenu?: NanoEventHandler<NanoPointerEvent<T>>;
   // Mouse
-  onDblClick?: NanoEventHandler<NanoMouseEvent<T>>;
+  onDblClick?: NanoEventHandler<NanoMouseEvent<MouseEvent, T>>;
   // Wheel
   onWheel?: NanoEventHandler<NanoWheelEvent<T>>;
   // Focus
@@ -94,9 +94,9 @@ export type NanoDomBubbleEventProps<T> = {
   onInput?: NanoEventHandler<NanoInputEvent<T>>;
   onBeforeInput?: NanoEventHandler<NanoInputEvent<T>>;
   // Generic
-  onChange?: NanoEventHandler<NanoGenericEvent<T>>;
-  onSelect?: NanoEventHandler<NanoGenericEvent<T>>;
-  onScroll?: NanoEventHandler<NanoGenericEvent<T>>;
+  onChange?: NanoEventHandler<NanoEvent<Event, T>>;
+  onSelect?: NanoEventHandler<NanoEvent<Event, T>>;
+  onScroll?: NanoEventHandler<NanoEvent<Event, T>>;
   // TODO
 };
 export type NanoDomEventProps<T> = NanoDomCaptureEventProps<T> &
@@ -450,16 +450,16 @@ interface NanoHtmlDelProps<T> extends NanoHtmlProps<T> {
 
 interface NanoHtmlDetailsProps<T> extends NanoHtmlProps<T> {
   open?: boolean | undefined;
-  onToggle?: NanoEventHandler<NanoGenericEvent<T>> | undefined;
-  onCaptureToggle?: NanoEventHandler<NanoGenericEvent<T>> | undefined;
+  onToggle?: NanoEventHandler<NanoEvent<Event, T>> | undefined;
+  onCaptureToggle?: NanoEventHandler<NanoEvent<Event, T>> | undefined;
   name?: string | undefined;
 }
 
 interface NanoHtmlDialogProps<T> extends NanoHtmlProps<T> {
-  onCancel?: NanoEventHandler<NanoGenericEvent<T>> | undefined;
-  onCaptureCancel?: NanoEventHandler<NanoGenericEvent<T>> | undefined;
-  onClose?: NanoEventHandler<NanoGenericEvent<T>> | undefined;
-  onCaptureClose?: NanoEventHandler<NanoGenericEvent<T>> | undefined;
+  onCancel?: NanoEventHandler<NanoEvent<Event, T>> | undefined;
+  onCaptureCancel?: NanoEventHandler<NanoEvent<Event, T>> | undefined;
+  onClose?: NanoEventHandler<NanoEvent<Event, T>> | undefined;
+  onCaptureClose?: NanoEventHandler<NanoEvent<Event, T>> | undefined;
   open?: boolean | undefined;
 }
 
@@ -647,8 +647,8 @@ interface NanoHtmlInputProps<T> extends NanoHtmlProps<T> {
   type?: NanoHtmlInputTypeAttribute | undefined;
   value?: string | readonly string[] | number | undefined;
   width?: number | string | undefined;
-  onChange?: NanoEventHandler<NanoGenericEvent<T>> | undefined;
-  onCaptureChange?: NanoEventHandler<NanoGenericEvent<T>> | undefined;
+  onChange?: NanoEventHandler<NanoEvent<Event, T>> | undefined;
+  onCaptureChange?: NanoEventHandler<NanoEvent<Event, T>> | undefined;
 }
 
 interface NanoHtmlInsProps<T> extends NanoHtmlProps<T> {
@@ -805,8 +805,8 @@ interface NanoHtmlSelectProps<T> extends NanoHtmlProps<T> {
   required?: boolean | undefined;
   size?: number | undefined;
   value?: string | readonly string[] | number | undefined;
-  onChange?: NanoEventHandler<NanoGenericEvent<T>> | undefined;
-  onCaptureChange?: NanoEventHandler<NanoGenericEvent<T>> | undefined;
+  onChange?: NanoEventHandler<NanoEvent<Event, T>> | undefined;
+  onCaptureChange?: NanoEventHandler<NanoEvent<Event, T>> | undefined;
 }
 
 interface NanoHtmlSourceProps<T> extends NanoHtmlProps<T> {
@@ -852,8 +852,8 @@ interface NanoHtmlTextareaProps<T> extends NanoHtmlProps<T> {
   rows?: number | undefined;
   value?: string | readonly string[] | number | undefined;
   wrap?: string | undefined;
-  onChange?: NanoEventHandler<NanoGenericEvent<T>> | undefined;
-  onCaptureChange?: NanoEventHandler<NanoGenericEvent<T>> | undefined;
+  onChange?: NanoEventHandler<NanoEvent<Event, T>> | undefined;
+  onCaptureChange?: NanoEventHandler<NanoEvent<Event, T>> | undefined;
 }
 
 interface NanoHtmlTdProps<T> extends NanoHtmlProps<T> {

@@ -1,7 +1,6 @@
 import {
   createStyleSheet,
   css,
-  NanoEventResult,
   NanoKeyboardEvent,
   useContext,
   useRef,
@@ -13,17 +12,14 @@ export function TodoHeader(): JSX.Element {
   const css = useStyleSheet(styleSheet);
   const dispatch = useContext(DispatchContext);
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const submit = (
-    event: NanoKeyboardEvent<HTMLInputElement>,
-    result: NanoEventResult,
-  ): void => {
+  const submit = (event: NanoKeyboardEvent<HTMLInputElement>): void => {
+    console.log(event);
     const input = inputRef.current;
     if (input !== null && event.key === 'Enter') {
       const label = input.value;
       if (label.length > 0) {
         dispatch({ type: 'addItem', label });
         input.value = '';
-        result.handled = true;
       }
     }
   };

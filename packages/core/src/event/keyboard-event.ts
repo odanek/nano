@@ -1,43 +1,10 @@
 import { NanoEvent } from './event';
-import { NanoEventType } from './type';
 
-export type NanoKeyboardEventType =
-  | NanoEventType.KeyDown
-  | NanoEventType.KeyUp
-  | NanoEventType.KeyPress;
-
-interface Options<T> {
-  type: NanoKeyboardEventType;
-  target: T;
-  key: string;
-}
-
-export class NanoKeyboardEvent<T> extends NanoEvent<T> {
+export class NanoKeyboardEvent<T> extends NanoEvent<KeyboardEvent, T> {
   public key: string;
 
-  constructor(options: Options<T>) {
-    super(options);
-    this.key = options.key;
-  }
-
-  static fromNative(nativeEvent: KeyboardEvent): NanoKeyboardEvent<unknown> {
-    return new NanoKeyboardEvent({
-      target: nativeEvent.target,
-      type: NanoKeyboardEvent.getType(nativeEvent.type),
-      key: nativeEvent.key,
-    });
-  }
-
-  static getType(type: string): NanoKeyboardEventType {
-    switch (type) {
-      case 'keydown':
-        return NanoEventType.KeyDown;
-      case 'keyup':
-        return NanoEventType.KeyUp;
-      case 'keypress':
-        return NanoEventType.KeyPress;
-      default:
-        throw new Error(`Event type ${type} is not a keyboard event`);
-    }
+  constructor(event: KeyboardEvent) {
+    super(event);
+    this.key = event.key;
   }
 }

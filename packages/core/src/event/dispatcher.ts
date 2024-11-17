@@ -11,12 +11,10 @@ import { NanoElementTag } from '../vdom/element.js';
 import {
   NanoBubbleEventHandlerName,
   NanoCaptureEventHandlerName,
-  NanoEventResult,
   NanoEventHandler,
   NanoEventType,
 } from './type.js';
 import { NanoMouseEvent } from './mouse-event.js';
-import { NanoGenericEvent } from './generic-event.js';
 import { NanoDomEventProps } from '../vdom/host/type.js';
 
 // TODO Expose dispatcherContext to enable attaching filters
@@ -59,17 +57,12 @@ export class NanoEventDispatcher {
     const type = capitalizeFirstLetter(event.type);
     const captureHandler = ('onCapture' + type) as NanoCaptureEventHandlerName;
     const bubbleHandler = ('on' + type) as NanoBubbleEventHandlerName;
-    const result = this.runHandlerChain(
-      fiberChain,
-      event,
-      captureHandler,
-      bubbleHandler,
-    );
+    this.runHandlerChain(fiberChain, event, captureHandler, bubbleHandler);
 
-    if (result.handled) {
-      if (!result.executeDefault) {
-        nativeEvent.preventDefault();
-      }
+    if (event.isDefaultPrevented()) {
+      nativeEvent.preventDefault();
+    }
+    if (event.isPropagationStopped()) {
       nativeEvent.stopPropagation();
       nativeEvent.stopImmediatePropagation();
     }
@@ -99,42 +92,36 @@ export class NanoEventDispatcher {
 
   private runHandlerChain(
     fiberChain: NanoFiber[],
-    event: NanoEvent<unknown>,
+    event: NanoEvent<Event, unknown>,
     captureHandlerName: NanoCaptureEventHandlerName,
     bubbleHandlerName: NanoBubbleEventHandlerName,
-  ): NanoEventResult {
-    const result: NanoEventResult = {
-      handled: false,
-      executeDefault: true,
-    };
+  ): void {
     const length = fiberChain.length;
 
-    for (let i = length - 1; i >= 0 && !result.handled; i--) {
+    for (let i = length - 1; i >= 0 && !event.isPropagationStopped(); i--) {
       const fiber = fiberChain[i] as NanoFiber;
       const props = fiber.memoizedProps as NanoDomEventProps<unknown>;
       const captureHandler = props[captureHandlerName] as
-        | NanoEventHandler<NanoEvent<unknown>>
+        | NanoEventHandler<NanoEvent<Event, unknown>>
         | undefined;
-      captureHandler?.(event, result);
+      captureHandler?.(event);
     }
 
-    for (let i = 0; i < length && !result.handled; i++) {
+    for (let i = 0; i < length && !event.isPropagationStopped(); i++) {
       const fiber = fiberChain[i] as NanoFiber;
       const props = fiber.memoizedProps as NanoDomEventProps<unknown>;
       const bubbleHandler = props[bubbleHandlerName] as
-        | NanoEventHandler<NanoEvent<unknown>>
+        | NanoEventHandler<NanoEvent<Event, unknown>>
         | undefined;
-      bubbleHandler?.(event, result);
+      bubbleHandler?.(event);
     }
-
-    return result;
   }
 
-  private createEvent(nativeEvent: Event): NanoEvent<unknown> | null {
+  private createEvent(nativeEvent: Event): NanoEvent<Event, unknown> | null {
     switch (nativeEvent.type) {
       case 'focusin':
       case 'focusout':
-        return NanoFocusEvent.fromNative(nativeEvent as FocusEvent);
+        return new NanoFocusEvent(nativeEvent as FocusEvent);
       case 'pointerenter':
       case 'pointerleave':
       case 'pointerover':
@@ -144,32 +131,32 @@ export class NanoEventDispatcher {
       case 'pointermove':
       case 'click':
       case 'contextmenu':
-        return NanoPointerEvent.fromNative(nativeEvent as PointerEvent);
+        return new NanoPointerEvent(nativeEvent as PointerEvent);
       case 'dblclick':
-        return NanoMouseEvent.fromNative(nativeEvent as MouseEvent);
+        return new NanoMouseEvent(nativeEvent as MouseEvent);
       case 'keydown':
       case 'keyup':
       case 'keypress':
-        return NanoKeyboardEvent.fromNative(nativeEvent as KeyboardEvent);
+        return new NanoKeyboardEvent(nativeEvent as KeyboardEvent);
       case 'wheel':
-        return NanoWheelEvent.fromNative(nativeEvent as WheelEvent);
+        return new NanoWheelEvent(nativeEvent as WheelEvent);
       case 'input':
       case 'beforeinput':
-        return NanoInputEvent.fromNative(nativeEvent as InputEvent);
+        return new NanoInputEvent(nativeEvent as InputEvent);
       case 'cut':
       case 'copy':
       case 'paste':
-        return NanoClipboardEvent.fromNative(nativeEvent as ClipboardEvent);
+        return new NanoClipboardEvent(nativeEvent as ClipboardEvent);
       case 'change':
       case 'select':
       case 'scroll':
-        return NanoGenericEvent.fromNative(nativeEvent);
+        return new NanoEvent(nativeEvent);
       default:
         return null;
     }
   }
 
-  private isBubblingEvent(event: NanoEvent<unknown>): boolean {
+  private isBubblingEvent(event: NanoEvent<Event, unknown>): boolean {
     return !nonBubblingEvents.includes(event.type);
   }
 }

@@ -1,35 +1,16 @@
 import { NanoEvent } from './event';
-import { NanoEventType } from './type';
 
-export type NanoInputEventType =
-  | NanoEventType.Input
-  | NanoEventType.BeforeInput;
+export class NanoInputEvent<T> extends NanoEvent<InputEvent, T> {
+  public readonly data: string | null;
+  public readonly dataTransfer: DataTransfer | null;
+  // readonly inputType: string;
+  public readonly isComposing: boolean;
+  // getTargetRanges(): StaticRange[];
 
-interface Options<T> {
-  type: NanoInputEventType;
-  target: T;
-}
-
-export class NanoInputEvent<T> extends NanoEvent<T> {
-  constructor(options: Options<T>) {
-    super(options);
-  }
-
-  static fromNative(nativeEvent: InputEvent): NanoInputEvent<unknown> {
-    return new NanoInputEvent({
-      target: nativeEvent.target,
-      type: NanoInputEvent.getType(nativeEvent.type),
-    });
-  }
-
-  static getType(type: string): NanoInputEventType {
-    switch (type) {
-      case 'input':
-        return NanoEventType.Input;
-      case 'beforeinput':
-        return NanoEventType.BeforeInput;
-      default:
-        throw new Error(`Event type ${type} is not a input event`);
-    }
+  constructor(event: InputEvent) {
+    super(event);
+    this.data = event.data;
+    this.dataTransfer = event.dataTransfer;
+    this.isComposing = event.isComposing;
   }
 }

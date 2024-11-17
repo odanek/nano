@@ -1,6 +1,6 @@
 # nano
 
-A tiny and fast UI library
+A tiny and fast functional UI library
 
 - Functional components
 - Hooks

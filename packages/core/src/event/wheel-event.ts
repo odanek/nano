@@ -1,31 +1,7 @@
 import { NanoEvent } from './event';
-import { NanoEventType } from './type';
 
-export type NanoWheelEventType = NanoEventType.Wheel;
-
-interface Options<T> {
-  type: NanoWheelEventType;
-  target: T;
-}
-
-export class NanoWheelEvent<T> extends NanoEvent<T> {
-  constructor(options: Options<T>) {
-    super(options);
-  }
-
-  static fromNative(nativeEvent: WheelEvent): NanoWheelEvent<unknown> {
-    return new NanoWheelEvent({
-      target: nativeEvent.target,
-      type: NanoWheelEvent.getType(nativeEvent.type),
-    });
-  }
-
-  static getType(type: string): NanoWheelEventType {
-    switch (type) {
-      case 'wheel':
-        return NanoEventType.Wheel;
-      default:
-        throw new Error(`Event type ${type} is not a wheel event`);
-    }
+export class NanoWheelEvent<T> extends NanoEvent<WheelEvent, T> {
+  constructor(event: WheelEvent) {
+    super(event);
   }
 }

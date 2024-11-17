@@ -7,7 +7,6 @@ import { NanoRef } from './vdom/ref';
 import { createContext, NanoContext } from './vdom/context';
 import { classNames } from './vdom/host/component';
 
-import { NanoEventResult } from './event/type';
 import { NanoEvent } from './event/event';
 import { NanoClipboardEvent } from './event/clipboard-event';
 import { NanoFocusEvent } from './event/focus-event';
@@ -54,7 +53,6 @@ export {
   classNames,
   // Events
   NanoEvent,
-  NanoEventResult,
   NanoClipboardEvent,
   NanoFocusEvent,
   NanoInputEvent,

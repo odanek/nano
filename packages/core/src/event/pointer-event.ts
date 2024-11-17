@@ -1,4 +1,4 @@
-import { NanoEvent } from './event';
+import { NanoMouseEvent } from './mouse-event';
 import { NanoEventType } from './type';
 
 export type NanoPointerEventType =
@@ -12,45 +12,8 @@ export type NanoPointerEventType =
   | NanoEventType.Click
   | NanoEventType.ContextMenu;
 
-interface Options<T> {
-  type: NanoPointerEventType;
-  target: T;
-}
-
-export class NanoPointerEvent<T> extends NanoEvent<T> {
-  constructor(options: Options<T>) {
-    super(options);
-  }
-
-  static fromNative(nativeEvent: PointerEvent): NanoPointerEvent<unknown> {
-    return new NanoPointerEvent({
-      target: nativeEvent.target,
-      type: NanoPointerEvent.getType(nativeEvent.type),
-    });
-  }
-
-  static getType(type: string): NanoPointerEventType {
-    switch (type) {
-      case 'pointerdown':
-        return NanoEventType.PointerDown;
-      case 'pointerup':
-        return NanoEventType.PointerUp;
-      case 'pointerenter':
-        return NanoEventType.PointerEnter;
-      case 'pointerleave':
-        return NanoEventType.PointerLeave;
-      case 'pointerover':
-        return NanoEventType.PointerOver;
-      case 'pointerout':
-        return NanoEventType.PointerOut;
-      case 'pointermove':
-        return NanoEventType.PointerMove;
-      case 'click':
-        return NanoEventType.Click;
-      case 'contextmenu':
-        return NanoEventType.ContextMenu;
-      default:
-        throw new Error(`Event type ${type} is not a pointer event`);
-    }
+export class NanoPointerEvent<T> extends NanoMouseEvent<PointerEvent, T> {
+  constructor(event: PointerEvent) {
+    super(event);
   }
 }
