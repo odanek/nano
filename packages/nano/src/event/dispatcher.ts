@@ -17,7 +17,7 @@ import {
 import { NanoMouseEvent } from './mouse-event.js';
 import { NanoDomEventProps } from '../vdom/host/type.js';
 
-// TODO Expose dispatcherContext to enable attaching filters
+// TODO Expose dispatcherContext to enable attaching filters? Or MessageFilterContext component?
 export class NanoEventDispatcher {
   private eventHandler: (event: Event) => void;
 

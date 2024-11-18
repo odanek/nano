@@ -41,3 +41,21 @@ export type NanoCaptureEventHandlerName =
   keyof NanoDomCaptureEventProps<unknown>;
 
 export type NanoBubbleEventHandlerName = keyof NanoDomBubbleEventProps<unknown>;
+
+export type NanoModifierKey =
+  | 'Alt'
+  | 'AltGraph'
+  | 'CapsLock'
+  | 'Control'
+  | 'Fn'
+  | 'FnLock'
+  | 'Hyper'
+  | 'Meta'
+  | 'NumLock'
+  | 'ScrollLock'
+  | 'Shift'
+  | 'Super'
+  | 'Symbol'
+  | 'SymbolLock';
+
+export type NanoPointerType = 'mouse' | 'pen' | 'touch';
