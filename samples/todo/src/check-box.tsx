@@ -4,7 +4,7 @@ import {
   css,
   JSX,
   useStyleSheet,
-} from '@nano-ui/core';
+} from '@nano-ui/nano';
 
 interface Props {
   checked?: boolean;

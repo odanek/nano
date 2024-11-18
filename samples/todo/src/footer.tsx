@@ -5,7 +5,7 @@ import {
   useContext,
   useMemo,
   useStyleSheet,
-} from '@nano-ui/core';
+} from '@nano-ui/nano';
 import { TodoFilterType, TodoItemState } from './reducer';
 import { DispatchContext } from './action';
 

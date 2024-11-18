@@ -1,4 +1,4 @@
-import { render } from '@nano-ui/core';
+import { render } from '@nano-ui/nano';
 import { TodoApp } from './app';
 
 function run(): void {

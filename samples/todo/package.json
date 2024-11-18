@@ -15,7 +15,7 @@
     "vite": "^5.4.0"
   },
   "dependencies": {
-    "@nano-ui/core": "file:../../packages/core"
+    "@nano-ui/nano": "file:../../packages/nano"
   },
   "scripts": {
     "dev": "vite",

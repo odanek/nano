@@ -1,12 +1,12 @@
+import { TodoAppState, todoReducer } from './reducer';
+import { DispatchContext } from './action';
+import { TodoList } from './list';
 import {
   createStyleSheet,
   css,
   useReducer,
   useStyleSheet,
-} from '@nano-ui/core';
-import { TodoAppState, todoReducer } from './reducer';
-import { DispatchContext } from './action';
-import { TodoList } from './list';
+} from '@nano-ui/nano';
 
 const initialState: TodoAppState = {
   nextId: 4,

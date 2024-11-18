@@ -5,7 +5,7 @@ import {
   NanoKeyProps,
   useContext,
   useStyleSheet,
-} from '@nano-ui/core';
+} from '@nano-ui/nano';
 import { TodoItemState } from './reducer';
 import { DispatchContext } from './action';
 import { CheckBox } from './check-box';

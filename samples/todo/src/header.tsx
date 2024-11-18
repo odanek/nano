@@ -5,7 +5,7 @@ import {
   useContext,
   useRef,
   useStyleSheet,
-} from '@nano-ui/core';
+} from '@nano-ui/nano';
 import { DispatchContext } from './action';
 
 export function TodoHeader(): JSX.Element {
