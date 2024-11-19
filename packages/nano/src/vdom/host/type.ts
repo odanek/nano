@@ -9,6 +9,7 @@ import { NanoClipboardEvent } from '../../event/clipboard-event';
 import { NanoKeyboardEvent } from '../../event/keyboard-event';
 import { NanoInputEvent } from '../../event/input-event';
 import { NanoEvent } from '../../event/event';
+import { NanoTouchEvent } from '../../event/touch-event';
 
 // Largely taken from https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/react/index.d.ts
 
@@ -30,6 +31,8 @@ export type NanoDomStylePropValue = CSS.Properties<string | number>;
 
 export type NanoDomCaptureEventProps<T> = {
   // Pointer
+  onCaptureAuxClick?: NanoEventHandler<NanoPointerEvent<T>>;
+  onCapturePointerCancel?: NanoEventHandler<NanoPointerEvent<T>>;
   onCapturePointerDown?: NanoEventHandler<NanoPointerEvent<T>>;
   onCapturePointerUp?: NanoEventHandler<NanoPointerEvent<T>>;
   onCapturePointerEnter?: NanoEventHandler<NanoPointerEvent<T>>;
@@ -61,11 +64,18 @@ export type NanoDomCaptureEventProps<T> = {
   onCaptureChange?: NanoEventHandler<NanoEvent<Event, T>>;
   onCaptureSelect?: NanoEventHandler<NanoEvent<Event, T>>;
   onCaptureScroll?: NanoEventHandler<NanoEvent<Event, T>>;
+  // Touch
+  onCaptureTouchCancel?: NanoEventHandler<NanoTouchEvent<T>>;
+  onCaptureTouchStart?: NanoEventHandler<NanoTouchEvent<T>>;
+  onCaptureTouchMove?: NanoEventHandler<NanoTouchEvent<T>>;
+  onCaptureTouchEnd?: NanoEventHandler<NanoTouchEvent<T>>;
   // TODO
 };
 
 export type NanoDomBubbleEventProps<T> = {
   // Pointer
+  onAuxClick?: NanoEventHandler<NanoPointerEvent<T>>;
+  onPointerCancel?: NanoEventHandler<NanoPointerEvent<T>>;
   onPointerDown?: NanoEventHandler<NanoPointerEvent<T>>;
   onPointerUp?: NanoEventHandler<NanoPointerEvent<T>>;
   onPointerEnter?: NanoEventHandler<NanoPointerEvent<T>>;
@@ -97,6 +107,11 @@ export type NanoDomBubbleEventProps<T> = {
   onChange?: NanoEventHandler<NanoEvent<Event, T>>;
   onSelect?: NanoEventHandler<NanoEvent<Event, T>>;
   onScroll?: NanoEventHandler<NanoEvent<Event, T>>;
+  // Touch
+  onTouchCancel?: NanoEventHandler<NanoTouchEvent<T>>;
+  onTouchStart?: NanoEventHandler<NanoTouchEvent<T>>;
+  onTouchMove?: NanoEventHandler<NanoTouchEvent<T>>;
+  onTouchEnd?: NanoEventHandler<NanoTouchEvent<T>>;
   // TODO
 };
 export type NanoDomEventProps<T> = NanoDomCaptureEventProps<T> &

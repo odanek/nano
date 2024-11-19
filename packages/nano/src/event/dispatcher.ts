@@ -16,6 +16,7 @@ import {
 } from './type.js';
 import { NanoMouseEvent } from './mouse-event.js';
 import { NanoDomEventProps } from '../vdom/host/type.js';
+import { NanoTouchEvent } from './touch-event.js';
 
 // TODO Expose dispatcherContext to enable attaching filters? Or MessageFilterContext component?
 export class NanoEventDispatcher {
@@ -122,6 +123,8 @@ export class NanoEventDispatcher {
       case 'focusin':
       case 'focusout':
         return new NanoFocusEvent(nativeEvent as FocusEvent);
+      case 'auxclick':
+      case 'pointercancel':
       case 'pointerenter':
       case 'pointerleave':
       case 'pointerover':
@@ -151,6 +154,11 @@ export class NanoEventDispatcher {
       case 'select':
       case 'scroll':
         return new NanoEvent(nativeEvent);
+      case 'touchcancel':
+      case 'touchstart':
+      case 'touchmove':
+      case 'touchend':
+        return new NanoTouchEvent(nativeEvent as TouchEvent);
       default:
         return null;
     }

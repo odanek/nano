@@ -42,6 +42,8 @@ export class NanoEvent<E extends Event, T> {
 
 function getType(type: string): NanoEventType {
   switch (type) {
+    case 'auxclic':
+      return NanoEventType.AuxClick;
     case 'cut':
       return NanoEventType.Cut;
     case 'copy':
@@ -70,6 +72,8 @@ function getType(type: string): NanoEventType {
       return NanoEventType.KeyPress;
     case 'dblclick':
       return NanoEventType.DblClick;
+    case 'pointercancel':
+      return NanoEventType.PointerCancel;
     case 'pointerdown':
       return NanoEventType.PointerDown;
     case 'pointerup':
@@ -90,6 +94,14 @@ function getType(type: string): NanoEventType {
       return NanoEventType.ContextMenu;
     case 'wheel':
       return NanoEventType.Wheel;
+    case 'touchcancel':
+      return NanoEventType.TouchCancel;
+    case 'touchstart':
+      return NanoEventType.TouchStart;
+    case 'touchmove':
+      return NanoEventType.TouchMove;
+    case 'touchend':
+      return NanoEventType.TouchEnd;
     default:
       throw new Error(`Unexpected event type: ${type}`);
   }

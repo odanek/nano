@@ -4,6 +4,9 @@ import {
 } from '../vdom/host/type';
 
 export enum NanoEventType {
+  // Pointer events
+  AuxClick = 'auxClick',
+  PointerCancel = 'pointerCancel',
   PointerEnter = 'pointerEnter',
   PointerLeave = 'pointerLeave',
   PointerOver = 'pointerOver',
@@ -12,22 +15,34 @@ export enum NanoEventType {
   PointerUp = 'pointerUp',
   PointerMove = 'pointerMove',
   Click = 'click',
-  DblClick = 'dblClick',
-  Wheel = 'wheel',
-  Scroll = 'scroll',
   ContextMenu = 'contextMenu',
+  // Mouse events
+  DblClick = 'dblClick',
+  // Wheel events
+  Wheel = 'wheel',
+  // Keyboard events
   KeyDown = 'keyDown',
   KeyUp = 'keyUp',
   KeyPress = 'keyPress',
+  // Focus events
   FocusIn = 'focusIn',
   FocusOut = 'focusOut',
+  // Input event
   Input = 'input',
   BeforeInput = 'beforeinput',
-  Change = 'change',
+  // Clipboard events
   Cut = 'cut',
   Copy = 'copy',
   Paste = 'paste',
+  // Generic events
+  Change = 'change',
+  Scroll = 'scroll',
   Select = 'select',
+  // Touch events
+  TouchCancel = 'touchCancel',
+  TouchStart = 'touchStart',
+  TouchMove = 'touchMove',
+  TouchEnd = 'touchEnd',
 }
 
 export type NanoEventFilter<E> = (
