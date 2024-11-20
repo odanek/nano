@@ -1,26 +1,23 @@
-import { FlagGenerator, isFlag } from '@nano-ui/util';
 import { NanoEffectHookPayload, NanoHook, NanoHookTag } from './hook';
-import { isFunction, isValue } from '@nano-ui/type';
 import { NanoFiber } from './fiber';
+import { isFlag, isFunction, isValue } from '../util';
 
-const effectTag = new FlagGenerator();
 export enum NanoEffectTag {
-  None = effectTag.next(),
-  Placement = effectTag.next(),
-  Update = effectTag.next(),
-  Effect = effectTag.next(),
-  Style = effectTag.next(),
-  Deletion = effectTag.next(),
-  ContentReset = effectTag.next(),
-  Ref = effectTag.next(),
+  None = 0x00,
+  Placement = 0x01,
+  Update = 0x02,
+  Effect = 0x04,
+  Style = 0x08,
+  Deletion = 0x10,
+  ContentReset = 0x20,
+  Ref = 0x40,
 }
 
-const effectFlag = new FlagGenerator();
 export enum NanoEffectFlag {
-  None = effectFlag.next(),
-  Create = effectFlag.next(),
-  Destroy = effectFlag.next(),
-  Passive = effectFlag.next(),
+  None = 0x00,
+  Create = 0x01,
+  Destroy = 0x02,
+  Passive = 0x04,
 }
 
 export let passiveEffects: NanoEffectHookPayload[] = [];

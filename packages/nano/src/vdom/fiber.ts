@@ -6,11 +6,11 @@ import {
 } from './element';
 import { NanoRef } from './ref';
 import { NanoFiberRoot } from './fiber-root';
-import { PlainObject } from '@nano-ui/type';
 import { NanoHostComponentStateNode } from './host/component';
 import { NanoHostTextStateNode } from './host/text';
 import { NanoContextKey } from './context';
 import { NanoEffectTag } from './effect';
+import { PlainObject } from '../util';
 
 const fiberKey = Symbol('nano-fiber-key');
 export class NanoFiber<P = unknown> {
@@ -74,7 +74,7 @@ export function createFiber<P = PlainObject>(
 ): NanoFiber<P> {
   return new NanoFiber(tag, pendingProps, key);
 }
-
+// TODO Remove default template value
 export function createWorkInProgress<P = PlainObject>(
   current: NanoFiber<P>,
   pendingProps: P,

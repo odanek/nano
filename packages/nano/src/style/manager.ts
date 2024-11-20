@@ -1,4 +1,3 @@
-import { isNumber } from '@nano-ui/type';
 import { NanoStyle, NanoStyleBundle } from './style.js';
 
 type RefCountMap<T> = Map<T, number>;
@@ -100,7 +99,7 @@ function retain<T>(map: RefCountMap<T>, object: T): boolean {
 
 function release<T>(map: RefCountMap<T>, object: T): boolean {
   let referenceCount = map.get(object);
-  if (!isNumber(referenceCount) || referenceCount < 1) {
+  if (referenceCount === undefined || referenceCount < 1) {
     throw new Error('Releasing a style or bundle that has not been retained');
   }
   referenceCount--;

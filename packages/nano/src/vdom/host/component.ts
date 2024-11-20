@@ -1,8 +1,8 @@
-import { isString, isNumber, PlainObject } from '@nano-ui/type';
 import { setHostTextContent } from './text';
 import { NanoFiber } from '../fiber';
 import { NanoDomClassPropValue, NanoDomStylePropValue } from './type';
 import { NanoChildrenProps } from '../type';
+import { isNumber, isString, PlainObject } from '../../util';
 
 export type NanoHostComponentStateNode = HTMLElement | SVGElement;
 export type NanoHostComponentPropsDiff = Array<string | null>;
@@ -161,7 +161,6 @@ function diffPropertyChange(
   oldValue: unknown,
   newValue: unknown,
 ): void {
-  // TODO class?
   if (key === 'children') {
     if (isString(newValue) || isNumber(newValue)) {
       diff.push(SET_TEXT_CHILD, newValue.toString());

@@ -1,5 +1,3 @@
-import { AnyFunction, PlainObject } from '@nano-ui/type';
-import { arrayEquals, objectEquals, objectHasOwnProperty } from '@nano-ui/util';
 import { connectBundle, disconnectBundle } from '../style/manager';
 import { NanoStyleBundle, NanoStyleSheet } from '../style/style';
 import {
@@ -28,6 +26,13 @@ import { NanoRef } from './ref';
 import { findFiberRoot } from './traversal';
 import { NanoChildren, NanoComponent } from './type';
 import { NanoEffectFlag, NanoEffectTag, pushPassiveEffect } from './effect';
+import {
+  AnyFunction,
+  arrayEquals,
+  objectEquals,
+  objectHasOwnProperty,
+  PlainObject,
+} from '../util';
 
 type NanoFunctionComponentProps = PlainObject;
 

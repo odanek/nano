@@ -1,8 +1,8 @@
-import { isFlag } from '@nano-ui/util';
 import { NanoFiber } from './fiber';
 import { NanoFiberRoot } from './fiber-root';
 import { NanoElementTag } from './element';
 import { NanoEffectTag } from './effect';
+import { isFlag } from '../util';
 
 type TraversalCallback = (fiber: NanoFiber) => void;
 

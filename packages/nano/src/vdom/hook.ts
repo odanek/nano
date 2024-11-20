@@ -1,9 +1,8 @@
-import { Counter } from '@nano-ui/util';
 import { NanoContext } from './context';
 import { NanoStyleBundle, NanoStyleSheet } from '../style/style';
 import { NanoRef } from './ref';
-import { AnyFunction } from '@nano-ui/type';
 import { NanoFiber } from './fiber';
+import { AnyFunction } from '../util';
 
 export class NanoHook<P = unknown> {
   public tag: NanoHookTag;
@@ -17,15 +16,14 @@ export class NanoHook<P = unknown> {
   }
 }
 
-const hookTagCounter = new Counter();
 export enum NanoHookTag {
-  Effect = hookTagCounter.next(),
-  Context = hookTagCounter.next(),
-  Style = hookTagCounter.next(),
-  Reducer = hookTagCounter.next(),
-  Ref = hookTagCounter.next(),
-  Callback = hookTagCounter.next(),
-  Memo = hookTagCounter.next(),
+  Effect,
+  Context,
+  Style,
+  Reducer,
+  Ref,
+  Callback,
+  Memo,
 }
 
 export type NanoReducer<T, A> = (state: T, action: A) => T;

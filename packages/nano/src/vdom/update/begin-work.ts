@@ -1,4 +1,3 @@
-import { isNumber, isString } from '@nano-ui/type';
 import { markInstanceFiber, NanoFiber } from '../fiber';
 import { createHostComponentInstance } from '../host/component';
 import { createHostTextInstance } from '../host/text';
@@ -21,6 +20,7 @@ import {
 } from '../function-component';
 import { NanoElementTag } from '../element';
 import { NanoEffectTag } from '../effect';
+import { isNumber, isString } from '../../util';
 
 export function beginWork(
   current: NanoFiber | null,

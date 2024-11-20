@@ -1,4 +1,3 @@
-import { isFlag } from '@nano-ui/util';
 import { NanoFiber, unmarkInstanceFiber } from '../fiber';
 import {
   NanoHostTextProps,
@@ -19,6 +18,7 @@ import {
 import { mountStyleEffects } from '../function-component';
 import { NanoEffectTag } from '../effect';
 import { NanoElementTag } from '../element';
+import { isFlag } from '../../util';
 
 export function commitResetTextContent(fiber: NanoFiber): void {
   resetHostTextContent(fiber.stateNode as NanoHostTextStateNode);

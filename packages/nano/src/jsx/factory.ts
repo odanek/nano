@@ -1,7 +1,6 @@
-import { isFunction, isString } from '@nano-ui/type';
 import { NanoComponent, NanoRefProps } from '../vdom/type';
 import { NanoElement, NanoElementKey, NanoElementType } from '../vdom/element';
-import { emptyObject } from '@nano-ui/util';
+import { emptyObject, isFunction, isString } from '../util';
 
 export function jsx(
   type: NanoElementType,

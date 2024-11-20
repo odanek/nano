@@ -1,10 +1,3 @@
-import {
-  isArray,
-  isIterable,
-  isNumber,
-  isString,
-  isValue,
-} from '@nano-ui/type';
 import { NanoElement, NanoElementKey, NanoElementTag } from '../element';
 import {
   createFiberFromElement,
@@ -14,6 +7,7 @@ import {
 import { NanoNode } from '../type';
 import { NanoFragmentProps } from '../fragment';
 import { NanoEffectTag } from '../effect';
+import { isArray, isIterable, isNumber, isString, isValue } from '../../util';
 
 type NanoReconciler = (
   returnFiber: NanoFiber,

@@ -1,4 +1,4 @@
-import { isFunction } from '@nano-ui/type';
+import { isFunction } from '../util';
 
 export type NanoStyleId = string;
 export type NanoStyleBundle = {

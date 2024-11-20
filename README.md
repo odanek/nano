@@ -1,4 +1,4 @@
-# nano
+# Nano
 
 A tiny and fast functional UI library
 
@@ -7,3 +7,5 @@ A tiny and fast functional UI library
 - Virtual DOM
 - JSX
 - CSS-in-JS
+- Fast and small
+- No dependencies

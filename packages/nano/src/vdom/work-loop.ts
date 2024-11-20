@@ -1,4 +1,3 @@
-import { isFlag } from '@nano-ui/util';
 import { createWorkInProgress, NanoFiber } from './fiber';
 import { NanoFiberRoot, NanoFiberRootProps } from './fiber-root';
 import { beginWork } from './update/begin-work';
@@ -22,6 +21,7 @@ import {
   runPassiveEffects,
   schedulePassiveEffects,
 } from './effect';
+import { isFlag } from '../util';
 
 export function performSyncWorkOnRoot(root: NanoFiberRoot): void {
   const start = performance.now();

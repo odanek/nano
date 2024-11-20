@@ -1,4 +1,3 @@
-import { capitalizeFirstLetter } from '@nano-ui/util';
 import { getInstanceFiber, NanoFiber } from '../vdom/fiber.js';
 import { NanoFocusEvent } from './focus-event.js';
 import { NanoPointerEvent } from './pointer-event.js';
@@ -17,6 +16,7 @@ import {
 import { NanoMouseEvent } from './mouse-event.js';
 import { NanoDomEventProps } from '../vdom/host/type.js';
 import { NanoTouchEvent } from './touch-event.js';
+import { capitalizeFirstLetter } from '../util.js';
 
 // TODO Expose dispatcherContext to enable attaching filters? Or MessageFilterContext component?
 export class NanoEventDispatcher {
