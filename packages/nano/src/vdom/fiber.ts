@@ -10,7 +10,7 @@ import { NanoHostComponentStateNode } from './host/component';
 import { NanoHostTextStateNode } from './host/text';
 import { NanoContextKey } from './context';
 import { NanoEffectTag } from './effect';
-import { emptyArray, emptyObject, PlainObject } from '../util';
+import { emptyArray, emptyObject } from '../util';
 
 const fiberKey = Symbol('nano-fiber-key');
 export class NanoFiber<P = unknown> {
@@ -65,15 +65,15 @@ export class NanoFiber<P = unknown> {
   }
 }
 
-export function createFiber<P = PlainObject>(
+export function createFiber<P>(
   tag: NanoElementTag,
   pendingProps: P,
   key: NanoElementKey,
 ): NanoFiber<P> {
   return new NanoFiber(tag, pendingProps, key);
 }
-// TODO Remove default template value
-export function createWorkInProgress<P = PlainObject>(
+
+export function createWorkInProgress<P>(
   current: NanoFiber<P>,
   pendingProps: P,
 ): NanoFiber<P> {
