@@ -6,7 +6,6 @@ import {
   getContextName,
   NanoContext,
   NanoContextKey,
-  readContext,
 } from './context';
 import { NanoFiber } from './fiber';
 import { NanoFiberRoot } from './fiber-root';
@@ -90,9 +89,6 @@ export function renderFunctionComponent(
   const Component = workInProgress.type as NanoComponent;
   const props = workInProgress.pendingProps;
   const children = Component(props);
-  if (current === null) {
-    workInProgress.memoizedContext = readContext(workInProgress);
-  }
 
   workInProgressFiber = null;
   currentHook = null;
@@ -108,10 +104,7 @@ export function updateFunctionComponent(
 ): boolean {
   const hasContextUpdate = !compareContext(current, workInProgress);
   if (hasContextUpdate) {
-    workInProgress.memoizedContext = readContext(workInProgress);
     return true;
-  } else {
-    workInProgress.memoizedContext = current.memoizedContext;
   }
 
   const oldProps = current.memoizedProps as NanoFunctionComponentProps;
@@ -274,11 +267,8 @@ function createMemoPayload<T>(
 }
 
 function addContextType(fiber: NanoFiber, key: NanoContextKey): void {
-  const contextTypes = fiber.contextTypes ?? [];
-  fiber.contextTypes = contextTypes;
-
-  if (!contextTypes.includes(key)) {
-    contextTypes.push(key);
+  if (!fiber.contextTypes.includes(key)) {
+    fiber.contextTypes = [...fiber.contextTypes, key];
   }
 }
 
@@ -308,7 +298,7 @@ function mountContext<T>(context: NanoContext<T>): T {
   const key = getContextKey(context);
   addContextType(workInProgressFiber as NanoFiber, key);
   const fullContext = (workInProgressFiber as NanoFiber).fullContext;
-  if (fullContext === null || !objectHasOwnProperty(fullContext, key)) {
+  if (!objectHasOwnProperty(fullContext, key)) {
     throw new Error(
       `Context value for context '${getContextName(context)}' not defined`,
     );
@@ -393,11 +383,11 @@ function updateLayoutEffect(create: NanoEffectCreator, deps?: unknown[]): void {
 function updateContext<T>(context: NanoContext<T>): T {
   updateWorkInProgressHook(NanoHookTag.Context);
   const key = getContextKey(context);
-  const memoizedContext = (workInProgressFiber as NanoFiber).memoizedContext;
-  if (memoizedContext === null || !objectHasOwnProperty(memoizedContext, key)) {
+  const fullContext = (workInProgressFiber as NanoFiber).fullContext;
+  if (!objectHasOwnProperty(fullContext, key)) {
     throw new Error('Context value not defined');
   }
-  return memoizedContext[key] as T;
+  return fullContext[key] as T;
 }
 
 function updateStyleSheet<S extends NanoStyleBundle>(

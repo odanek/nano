@@ -10,7 +10,7 @@ import { NanoHostComponentStateNode } from './host/component';
 import { NanoHostTextStateNode } from './host/text';
 import { NanoContextKey } from './context';
 import { NanoEffectTag } from './effect';
-import { PlainObject } from '../util';
+import { emptyArray, emptyObject, PlainObject } from '../util';
 
 const fiberKey = Symbol('nano-fiber-key');
 export class NanoFiber<P = unknown> {
@@ -30,9 +30,8 @@ export class NanoFiber<P = unknown> {
   public pendingProps: P;
   public memoizedProps: P | null;
   public memoizedState: unknown;
-  public fullContext: Record<NanoContextKey, unknown> | null; // TODO Instead of null use emptyObject
-  public contextTypes: Array<NanoContextKey> | null; // TODO Instead of null use emptyArray
-  public memoizedContext: Record<string, unknown> | null; // TODO Instead of null use emptyObject
+  public fullContext: Record<NanoContextKey, unknown>;
+  public contextTypes: readonly NanoContextKey[];
   public updateQueue: Array<unknown> | null;
   public effectTag: NanoEffectTag;
   public deletions: Array<NanoFiber> | null;
@@ -55,9 +54,8 @@ export class NanoFiber<P = unknown> {
     this.memoizedProps = null;
     this.memoizedState = null;
 
-    this.fullContext = null;
-    this.contextTypes = null;
-    this.memoizedContext = null;
+    this.fullContext = emptyObject;
+    this.contextTypes = emptyArray;
 
     this.updateQueue = null;
     this.effectTag = NanoEffectTag.None;
@@ -99,8 +97,7 @@ export function createWorkInProgress<P = PlainObject>(
     workInProgress.memoizedState = null;
     workInProgress.pendingProps = pendingProps;
 
-    workInProgress.fullContext = null;
-    workInProgress.memoizedContext = null;
+    workInProgress.fullContext = emptyObject;
 
     workInProgress.effectTag = NanoEffectTag.None;
     workInProgress.deletions = [];

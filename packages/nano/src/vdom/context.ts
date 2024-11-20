@@ -21,37 +21,13 @@ export function createContext<T>(name: string): NanoContext<T> {
   return Context;
 }
 
-export function readContext(
-  workInProgress: NanoFiber,
-): Record<NanoContextKey, unknown> | null {
-  const types = workInProgress.contextTypes;
-  if (types === null) {
-    // TODO When does this happen?
-    return null;
-  }
-
-  // TODO Is the null check needed?
-  const fullContext = workInProgress.fullContext ?? emptyContext;
-  const context: Record<string, unknown> = {};
-  for (const type of types) {
-    context[type] = fullContext[type];
-  }
-  return context;
-}
-
 export function compareContext(
   current: NanoFiber,
   workInProgress: NanoFiber,
 ): boolean {
   const types = workInProgress.contextTypes;
-  if (types === null) {
-    // TODO When does this happen?
-    return true;
-  }
-
-  // TODO Is the null check needed?
-  const oldContext = current.fullContext ?? emptyContext;
-  const newContext = workInProgress.fullContext ?? emptyContext;
+  const oldContext = current.fullContext;
+  const newContext = workInProgress.fullContext;
   for (const type of types) {
     if (oldContext[type] !== newContext[type]) {
       return false;
