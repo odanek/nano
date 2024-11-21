@@ -69,7 +69,7 @@ export type NanoDomCaptureEventProps<T> = {
   onCaptureTouchStart?: NanoEventHandler<NanoTouchEvent<T>>;
   onCaptureTouchMove?: NanoEventHandler<NanoTouchEvent<T>>;
   onCaptureTouchEnd?: NanoEventHandler<NanoTouchEvent<T>>;
-  // TODO
+  // TODO Add missing events
 };
 
 export type NanoDomBubbleEventProps<T> = {
@@ -112,7 +112,7 @@ export type NanoDomBubbleEventProps<T> = {
   onTouchStart?: NanoEventHandler<NanoTouchEvent<T>>;
   onTouchMove?: NanoEventHandler<NanoTouchEvent<T>>;
   onTouchEnd?: NanoEventHandler<NanoTouchEvent<T>>;
-  // TODO
+  // TODO Add missing events
 };
 export type NanoDomEventProps<T> = NanoDomCaptureEventProps<T> &
   NanoDomBubbleEventProps<T>;

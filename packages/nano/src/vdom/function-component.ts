@@ -129,7 +129,7 @@ export function updateFunctionComponent(
   return false;
 }
 
-export function mountStyleEffects(
+export function runStyleEffects(
   current: NanoFiber | null,
   finishedWork: NanoFiber | null,
 ): void {

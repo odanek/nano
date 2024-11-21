@@ -15,7 +15,7 @@ import {
   NanoHostComponentStateNode,
   updateHostComponentInstance,
 } from '../host/component';
-import { mountStyleEffects } from '../function-component';
+import { runStyleEffects } from '../function-component';
 import { NanoEffectTag } from '../effect';
 import { NanoElementTag } from '../element';
 import { isFlag } from '../../util';
@@ -78,8 +78,7 @@ export function commitStyleMutation(
   current: NanoFiber | null,
   finishedWork: NanoFiber,
 ): void {
-  // TODO Better name
-  mountStyleEffects(current, finishedWork);
+  runStyleEffects(current, finishedWork);
 }
 
 export function commitMutation(
@@ -162,7 +161,7 @@ function commitUnmount(current: NanoFiber, removeNode: boolean): void {
 }
 
 function commitUnmountFunctionComponent(current: NanoFiber): void {
-  mountStyleEffects(current, null);
+  runStyleEffects(current, null);
 }
 
 function commitUnmountHostComponent(

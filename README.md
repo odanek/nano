@@ -8,4 +8,5 @@ A tiny and fast functional UI library
 - JSX
 - CSS-in-JS
 - Fast and small
+- Fully typed
 - No dependencies

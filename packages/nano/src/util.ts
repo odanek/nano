@@ -1,10 +1,9 @@
-export const emptyString = '';
-
 export type AnyFunction = (...args: unknown[]) => unknown;
 export type PlainObject = Record<string, unknown>;
 
 export const emptyObject = Object.freeze({});
 export const emptyArray = Object.freeze([]);
+export const emptyString = '';
 
 export function isValue(value: unknown): value is NonNullable<unknown> {
   return value !== undefined && value !== null;
