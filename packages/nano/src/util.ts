@@ -67,7 +67,10 @@ export function objectHasOwnProperty(
   return Object.prototype.hasOwnProperty.call(object, property);
 }
 
-export function arrayEquals<T>(left: T[], right: T[]): boolean {
+export function arrayEquals<T>(
+  left: readonly T[],
+  right: readonly T[],
+): boolean {
   if (left === right) {
     return true;
   }

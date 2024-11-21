@@ -221,7 +221,7 @@ function dispatchReducer<T, A>(
 
 function createEffectPayload(
   create: NanoEffectCreator,
-  deps: unknown[] | undefined,
+  deps: readonly unknown[],
   flags: number,
 ): NanoEffectHookPayload {
   return {
@@ -248,7 +248,7 @@ function createReducerPayload<T, A>(
 
 function createCallbackPayload<T extends AnyFunction>(
   callback: T,
-  deps?: unknown[],
+  deps: readonly unknown[],
 ): NanoCallbackHookPayload<T> {
   return {
     callback,
@@ -258,7 +258,7 @@ function createCallbackPayload<T extends AnyFunction>(
 
 function createMemoPayload<T>(
   create: () => T,
-  deps?: unknown[],
+  deps: readonly unknown[],
 ): NanoMemoHookPayload<T> {
   return {
     value: create(),
@@ -276,7 +276,10 @@ function mountState<T>(initialState: T): [T, (value: T) => void] {
   return mountReducer(stateReducer, initialState);
 }
 
-function mountEffect(create: NanoEffectCreator, deps?: unknown[]): void {
+function mountEffect(
+  create: NanoEffectCreator,
+  deps: readonly unknown[],
+): void {
   const hook = mountWorkInProgressHook(NanoHookTag.Effect);
   const payload = createEffectPayload(
     create,
@@ -287,7 +290,10 @@ function mountEffect(create: NanoEffectCreator, deps?: unknown[]): void {
   pushPassiveEffect(payload);
 }
 
-function mountLayoutEffect(create: NanoEffectCreator, deps?: unknown[]): void {
+function mountLayoutEffect(
+  create: NanoEffectCreator,
+  deps: readonly unknown[],
+): void {
   const hook = mountWorkInProgressHook(NanoHookTag.Effect);
   hook.payload = createEffectPayload(create, deps, NanoEffectFlag.Create);
   (workInProgressFiber as NanoFiber).effectTag |= NanoEffectTag.Effect;
@@ -335,7 +341,7 @@ function mountRef<T>(initialValue: T): NanoRef<T> {
 
 function mountCallback<T extends AnyFunction>(
   callback: T,
-  deps?: unknown[],
+  deps: readonly unknown[],
 ): T {
   const hook = mountWorkInProgressHook(NanoHookTag.Callback);
   const payload = createCallbackPayload(callback, deps);
@@ -343,7 +349,7 @@ function mountCallback<T extends AnyFunction>(
   return payload.callback;
 }
 
-function mountMemo<T>(create: () => T, deps?: unknown[]): T {
+function mountMemo<T>(create: () => T, deps: readonly unknown[]): T {
   const hook = mountWorkInProgressHook(NanoHookTag.Memo);
   const payload = createMemoPayload(create, deps);
   hook.payload = payload;
@@ -354,11 +360,13 @@ function updateState<T>(initialState: T): [T, (value: T) => void] {
   return updateReducer(stateReducer, initialState);
 }
 
-function updateEffect(create: NanoEffectCreator, deps?: unknown[]): void {
+function updateEffect(
+  create: NanoEffectCreator,
+  deps: readonly unknown[],
+): void {
   const hook = updateWorkInProgressHook(NanoHookTag.Effect);
   const payload = hook.payload as NanoEffectHookPayload;
-  // TODO Fix dep comparisons
-  if (deps === undefined || !arrayEquals(payload.deps as unknown[], deps)) {
+  if (!arrayEquals(payload.deps, deps)) {
     payload.flags |= NanoEffectFlag.Destroy;
     pushPassiveEffect(payload);
     const updatedPayload = createEffectPayload(
@@ -371,10 +379,13 @@ function updateEffect(create: NanoEffectCreator, deps?: unknown[]): void {
   }
 }
 
-function updateLayoutEffect(create: NanoEffectCreator, deps?: unknown[]): void {
+function updateLayoutEffect(
+  create: NanoEffectCreator,
+  deps: readonly unknown[],
+): void {
   const hook = updateWorkInProgressHook(NanoHookTag.Effect);
   const payload = hook.payload as NanoEffectHookPayload;
-  if (deps === undefined || !arrayEquals(payload.deps as unknown[], deps)) {
+  if (!arrayEquals(payload.deps, deps)) {
     hook.payload = createEffectPayload(create, deps, NanoEffectFlag.Create);
     (workInProgressFiber as NanoFiber).effectTag |= NanoEffectTag.Effect;
   }
@@ -428,11 +439,11 @@ function updateRef<T>(initialValue: T): NanoRef<T> {
 
 function updateCallback<T extends AnyFunction>(
   callback: T,
-  deps?: unknown[],
+  deps: readonly unknown[],
 ): T {
   const hook = updateWorkInProgressHook(NanoHookTag.Callback);
   const payload = hook.payload as NanoCallbackHookPayload<T>;
-  if (deps !== undefined && !arrayEquals(payload.deps as unknown[], deps)) {
+  if (!arrayEquals(payload.deps, deps)) {
     const updatedPayload = (hook.payload = createCallbackPayload(
       callback,
       deps,
@@ -443,10 +454,10 @@ function updateCallback<T extends AnyFunction>(
   }
 }
 
-function updateMemo<T>(create: () => T, deps?: unknown[]): T {
+function updateMemo<T>(create: () => T, deps: readonly unknown[]): T {
   const hook = updateWorkInProgressHook(NanoHookTag.Memo);
   const payload = hook.payload as NanoMemoHookPayload<T>;
-  if (deps !== undefined && !arrayEquals(payload.deps as unknown[], deps)) {
+  if (!arrayEquals(payload.deps, deps)) {
     const newPayload = createMemoPayload(create, deps);
     hook.payload = newPayload;
     return newPayload.value;
@@ -459,13 +470,16 @@ export function useState<T>(initialState: T): [T, (value: T) => void] {
   return (hookDispatcher as NanoHookDispatcher).useState(initialState);
 }
 
-export function useEffect(create: NanoEffectCreator, deps?: unknown[]): void {
+export function useEffect(
+  create: NanoEffectCreator,
+  deps: readonly unknown[],
+): void {
   (hookDispatcher as NanoHookDispatcher).useEffect(create, deps);
 }
 
 export function useLayoutEffect(
   create: NanoEffectCreator,
-  deps?: unknown[],
+  deps: readonly unknown[],
 ): void {
   (hookDispatcher as NanoHookDispatcher).useLayoutEffect(create, deps);
 }
@@ -496,11 +510,11 @@ export function useRef<T>(initialValue: T): NanoRef<T> {
 
 export function useCallback<T extends AnyFunction>(
   callback: T,
-  deps?: unknown[],
+  deps: readonly unknown[],
 ): T {
   return (hookDispatcher as NanoHookDispatcher).useCallback(callback, deps);
 }
 
-export function useMemo<T>(create: () => T, deps?: unknown[]): T {
+export function useMemo<T>(create: () => T, deps: readonly unknown[]): T {
   return (hookDispatcher as NanoHookDispatcher).useMemo(create, deps);
 }

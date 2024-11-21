@@ -33,7 +33,7 @@ export type NanoEffectCreator = () => NanoEffectCleanup | undefined;
 export type NanoStateHook = <T>(initialState: T) => [T, (value: T) => void];
 export type NanoEffectHook = (
   create: NanoEffectCreator,
-  deps?: unknown[],
+  deps: readonly unknown[],
 ) => void;
 export type NanoContextHook = <T>(context: NanoContext<T>) => T;
 export type NanoStyleSheetHook = <S extends NanoStyleBundle>(
@@ -46,9 +46,9 @@ export type NanoReducerHook = <T, A>(
 export type NanoRefHook = <T>(initialValue: T) => NanoRef<T>;
 export type NanoCallbackHook = <T extends AnyFunction>(
   callback: T,
-  deps?: unknown[],
+  deps: readonly unknown[],
 ) => T;
-export type NanoMemoHook = <T>(create: () => T, deps?: unknown[]) => T;
+export type NanoMemoHook = <T>(create: () => T, deps: readonly unknown[]) => T;
 
 export type NanoHookDispatcher = {
   useState: NanoStateHook;
@@ -66,7 +66,7 @@ export type NanoEffectHookPayload = {
   create: NanoEffectCreator;
   destroy: NanoEffectCleanup | undefined;
   flags: number;
-  deps: unknown[] | undefined;
+  deps: readonly unknown[];
 };
 
 export type NanoReducerHookPayload<T = unknown, A = unknown> = {
@@ -79,12 +79,12 @@ export type NanoReducerHookPayload<T = unknown, A = unknown> = {
 
 export type NanoCallbackHookPayload<T extends AnyFunction> = {
   callback: T;
-  deps: unknown[] | undefined;
+  deps: readonly unknown[];
 };
 
 export type NanoMemoHookPayload<T> = {
   value: T;
-  deps: unknown[] | undefined;
+  deps: readonly unknown[];
 };
 
 export type NanoStyleSheetHookPayload<S extends NanoStyleBundle> =
