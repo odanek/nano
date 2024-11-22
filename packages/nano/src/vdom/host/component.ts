@@ -136,18 +136,16 @@ export function diffProperties(
 
 function diffObjects(
   diff: NanoHostComponentPropsDiff,
-  left: object,
-  right: object,
+  left: PlainObject,
+  right: PlainObject,
 ): void {
   for (const [key, value] of Object.entries(left)) {
-    // @ts-expect-error TODO
     const newValue = right[key];
     if (value !== newValue) {
       diffPropertyChange(diff, key, value, newValue);
     }
   }
   for (const [key, value] of Object.entries(right)) {
-    // @ts-expect-error TODO
     const oldValue = left[key];
     if (oldValue === undefined) {
       diffPropertyChange(diff, key, oldValue, value);
@@ -178,8 +176,7 @@ function diffPropertyChange(
       (newValue ?? emptyStyle) as NanoDomStylePropValue,
     );
   } else if (!key.startsWith('on')) {
-    // @ts-expect-error TODO
-    diff.push(key, newValue === undefined ? null : newValue);
+    diff.push(key, newValue === undefined ? null : (newValue as string | null));
   }
 }
 

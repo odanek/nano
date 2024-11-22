@@ -17,8 +17,8 @@ import { NanoMouseEvent } from './mouse-event.js';
 import { NanoDomEventProps } from '../vdom/host/type.js';
 import { NanoTouchEvent } from './touch-event.js';
 import { capitalizeFirstLetter } from '../util.js';
+import { NanoMessageFilter } from './message-filter.js';
 
-// TODO Expose dispatcherContext to enable attaching filters? Or MessageFilterContext component?
 export class NanoEventDispatcher {
   private eventHandler: (event: Event) => void;
 
@@ -79,11 +79,12 @@ export class NanoEventDispatcher {
     }
 
     while (fiber !== null) {
-      if (fiber?.tag === NanoElementTag.HostComponent) {
-        // TODO || NanoElementTag.MessageFilter
-        if (!bubbles && fiber.stateNode !== target) {
-          return chain;
-        }
+      if (
+        fiber.tag === NanoElementTag.HostComponent &&
+        (bubbles || fiber.stateNode === target)
+      ) {
+        chain.push(fiber);
+      } else if (fiber.type === NanoMessageFilter) {
         chain.push(fiber);
       }
       fiber = fiber.return;
