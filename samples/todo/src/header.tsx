@@ -13,7 +13,6 @@ export function TodoHeader(): JSX.Element {
   const dispatch = useContext(DispatchContext);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const submit = (event: NanoKeyboardEvent<HTMLInputElement>): void => {
-    console.log(event);
     const input = inputRef.current;
     if (input !== null && event.key === 'Enter') {
       const label = input.value;
@@ -29,7 +28,9 @@ export function TodoHeader(): JSX.Element {
       <button
         class={css.completeAll}
         onClick={() => dispatch({ type: 'completeAll' })}
-      />
+      >
+        ❯
+      </button>
       <input
         class={css.input}
         type={'text'}

@@ -3,6 +3,7 @@ import { NanoRef } from './ref';
 import { NanoHostTextProps } from './host/text';
 import { NanoFragmentProps } from './fragment';
 import { NanoContext, NanoContextProps } from './context';
+import { NanoPortalProps } from './portal';
 
 export enum NanoElementTag {
   HostRoot,
@@ -87,5 +88,18 @@ export class NanoElement<P = unknown> {
     key: NanoElementKey,
   ): NanoElement<NanoFragmentProps> {
     return new NanoElement(NanoElementTag.Fragment, null, key, null, props);
+  }
+
+  static portal(
+    props: NanoPortalProps,
+    key: NanoElementKey,
+  ): NanoElement<NanoPortalProps> {
+    return new NanoElement(
+      NanoElementTag.HostPortal,
+      props.container,
+      key,
+      null,
+      props,
+    );
   }
 }

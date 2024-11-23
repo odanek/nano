@@ -24,7 +24,7 @@ import {
 import { isFlag } from '../util';
 
 export function performSyncWorkOnRoot(root: NanoFiberRoot): void {
-  const start = performance.now();
+  console.time('Virtual dom update');
 
   runPassiveEffects();
 
@@ -36,8 +36,7 @@ export function performSyncWorkOnRoot(root: NanoFiberRoot): void {
 
   schedulePassiveEffects();
 
-  const end = performance.now();
-  console.log('Updated in: ', end - start, ' milliseconds');
+  console.timeEnd('Virtual dom update');
 }
 
 function workLoopSync(workInProgress: NanoFiber | null): void {

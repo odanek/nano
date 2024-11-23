@@ -4,8 +4,9 @@ import { NanoNode, NanoComponent, NanoKeyProps } from './vdom/type';
 import { NanoElement, NanoElementKey } from './vdom/element';
 import { NanoRef } from './vdom/ref';
 import { NanoFragment } from './vdom/fragment';
-import { createContext, NanoContext } from './vdom/context';
+import { NanoPortal } from './vdom/portal';
 import { NanoMessageFilter } from './event/message-filter';
+import { createContext, NanoContext } from './vdom/context';
 import { classNames } from './vdom/host/component';
 
 import { NanoEvent } from './event/event';
@@ -50,6 +51,7 @@ export {
   NanoElement,
   NanoRef,
   NanoFragment,
+  NanoPortal,
   NanoMessageFilter,
   createContext,
   classNames,
