@@ -131,7 +131,7 @@ export function getDecoratorRoot<T>(fiber: NanoFiber<T>): Element | null {
   let current = fiber.child;
   while (current !== null) {
     if (current.sibling !== null) {
-      throw new Error('Nano decorator requires a single root element');
+      return null;
     }
 
     switch (current.tag) {
@@ -144,7 +144,7 @@ export function getDecoratorRoot<T>(fiber: NanoFiber<T>): Element | null {
         current = current.child;
         break;
       default:
-        throw new Error('Nano decorator requires a single root element');
+        return null;
     }
   }
   return null;
