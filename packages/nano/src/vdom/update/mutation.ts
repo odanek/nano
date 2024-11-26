@@ -6,19 +6,23 @@ import {
   updateHostTextInstance,
 } from '../host/text';
 import {
+  getDecoratorRoot,
   getHostParentFiber,
   getHostParentNode,
   getPlacedHostSibling,
 } from '../traversal';
 import {
+  diffProperties,
   NanoHostComponentPropsDiff,
   NanoHostComponentStateNode,
+  setInitialProperties,
   updateHostComponentInstance,
 } from '../host/component';
 import { runStyleEffects } from '../function-component';
 import { NanoEffectTag } from '../effect';
 import { NanoElementTag } from '../element';
-import { isFlag } from '../../util';
+import { isFlag, PlainObject } from '../../util';
+import { NanoDecoratorProps } from '../host/decorator';
 
 export function commitResetTextContent(fiber: NanoFiber): void {
   resetHostTextContent(fiber.stateNode as NanoHostTextStateNode);
@@ -95,6 +99,12 @@ export function commitMutation(
         finishedWork as NanoFiber<NanoHostTextProps>,
       );
       return;
+    case NanoElementTag.HostDecorator:
+      commitHostDecoratorMutation(
+        current as NanoFiber<NanoDecoratorProps>,
+        finishedWork as NanoFiber<NanoDecoratorProps>,
+      );
+      return;
   }
 }
 
@@ -112,13 +122,33 @@ function commitHostComponentMutation(
 }
 
 function commitHostTextMutation(
-  current: NanoFiber<string>,
-  finishedWork: NanoFiber<string>,
+  current: NanoFiber<NanoHostTextProps>,
+  finishedWork: NanoFiber<NanoHostTextProps>,
 ): void {
   const textInstance = finishedWork.stateNode as NanoHostTextStateNode;
   const newText = finishedWork.memoizedProps as string;
   const oldText = current.memoizedProps as string;
   updateHostTextInstance(textInstance, newText, oldText);
+}
+
+function commitHostDecoratorMutation(
+  current: NanoFiber<NanoDecoratorProps>,
+  finishedWork: NanoFiber<NanoDecoratorProps>,
+): void {
+  const root = getDecoratorRoot(finishedWork);
+  if (root) {
+    if (current && current.stateNode === root) {
+      const diff = diffProperties(
+        current as NanoFiber,
+        finishedWork as NanoFiber,
+      );
+      if (diff) {
+        updateHostComponentInstance(root, diff);
+      }
+    } else {
+      setInitialProperties(root, finishedWork.memoizedProps as PlainObject);
+    }
+  }
 }
 
 export function commitDeletion(current: NanoFiber): void {

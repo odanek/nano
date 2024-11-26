@@ -126,3 +126,26 @@ export function getPlacedHostSibling(
 
   return null;
 }
+
+export function getDecoratorRoot<T>(fiber: NanoFiber<T>): Element | null {
+  let current = fiber.child;
+  while (current !== null) {
+    if (current.sibling !== null) {
+      throw new Error('Nano decorator requires a single root element');
+    }
+
+    switch (current.tag) {
+      case NanoElementTag.HostComponent:
+        return current.stateNode as Element;
+      case NanoElementTag.HostDecorator:
+      case NanoElementTag.FunctionComponent:
+      case NanoElementTag.Fragment:
+      case NanoElementTag.Context:
+        current = current.child;
+        break;
+      default:
+        throw new Error('Nano decorator requires a single root element');
+    }
+  }
+  return null;
+}

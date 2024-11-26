@@ -40,6 +40,7 @@ export function beginWork(
     case NanoElementTag.HostPortal:
     case NanoElementTag.Fragment:
     case NanoElementTag.Context:
+    case NanoElementTag.HostDecorator:
       return beginElement(current, workInProgress);
   }
   return null;

@@ -6,11 +6,11 @@ export type NanoChildren = undefined | NanoNode | Iterable<NanoNode>;
 export type NanoComponent<P = unknown> = (props: P) => NanoNode<P>;
 
 export type NanoChildrenProps = {
-  children?: NanoChildren;
+  children?: NanoChildren | undefined;
 };
 export type NanoRefProps = {
-  ref?: NanoRef;
+  ref?: NanoRef | undefined;
 };
 export type NanoKeyProps = {
-  key?: unknown;
+  key?: unknown | undefined;
 };

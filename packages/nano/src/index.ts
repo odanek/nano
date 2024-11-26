@@ -1,11 +1,17 @@
 import { render } from './vdom/render';
 
-import { NanoNode, NanoComponent, NanoKeyProps } from './vdom/type';
+import {
+  NanoNode,
+  NanoComponent,
+  NanoKeyProps,
+  NanoChildrenProps,
+} from './vdom/type';
 import { NanoElement, NanoElementKey } from './vdom/element';
 import { NanoRef } from './vdom/ref';
 import { NanoFragment } from './vdom/fragment';
 import { NanoPortal } from './vdom/portal';
 import { NanoMessageFilter } from './event/message-filter';
+import { NanoDecorator } from './vdom/host/decorator';
 import { createContext, NanoContext } from './vdom/context';
 import { classNames } from './vdom/host/component';
 
@@ -45,6 +51,7 @@ export {
   // Classes and types
   NanoElementKey,
   NanoKeyProps,
+  NanoChildrenProps,
   NanoNode,
   NanoComponent,
   NanoContext,
@@ -53,6 +60,7 @@ export {
   NanoFragment,
   NanoPortal,
   NanoMessageFilter,
+  NanoDecorator,
   createContext,
   classNames,
   // Events

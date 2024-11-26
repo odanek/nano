@@ -17,6 +17,9 @@ export function completeWork(
     case NanoElementTag.HostPortal:
       completeHostPortalWork(current, workInProgress);
       break;
+    case NanoElementTag.HostDecorator:
+      completeHostDecoratorWork(current, workInProgress);
+      break;
   }
 }
 
@@ -51,6 +54,13 @@ function completeHostPortalWork(
   if (current === null) {
     appendAllChildren(workInProgress.type as Element, workInProgress);
   }
+}
+
+function completeHostDecoratorWork(
+  current: NanoFiber | null,
+  workInProgress: NanoFiber,
+): void {
+  workInProgress.effectTag |= NanoEffectTag.Update;
 }
 
 function updateHostComponent(

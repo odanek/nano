@@ -51,7 +51,7 @@ export function createHostComponentInstance(
 }
 
 export function updateHostComponentInstance(
-  node: NanoHostComponentStateNode,
+  node: Element,
   diff: NanoHostComponentPropsDiff,
 ): void {
   let i = 0;
@@ -82,10 +82,7 @@ function createElement(type: string): NanoHostComponentStateNode {
   return element as NanoHostComponentStateNode;
 }
 
-function setInitialProperties(
-  node: NanoHostComponentStateNode,
-  props: PlainObject,
-): void {
+export function setInitialProperties(node: Element, props: PlainObject): void {
   for (const [key, value] of Object.entries(props)) {
     if (value === null || value === undefined) {
       continue;

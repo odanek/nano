@@ -4,12 +4,14 @@ import { NanoHostTextProps } from './host/text';
 import { NanoFragmentProps } from './fragment';
 import { NanoContext, NanoContextProps } from './context';
 import { NanoPortalProps } from './portal';
+import { NanoDecoratorProps } from './host/decorator';
 
 export enum NanoElementTag {
   HostRoot,
   HostComponent,
   HostText,
   HostPortal,
+  HostDecorator,
   FunctionComponent,
   Fragment,
   Context,
@@ -97,6 +99,19 @@ export class NanoElement<P = unknown> {
     return new NanoElement(
       NanoElementTag.HostPortal,
       props.container,
+      key,
+      null,
+      props,
+    );
+  }
+
+  static decorator(
+    props: NanoDecoratorProps,
+    key: NanoElementKey,
+  ): NanoElement<NanoDecoratorProps> {
+    return new NanoElement(
+      NanoElementTag.HostDecorator,
+      null,
       key,
       null,
       props,
