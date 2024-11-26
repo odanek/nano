@@ -26,8 +26,8 @@ export type NanoHostComponentSvgProps<T> = NanoRefProps &
   NanoKeyProps &
   NanoSvgProps<T>;
 
-export type NanoDomClassPropValue = string | string[];
-export type NanoDomStylePropValue = CSS.Properties<string | number>;
+export type NanoDomClass = string | string[];
+export type NanoDomStyle = CSS.Properties<string | number>;
 
 export type NanoDomCaptureEventProps<T> = {
   // Pointer
@@ -303,7 +303,7 @@ export interface NanoHtmlProps<T> extends NanoAriaProps, NanoDomProps<T> {
     | undefined
     | (string & {});
   autoFocus?: boolean | undefined;
-  class?: NanoDomClassPropValue | undefined;
+  class?: NanoDomClass | undefined;
   contentEditable?: Booleanish | 'inherit' | 'plaintext-only' | undefined;
   contextMenu?: string | undefined;
   dir?: string | undefined;
@@ -323,7 +323,7 @@ export interface NanoHtmlProps<T> extends NanoAriaProps, NanoDomProps<T> {
   nonce?: string | undefined;
   slot?: string | undefined;
   spellCheck?: Booleanish | undefined;
-  style?: NanoDomStylePropValue | undefined;
+  style?: NanoDomStyle | undefined;
   tabIndex?: number | undefined;
   title?: string | undefined;
   translate?: 'yes' | 'no' | undefined;
@@ -1276,7 +1276,7 @@ export interface NanoSvgProps<T> extends NanoAriaProps, NanoDomProps<T> {
   method?: string | undefined;
   min?: number | string | undefined;
   name?: string | undefined;
-  style?: NanoDomStylePropValue | undefined;
+  style?: NanoDomStyle | undefined;
   target?: string | undefined;
   type?: string | undefined;
   width?: number | string | undefined;

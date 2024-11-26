@@ -1,6 +1,6 @@
 import { setHostTextContent } from './text';
 import { NanoFiber } from '../fiber';
-import { NanoDomClassPropValue, NanoDomStylePropValue } from './type';
+import { NanoDomClass, NanoDomStyle } from './type';
 import { NanoChildrenProps } from '../type';
 import { isNumber, isString, PlainObject } from '../../util';
 
@@ -89,13 +89,13 @@ export function setInitialProperties(node: Element, props: PlainObject): void {
     }
 
     if (key === 'class') {
-      const className = classNameString(value as NanoDomClassPropValue);
+      const className = classNameString(value as NanoDomClass);
       if (className !== null) {
         node.setAttribute('class', className);
       }
     } else if (key === 'style') {
       for (const [styleKey, styleValue] of Object.entries(
-        value as NanoDomStylePropValue,
+        value as NanoDomStyle,
       )) {
         // @ts-expect-error Setting a custom style
         node.style[styleKey] = styleValue;
@@ -161,16 +161,16 @@ function diffPropertyChange(
       diff.push(SET_TEXT_CHILD, newValue.toString());
     }
   } else if (key === 'class') {
-    const oldClassName = classNameString(oldValue as NanoDomClassPropValue);
-    const newClassName = classNameString(newValue as NanoDomClassPropValue);
+    const oldClassName = classNameString(oldValue as NanoDomClass);
+    const newClassName = classNameString(newValue as NanoDomClass);
     if (oldClassName !== newClassName) {
       diff.push(key, newClassName);
     }
   } else if (key === 'style') {
     diffStyle(
       diff,
-      (oldValue ?? emptyStyle) as NanoDomStylePropValue,
-      (newValue ?? emptyStyle) as NanoDomStylePropValue,
+      (oldValue ?? emptyStyle) as NanoDomStyle,
+      (newValue ?? emptyStyle) as NanoDomStyle,
     );
   } else if (!key.startsWith('on')) {
     diff.push(key, newValue === undefined ? null : (newValue as string | null));
@@ -179,17 +179,17 @@ function diffPropertyChange(
 
 function diffStyle(
   diff: NanoHostComponentPropsDiff,
-  oldStyle: NanoDomStylePropValue,
-  newStyle: NanoDomStylePropValue,
+  oldStyle: NanoDomStyle,
+  newStyle: NanoDomStyle,
 ): void {
   for (const [key, value] of Object.entries(newStyle)) {
-    const oldValue = oldStyle[key as keyof NanoDomStylePropValue];
+    const oldValue = oldStyle[key as keyof NanoDomStyle];
     if (value !== oldValue) {
       diff.push(SET_STYLE, key, value === undefined ? null : value);
     }
   }
   for (const key of Object.keys(oldStyle)) {
-    const newValue = newStyle[key as keyof NanoDomStylePropValue];
+    const newValue = newStyle[key as keyof NanoDomStyle];
     if (newValue === undefined) {
       diff.push(SET_STYLE, key, null);
     }

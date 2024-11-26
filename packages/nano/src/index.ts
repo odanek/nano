@@ -13,6 +13,7 @@ import { NanoPortal } from './vdom/portal';
 import { NanoMessageFilter } from './event/message-filter';
 import { NanoDecorator } from './vdom/host/decorator';
 import { createContext, NanoContext } from './vdom/context';
+import { NanoDomClass, NanoDomStyle } from './vdom/host/type';
 import { classNames } from './vdom/host/component';
 
 import { NanoEvent } from './event/event';
@@ -62,6 +63,8 @@ export {
   NanoMessageFilter,
   NanoDecorator,
   createContext,
+  NanoDomClass,
+  NanoDomStyle,
   classNames,
   // Events
   NanoEvent,

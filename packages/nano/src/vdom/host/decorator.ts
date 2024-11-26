@@ -1,11 +1,11 @@
 import { NanoElement } from '../element';
 import { NanoChildrenProps, NanoKeyProps } from '../type';
-import { NanoDomClassPropValue, NanoDomStylePropValue } from './type';
+import { NanoDomClass, NanoDomStyle } from './type';
 
 export type NanoDecoratorProps = NanoChildrenProps &
   NanoKeyProps & {
-    class?: NanoDomClassPropValue | undefined;
-    style?: NanoDomStylePropValue | undefined;
+    class?: NanoDomClass | undefined;
+    style?: NanoDomStyle | undefined;
   };
 
 export function NanoDecorator(
