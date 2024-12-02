@@ -28,7 +28,7 @@ export enum NanoHookTag {
 
 export type NanoReducer<T, A> = (state: T, action: A) => T;
 export type NanoEffectCleanup = () => void;
-export type NanoEffectCreator = () => NanoEffectCleanup | undefined;
+export type NanoEffectCreator = () => NanoEffectCleanup | void;
 
 export type NanoStateHook = <T>(initialState: T) => [T, (value: T) => void];
 export type NanoEffectHook = (
@@ -64,7 +64,7 @@ export type NanoHookDispatcher = {
 
 export type NanoEffectHookPayload = {
   create: NanoEffectCreator;
-  destroy: NanoEffectCleanup | undefined;
+  destroy: NanoEffectCleanup | void;
   flags: number;
   deps: readonly unknown[];
 };
