@@ -16,6 +16,7 @@
     "strictNullChecks": true,
     "noImplicitReturns": true,
     "noUncheckedIndexedAccess": true,
+    "forceConsistentCasingInFileNames": true,
     "sourceMap": true
   },
   "include": ["./src/**/*.ts", "./src/**/*.tsx"]
