@@ -1,4 +1,5 @@
-export type AnyFunction = (...args: unknown[]) => unknown;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type AnyFunction = (...args: any[]) => any;
 export type PlainObject = Record<string, unknown>;
 
 export const emptyObject = Object.freeze({});
