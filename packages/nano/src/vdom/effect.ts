@@ -29,13 +29,15 @@ export function runEffects(fiber: NanoFiber): void {
     hook !== null;
     hook = hook.next
   ) {
-    const effect = hook.payload as NanoEffectHookPayload;
-    const passive = isFlag(effect.flags, NanoEffectFlag.Passive);
-    if (!passive) {
-      if (isFlag(effect.flags, NanoEffectFlag.Create)) {
-        createEffect(effect);
-      } else if (isFlag(effect.flags, NanoEffectFlag.Destroy)) {
-        destroyEffect(effect);
+    if (hook.tag === NanoHookTag.Effect) {
+      const effect = hook.payload as NanoEffectHookPayload;
+      const passive = isFlag(effect.flags, NanoEffectFlag.Passive);
+      if (!passive) {
+        if (isFlag(effect.flags, NanoEffectFlag.Create)) {
+          createEffect(effect);
+        } else if (isFlag(effect.flags, NanoEffectFlag.Destroy)) {
+          destroyEffect(effect);
+        }
       }
     }
   }
