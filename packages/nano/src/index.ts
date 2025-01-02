@@ -16,7 +16,7 @@ import { createContext, NanoContext } from './vdom/context';
 import { NanoDomClass, NanoDomStyle } from './vdom/host/type';
 import { classNames } from './vdom/host/component';
 
-import { NanoEvent } from './event/event';
+import { NanoGenericEvent } from './event/generic-event';
 import { NanoClipboardEvent } from './event/clipboard-event';
 import { NanoFocusEvent } from './event/focus-event';
 import { NanoInputEvent } from './event/input-event';
@@ -67,7 +67,7 @@ export {
   NanoDomStyle,
   classNames,
   // Events
-  NanoEvent,
+  NanoGenericEvent,
   NanoClipboardEvent,
   NanoFocusEvent,
   NanoInputEvent,
