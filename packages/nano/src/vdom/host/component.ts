@@ -101,7 +101,11 @@ export function setInitialProperties(node: Element, props: PlainObject): void {
         node.style[styleKey] = styleValue;
       }
     } else if (key !== 'children' && !key.startsWith('on')) {
-      node.setAttribute(key, value as string);
+      if (value === true) {
+        node.setAttribute(key, '');
+      } else if (value !== false) {
+        node.setAttribute(key, value as string);
+      }
     }
   }
 }
@@ -173,7 +177,13 @@ function diffPropertyChange(
       (newValue ?? emptyStyle) as NanoDomStyle,
     );
   } else if (!key.startsWith('on')) {
-    diff.push(key, newValue === undefined ? null : (newValue as string | null));
+    if (newValue === undefined || newValue === false) {
+      diff.push(key, null);
+    } else if (newValue === true) {
+      diff.push(key, '');
+    } else {
+      diff.push(key, newValue as string | null);
+    }
   }
 }
 
