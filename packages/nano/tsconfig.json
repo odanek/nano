@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "rootDir": ".",
     "outDir": "dist",
     "declaration": true,
 
@@ -24,7 +23,7 @@
     "noFallthroughCasesInSwitch": true,
     "noPropertyAccessFromIndexSignature": true,
     "forceConsistentCasingInFileNames": true,
-    
+
     // "exactOptionalPropertyTypes": true
   },
   "include": ["./src/**/*.ts"]
