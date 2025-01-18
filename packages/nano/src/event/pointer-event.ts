@@ -1,5 +1,5 @@
 import { NanoMouseEvent } from './mouse-event';
-import { NanoPointerType } from './type';
+import { type NanoPointerType } from './type';
 
 export class NanoPointerEvent<T> extends NanoMouseEvent<PointerEvent, T> {
   public readonly pointerId: number;

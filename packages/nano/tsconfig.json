@@ -1,18 +1,31 @@
 {
   "compilerOptions": {
-    "strict": true,
-    "declaration": true,
+    "rootDir": ".",
     "outDir": "dist",
-    "lib": ["es2023", "dom"],
+    "declaration": true,
+
     "target": "es2023",
-    "esModuleInterop": true,
     "module": "es2022",
     "moduleResolution": "bundler",
-    "noImplicitAny": true,
+    "lib": ["es2023", "dom"],
+    "esModuleInterop": true,    
+    "noUncheckedSideEffectImports": true,
+    
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "isolatedDeclarations": true,
+
+    "strict": true,        
     "strictNullChecks": true,
-    "noImplicitReturns": true,
+    "noImplicitAny": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,    
     "noUncheckedIndexedAccess": true,
-    "forceConsistentCasingInFileNames": true
+    "noFallthroughCasesInSwitch": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "forceConsistentCasingInFileNames": true,
+    
+    // "exactOptionalPropertyTypes": true
   },
   "include": ["./src/**/*.ts"]
 }

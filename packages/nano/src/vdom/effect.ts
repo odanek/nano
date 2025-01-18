@@ -1,4 +1,4 @@
-import { NanoEffectHookPayload, NanoHook, NanoHookTag } from './hook';
+import { type NanoEffectHookPayload, NanoHook, NanoHookTag } from './hook';
 import { NanoFiber } from './fiber';
 import { isFlag, isFunction, isValue } from '../util';
 

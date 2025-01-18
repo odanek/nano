@@ -1,5 +1,9 @@
-import { NanoComponent, NanoRefProps } from '../vdom/type';
-import { NanoElement, NanoElementKey, NanoElementType } from '../vdom/element';
+import { type NanoComponent, type NanoRefProps } from '../vdom/type';
+import {
+  NanoElement,
+  type NanoElementKey,
+  type NanoElementType,
+} from '../vdom/element';
 import { emptyObject, isFunction, isString } from '../util';
 
 export function jsx(
@@ -16,8 +20,16 @@ export function jsx(
   }
 }
 
-export const jsxs = jsx;
-export const jsxDEV = jsx;
+export const jsxs: (
+  type: NanoElementType,
+  props: unknown,
+  key?: NanoElementKey,
+) => NanoElement = jsx;
+export const jsxDEV: (
+  type: NanoElementType,
+  props: unknown,
+  key?: NanoElementKey,
+) => NanoElement = jsx;
 
 function jsxHostComponent(
   type: string,

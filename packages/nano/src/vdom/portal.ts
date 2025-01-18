@@ -1,5 +1,5 @@
 import { NanoElement } from './element';
-import { NanoChildrenProps } from './type';
+import { type NanoChildrenProps } from './type';
 
 export type NanoPortalProps = {
   container: HTMLElement | SVGElement;

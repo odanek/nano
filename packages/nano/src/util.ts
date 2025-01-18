@@ -2,8 +2,8 @@
 export type AnyFunction = (...args: any[]) => any;
 export type PlainObject = Record<string, unknown>;
 
-export const emptyObject = Object.freeze({});
-export const emptyArray = Object.freeze([]);
+export const emptyObject: Readonly<Record<(string | number), unknown>> = Object.freeze({});
+export const emptyArray: readonly [] = Object.freeze([]);
 export const emptyString = '';
 
 export function isValue(value: unknown): value is NonNullable<unknown> {

@@ -1,10 +1,10 @@
-import { NanoComponent } from './type';
+import { type NanoComponent } from './type';
 import { NanoRef } from './ref';
-import { NanoHostTextProps } from './host/text';
-import { NanoFragmentProps } from './fragment';
-import { NanoContext, NanoContextProps } from './context';
-import { NanoPortalProps } from './portal';
-import { NanoDecoratorProps } from './host/decorator';
+import { type NanoHostTextProps } from './host/text';
+import { type NanoFragmentProps } from './fragment';
+import { type NanoContext, type NanoContextProps } from './context';
+import { type NanoPortalProps } from './portal';
+import { type NanoDecoratorProps } from './host/decorator';
 
 export enum NanoElementTag {
   HostRoot,

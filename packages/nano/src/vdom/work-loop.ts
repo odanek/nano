@@ -1,5 +1,5 @@
 import { createWorkInProgress, NanoFiber } from './fiber';
-import { NanoFiberRoot, NanoFiberRootProps } from './fiber-root';
+import { NanoFiberRoot, type NanoFiberRootProps } from './fiber-root';
 import { beginWork } from './update/begin-work';
 import { completeWork } from './update/complete-work';
 import {

@@ -1,6 +1,6 @@
 import { NanoElement } from './element';
 import { NanoFiber } from './fiber';
-import { NanoChildrenProps, NanoComponent, NanoKeyProps } from './type';
+import { type NanoChildrenProps, type NanoComponent, type NanoKeyProps } from './type';
 
 export type NanoContextKey = number;
 export type NanoContext<T = unknown> = NanoComponent<NanoContextProps<T>>;

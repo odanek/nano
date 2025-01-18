@@ -8,13 +8,13 @@ import { NanoClipboardEvent } from './clipboard-event.js';
 import { NanoEvent } from './event.js';
 import { NanoElementTag } from '../vdom/element.js';
 import {
-  NanoBubbleEventHandlerName,
-  NanoCaptureEventHandlerName,
-  NanoEventHandler,
+  type NanoBubbleEventHandlerName,
+  type NanoCaptureEventHandlerName,
+  type NanoEventHandler,
   NanoEventType,
 } from './type.js';
 import { NanoMouseEvent } from './mouse-event.js';
-import { NanoDomEventProps } from '../vdom/host/type.js';
+import { type NanoDomEventProps } from '../vdom/host/type.js';
 import { NanoTouchEvent } from './touch-event.js';
 import { capitalizeFirstLetter } from '../util.js';
 import { NanoMessageFilter } from './message-filter.js';

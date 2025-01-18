@@ -1,4 +1,4 @@
-import { NanoNode } from './type';
+import { type NanoNode } from './type';
 import { NanoFiberRoot } from './fiber-root';
 
 export function render(

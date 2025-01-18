@@ -1,6 +1,6 @@
 import {
-  NanoDomBubbleEventProps,
-  NanoDomCaptureEventProps,
+  type NanoDomBubbleEventProps,
+  type NanoDomCaptureEventProps,
 } from '../vdom/host/type';
 
 export enum NanoEventType {

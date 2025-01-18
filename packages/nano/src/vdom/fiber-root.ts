@@ -1,7 +1,7 @@
 import { performSyncWorkOnRoot } from './work-loop.js';
 import { createFiber, NanoFiber } from './fiber.js';
 import { NanoEventDispatcher } from '../event/dispatcher.js';
-import { NanoNode } from './type.js';
+import { type NanoNode } from './type.js';
 import { NanoElement, NanoElementTag } from './element.js';
 
 export type NanoFiberRootProps = null;

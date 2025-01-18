@@ -1,36 +1,36 @@
 import { connectBundle, disconnectBundle } from '../style/manager';
-import { NanoStyleBundle, NanoStyleSheet } from '../style/style';
+import { type NanoStyleBundle, type NanoStyleSheet } from '../style/style';
 import {
   compareContext,
   getContextKey,
   getContextName,
-  NanoContext,
-  NanoContextKey,
+  type NanoContext,
+  type NanoContextKey,
 } from './context';
 import { NanoFiber } from './fiber';
 import { NanoFiberRoot } from './fiber-root';
 import {
-  NanoEffectCreator,
+  type NanoEffectCreator,
   NanoHook,
-  NanoHookDispatcher,
+  type NanoHookDispatcher,
   NanoHookTag,
-  NanoReducer,
-  NanoEffectHookPayload,
-  NanoReducerHookPayload,
-  NanoCallbackHookPayload,
-  NanoMemoHookPayload,
-  NanoStyleSheetHookPayload,
+  type NanoReducer,
+  type NanoEffectHookPayload,
+  type NanoReducerHookPayload,
+  type NanoCallbackHookPayload,
+  type NanoMemoHookPayload,
+  type NanoStyleSheetHookPayload,
 } from './hook';
 import { NanoRef } from './ref';
 import { findFiberRoot } from './traversal';
-import { NanoChildren, NanoComponent } from './type';
+import { type NanoChildren, type NanoComponent } from './type';
 import { NanoEffectFlag, NanoEffectTag, pushPassiveEffect } from './effect';
 import {
-  AnyFunction,
+  type AnyFunction,
   arrayEquals,
   objectEquals,
   objectHasOwnProperty,
-  PlainObject,
+  type PlainObject,
 } from '../util';
 
 type NanoFunctionComponentProps = PlainObject;

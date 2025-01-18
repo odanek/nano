@@ -1,4 +1,4 @@
-import { NanoStyle, NanoStyleBundle } from './style.js';
+import { NanoStyle, type NanoStyleBundle } from './style.js';
 
 type RefCountMap<T> = Map<T, number>;
 

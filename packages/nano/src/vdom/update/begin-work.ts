@@ -1,8 +1,8 @@
 import { markInstanceFiber, NanoFiber } from '../fiber';
 import { createHostComponentInstance } from '../host/component';
 import { createHostTextInstance } from '../host/text';
-import { NanoFiberRootState } from '../fiber-root';
-import { NanoChildren, NanoChildrenProps } from '../type';
+import { type NanoFiberRootState } from '../fiber-root';
+import { type NanoChildren, type NanoChildrenProps } from '../type';
 import {
   cloneChildFibers,
   mountChildFibers,
@@ -11,8 +11,8 @@ import {
 import {
   emptyContext,
   getContextKey,
-  NanoContext,
-  NanoContextProps,
+  type NanoContext,
+  type NanoContextProps,
 } from '../context';
 import {
   renderFunctionComponent,

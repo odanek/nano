@@ -1,7 +1,7 @@
 import { NanoFiber, unmarkInstanceFiber } from '../fiber';
 import {
-  NanoHostTextProps,
-  NanoHostTextStateNode,
+  type NanoHostTextProps,
+  type NanoHostTextStateNode,
   resetHostTextContent,
   updateHostTextInstance,
 } from '../host/text';
@@ -13,16 +13,16 @@ import {
 } from '../traversal';
 import {
   diffProperties,
-  NanoHostComponentPropsDiff,
-  NanoHostComponentStateNode,
+  type NanoHostComponentPropsDiff,
+  type NanoHostComponentStateNode,
   setInitialProperties,
   updateHostComponentInstance,
 } from '../host/component';
 import { runStyleEffects } from '../function-component';
 import { NanoEffectTag } from '../effect';
 import { NanoElementTag } from '../element';
-import { isFlag, PlainObject } from '../../util';
-import { NanoDecoratorProps } from '../host/decorator';
+import { isFlag, type PlainObject } from '../../util';
+import { type NanoDecoratorProps } from '../host/decorator';
 
 export function commitResetTextContent(fiber: NanoFiber): void {
   resetHostTextContent(fiber.stateNode as NanoHostTextStateNode);

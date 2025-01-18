@@ -1,14 +1,14 @@
 import {
   NanoElement,
-  NanoElementKey,
+  type NanoElementKey,
   NanoElementTag,
-  NanoElementType,
+  type NanoElementType,
 } from './element';
 import { NanoRef } from './ref';
 import { NanoFiberRoot } from './fiber-root';
-import { NanoHostComponentStateNode } from './host/component';
-import { NanoHostTextStateNode } from './host/text';
-import { NanoContextKey } from './context';
+import { type NanoHostComponentStateNode } from './host/component';
+import { type NanoHostTextStateNode } from './host/text';
+import { type NanoContextKey } from './context';
 import { NanoEffectTag } from './effect';
 import { emptyArray, emptyObject } from '../util';
 

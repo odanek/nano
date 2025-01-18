@@ -1,11 +1,11 @@
-import { NanoElement, NanoElementKey, NanoElementTag } from '../element';
+import { NanoElement, type NanoElementKey, NanoElementTag } from '../element';
 import {
   createFiberFromElement,
   createWorkInProgress,
   NanoFiber,
 } from '../fiber';
-import { NanoNode } from '../type';
-import { NanoFragmentProps } from '../fragment';
+import { type NanoNode } from '../type';
+import { type NanoFragmentProps } from '../fragment';
 import { NanoEffectTag } from '../effect';
 import { isArray, isIterable, isNumber, isString, isValue } from '../../util';
 
@@ -391,5 +391,5 @@ function childReconciler(shouldTrackSideEffects: boolean): NanoReconciler {
   return reconcileChildFibers;
 }
 
-export const reconcileChildFibers = childReconciler(true);
-export const mountChildFibers = childReconciler(false);
+export const reconcileChildFibers: NanoReconciler = childReconciler(true);
+export const mountChildFibers: NanoReconciler = childReconciler(false);

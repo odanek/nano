@@ -1,6 +1,6 @@
 import { NanoElement } from '../element';
-import { NanoChildrenProps, NanoKeyProps } from '../type';
-import { NanoDomClass, NanoDomStyle } from './type';
+import { type NanoChildrenProps, type NanoKeyProps } from '../type';
+import { type NanoDomClass, type NanoDomStyle } from './type';
 
 export type NanoDecoratorProps = NanoChildrenProps &
   NanoKeyProps & {

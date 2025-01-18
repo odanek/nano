@@ -1,4 +1,4 @@
-import { NanoModifierKey } from './type';
+import { type NanoModifierKey } from './type';
 import { NanoUiEvent } from './ui-event';
 
 export class NanoKeyboardEvent<T> extends NanoUiEvent<KeyboardEvent, T> {

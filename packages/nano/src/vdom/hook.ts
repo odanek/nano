@@ -1,8 +1,8 @@
-import { NanoContext } from './context';
-import { NanoStyleBundle, NanoStyleSheet } from '../style/style';
+import { type NanoContext } from './context';
+import { type NanoStyleBundle, type NanoStyleSheet } from '../style/style';
 import { NanoRef } from './ref';
 import { NanoFiber } from './fiber';
-import { AnyFunction } from '../util';
+import { type AnyFunction } from '../util';
 
 export class NanoHook<P = unknown> {
   public tag: NanoHookTag;

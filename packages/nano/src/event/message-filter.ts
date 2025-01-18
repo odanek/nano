@@ -1,5 +1,5 @@
-import { NanoDomEventProps } from '../vdom/host/type';
-import { NanoChildrenProps, NanoNode } from '../vdom/type';
+import { type NanoDomEventProps } from '../vdom/host/type';
+import { type NanoChildrenProps, type NanoNode } from '../vdom/type';
 
 type NanoMessageFilterProps = NanoDomEventProps<Element> & NanoChildrenProps;
 
