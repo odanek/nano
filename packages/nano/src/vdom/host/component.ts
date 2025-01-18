@@ -65,6 +65,8 @@ export function updateHostComponentInstance(
       node.style[value] = diff[i++];
     } else if (key === SET_TEXT_CHILD) {
       setHostTextContent(node, value as string);
+    } else if (key === 'value' && node.tagName === 'INPUT') {
+      (node as HTMLInputElement).value = value ?? '';
     } else if (value === null) {
       node.removeAttribute(key);
     } else {
@@ -100,6 +102,8 @@ export function setInitialProperties(node: Element, props: PlainObject): void {
         // @ts-expect-error Setting a custom style
         node.style[styleKey] = styleValue;
       }
+    } else if (key === 'value' && node.tagName === 'INPUT') {
+      (node as HTMLInputElement).value = (value as string) ?? '';
     } else if (key !== 'children' && !key.startsWith('on')) {
       if (value === true) {
         node.setAttribute(key, '');
