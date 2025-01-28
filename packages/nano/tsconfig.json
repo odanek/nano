@@ -7,22 +7,22 @@
     "module": "es2022",
     "moduleResolution": "bundler",
     "lib": ["es2023", "dom"],
-    "esModuleInterop": true,    
+    "esModuleInterop": true,
     "noUncheckedSideEffectImports": true,
-    
+
     "verbatimModuleSyntax": true,
     "isolatedModules": true,
     "isolatedDeclarations": true,
 
-    "strict": true,        
+    "strict": true,
     "strictNullChecks": true,
     "noImplicitAny": true,
     "noImplicitOverride": true,
-    "noImplicitReturns": true,    
+    "noImplicitReturns": true,
     "noUncheckedIndexedAccess": true,
     "noFallthroughCasesInSwitch": true,
     "noPropertyAccessFromIndexSignature": true,
-    "forceConsistentCasingInFileNames": true,
+    "forceConsistentCasingInFileNames": true
 
     // "exactOptionalPropertyTypes": true
   },

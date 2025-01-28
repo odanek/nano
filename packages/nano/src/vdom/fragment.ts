@@ -1,6 +1,10 @@
 import { emptyArray, isIterable, isValue } from '../util';
 import { NanoElement } from './element';
-import { type NanoChildrenProps, type NanoKeyProps, type NanoNode } from './type';
+import {
+  type NanoChildrenProps,
+  type NanoKeyProps,
+  type NanoNode,
+} from './type';
 
 export type NanoFragmentProps = NanoKeyProps & {
   children: Iterable<NanoNode>;

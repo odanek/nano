@@ -1,7 +1,11 @@
 import type { Properties as CSSProperties } from 'csstype';
 import { NanoPointerEvent } from '../../event/pointer-event';
 import { type NanoEventHandler } from '../../event/type';
-import { type NanoChildren, type NanoKeyProps, type NanoRefProps } from '../type';
+import {
+  type NanoChildren,
+  type NanoKeyProps,
+  type NanoRefProps,
+} from '../type';
 import { NanoMouseEvent } from '../../event/mouse-event';
 import { NanoWheelEvent } from '../../event/wheel-event';
 import { NanoFocusEvent } from '../../event/focus-event';
@@ -43,7 +47,9 @@ export type NanoDomCaptureEventProps<T> = {
   onCaptureClick?: NanoEventHandler<NanoPointerEvent<T>> | undefined;
   onCaptureContextMenu?: NanoEventHandler<NanoPointerEvent<T>> | undefined;
   // Mouse
-  onCaptureDblClick?: NanoEventHandler<NanoMouseEvent<MouseEvent, T>> | undefined;
+  onCaptureDblClick?:
+    | NanoEventHandler<NanoMouseEvent<MouseEvent, T>>
+    | undefined;
   // Wheel
   onCaptureWheel?: NanoEventHandler<NanoWheelEvent<T>> | undefined;
   // Focus
