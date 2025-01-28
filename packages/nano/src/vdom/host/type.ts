@@ -1,4 +1,4 @@
-import * as CSS from 'csstype';
+import type { Properties as CSSProperties } from 'csstype';
 import { NanoPointerEvent } from '../../event/pointer-event';
 import { type NanoEventHandler } from '../../event/type';
 import { type NanoChildren, type NanoKeyProps, type NanoRefProps } from '../type';
@@ -27,7 +27,7 @@ export type NanoHostComponentSvgProps<T> = NanoRefProps &
   NanoSvgProps<T>;
 
 export type NanoDomClass = string | string[];
-export type NanoDomStyle = CSS.Properties<string | number>;
+export type NanoDomStyle = CSSProperties<string | number>;
 
 export type NanoDomCaptureEventProps<T> = {
   // Pointer
