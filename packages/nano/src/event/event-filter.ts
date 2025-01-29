@@ -1,9 +1,9 @@
 import { type NanoDomEventProps } from '../vdom/host/type';
 import { type NanoChildrenProps, type NanoNode } from '../vdom/type';
 
-type NanoMessageFilterProps = NanoDomEventProps<Element> & NanoChildrenProps;
+type NanoEventFilterProps = NanoDomEventProps<Element> & NanoChildrenProps;
 
 // TODO TS does not allow the return value to be NanoChildren
-export function NanoMessageFilter(props: NanoMessageFilterProps): NanoNode {
+export function NanoEventFilter(props: NanoEventFilterProps): NanoNode {
   return (props.children ?? null) as NanoNode;
 }

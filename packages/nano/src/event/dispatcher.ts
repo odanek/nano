@@ -17,7 +17,7 @@ import { NanoMouseEvent } from './mouse-event.js';
 import { type NanoDomEventProps } from '../vdom/host/type.js';
 import { NanoTouchEvent } from './touch-event.js';
 import { capitalizeFirstLetter } from '../util.js';
-import { NanoMessageFilter } from './message-filter.js';
+import { NanoEventFilter } from './event-filter.js';
 
 export class NanoEventDispatcher {
   private eventHandler: (event: Event) => void;
@@ -84,7 +84,7 @@ export class NanoEventDispatcher {
         (bubbles || fiber.stateNode === target)
       ) {
         chain.push(fiber);
-      } else if (fiber.type === NanoMessageFilter) {
+      } else if (fiber.type === NanoEventFilter) {
         chain.push(fiber);
       }
       fiber = fiber.return;

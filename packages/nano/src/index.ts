@@ -10,7 +10,7 @@ import { NanoElement, type NanoElementKey } from './vdom/element';
 import { NanoRef } from './vdom/ref';
 import { NanoFragment } from './vdom/fragment';
 import { NanoPortal } from './vdom/portal';
-import { NanoMessageFilter } from './event/message-filter';
+import { NanoEventFilter } from './event/event-filter';
 import { NanoDecorator } from './vdom/host/decorator';
 import { createContext, type NanoContext } from './vdom/context';
 import { type NanoDomClass, type NanoDomStyle } from './vdom/host/type';
@@ -60,7 +60,7 @@ export {
   NanoRef,
   NanoFragment,
   NanoPortal,
-  NanoMessageFilter,
+  NanoEventFilter,
   NanoDecorator,
   createContext,
   type NanoDomClass,
