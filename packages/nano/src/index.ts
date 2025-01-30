@@ -35,6 +35,7 @@ import {
   useRef,
   useState,
   useStyleSheet,
+  useEventDispatcher,
 } from './vdom/function-component';
 
 import {
@@ -85,6 +86,7 @@ export {
   useRef,
   useState,
   useStyleSheet,
+  useEventDispatcher,
   // Styles
   css,
   keyframes,

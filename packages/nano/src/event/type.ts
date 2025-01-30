@@ -45,11 +45,6 @@ export enum NanoEventType {
   TouchEnd = 'touchEnd',
 }
 
-export type NanoEventFilter<E> = (
-  event: E,
-  next: NanoEventHandler<unknown>,
-) => void;
-
 export type NanoEventHandler<E> = (event: E) => void;
 
 export type NanoCaptureEventHandlerName =

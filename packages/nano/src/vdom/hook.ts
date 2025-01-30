@@ -3,6 +3,7 @@ import { type NanoStyleBundle, type NanoStyleSheet } from '../style/style';
 import { NanoRef } from './ref';
 import { NanoFiber } from './fiber';
 import { type AnyFunction } from '../util';
+import type { NanoEventDispatcher } from '../event/dispatcher';
 
 export class NanoHook<P = unknown> {
   public tag: NanoHookTag;
@@ -49,6 +50,7 @@ export type NanoCallbackHook = <T extends AnyFunction>(
   deps: readonly unknown[],
 ) => T;
 export type NanoMemoHook = <T>(create: () => T, deps: readonly unknown[]) => T;
+export type NanoEventDispatcherHook = () => NanoEventDispatcher;
 
 export type NanoHookDispatcher = {
   useState: NanoStateHook;
@@ -60,6 +62,7 @@ export type NanoHookDispatcher = {
   useRef: NanoRefHook;
   useCallback: NanoCallbackHook;
   useMemo: NanoMemoHook;
+  useEventDispatcher: NanoEventDispatcherHook;
 };
 
 export type NanoEffectHookPayload = {
@@ -89,4 +92,3 @@ export type NanoMemoHookPayload<T> = {
 
 export type NanoStyleSheetHookPayload<S extends NanoStyleBundle> =
   NanoStyleSheet<S>;
-

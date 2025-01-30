@@ -32,6 +32,7 @@ import {
   objectHasOwnProperty,
   type PlainObject,
 } from '../util';
+import type { NanoEventDispatcher } from '../event/dispatcher';
 
 type NanoFunctionComponentProps = PlainObject;
 
@@ -50,6 +51,7 @@ const mountDispatcher: NanoHookDispatcher = {
   useRef: mountRef,
   useCallback: mountCallback,
   useMemo: mountMemo,
+  useEventDispatcher: mountEventDispatcher,
 };
 
 const updateDispatcher: NanoHookDispatcher = {
@@ -62,6 +64,7 @@ const updateDispatcher: NanoHookDispatcher = {
   useRef: updateRef,
   useCallback: updateCallback,
   useMemo: updateMemo,
+  useEventDispatcher: mountEventDispatcher,
 };
 
 function scheduleUpdateOnFiber(fiber: NanoFiber): void {
@@ -356,6 +359,12 @@ function mountMemo<T>(create: () => T, deps: readonly unknown[]): T {
   return payload.value;
 }
 
+function mountEventDispatcher(): NanoEventDispatcher {
+  const rootFiber = findFiberRoot(workInProgressFiber as NanoFiber);
+  const root = rootFiber.stateNode as NanoFiberRoot;
+  return root.dispatcher;
+}
+
 function updateState<T>(initialState: T): [T, (value: T) => void] {
   return updateReducer(stateReducer, initialState);
 }
@@ -517,4 +526,8 @@ export function useCallback<T extends AnyFunction>(
 
 export function useMemo<T>(create: () => T, deps: readonly unknown[]): T {
   return (hookDispatcher as NanoHookDispatcher).useMemo(create, deps);
+}
+
+export function useEventDispatcher(): NanoEventDispatcher {
+  return (hookDispatcher as NanoHookDispatcher).useEventDispatcher();
 }

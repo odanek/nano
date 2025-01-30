@@ -15,8 +15,8 @@ export class NanoFiberRoot {
   public current: NanoFiber<NanoFiberRootProps>;
   public workInProgress: NanoFiber<NanoFiberRootProps> | null;
   public disposed: boolean;
+  public dispatcher: NanoEventDispatcher;
   private updateHandle: number | null;
-  private dispatcher: NanoEventDispatcher;
 
   constructor(container: Element) {
     const fiber = createFiber(NanoElementTag.HostRoot, null, null);

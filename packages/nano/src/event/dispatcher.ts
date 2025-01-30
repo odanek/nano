@@ -19,11 +19,15 @@ import { NanoTouchEvent } from './touch-event.js';
 import { capitalizeFirstLetter } from '../util.js';
 import { NanoEventFilter } from './event-filter.js';
 
+type NanoEventTarget = NanoDomEventProps<unknown>;
+
 export class NanoEventDispatcher {
   private eventHandler: (event: Event) => void;
+  private filters: NanoEventTarget[];
 
   constructor() {
     this.eventHandler = this.handleEvent.bind(this);
+    this.filters = [];
   }
 
   public connect(root: EventTarget) {
@@ -40,6 +44,18 @@ export class NanoEventDispatcher {
   public disconnect(root: EventTarget): void {
     for (const event of nativeEventType) {
       root.removeEventListener(event, this.eventHandler);
+    }
+  }
+
+  public addFilter(filter: NanoEventTarget): () => void {
+    this.filters.push(filter);
+    return (): void => this.removeFilter(filter);
+  }
+
+  public removeFilter(filter: NanoEventTarget): void {
+    const index = this.filters.indexOf(filter);
+    if (index !== -1) {
+      this.filters.splice(index, 1);
     }
   }
 
@@ -69,8 +85,8 @@ export class NanoEventDispatcher {
     }
   }
 
-  private getFiberChain(target: Node, bubbles: boolean): NanoFiber[] {
-    const chain: NanoFiber[] = [];
+  private getFiberChain(target: Node, bubbles: boolean): NanoEventTarget[] {
+    const chain: NanoEventTarget[] = [];
     let current: Node | null = target;
     let fiber: NanoFiber | null = null;
     while (current !== null && fiber === null) {
@@ -83,36 +99,39 @@ export class NanoEventDispatcher {
         fiber.tag === NanoElementTag.HostComponent &&
         (bubbles || fiber.stateNode === target)
       ) {
-        chain.push(fiber);
+        chain.push(fiber.memoizedProps as NanoEventTarget);
       } else if (fiber.type === NanoEventFilter) {
-        chain.push(fiber);
+        chain.push(fiber.memoizedProps as NanoEventTarget);
       }
       fiber = fiber.return;
     }
+
+    for (const filter of this.filters) {
+      chain.push(filter);
+    }
+
     return chain;
   }
 
   private runHandlerChain(
-    fiberChain: NanoFiber[],
+    handlers: NanoEventTarget[],
     event: NanoEvent<Event, unknown>,
     captureHandlerName: NanoCaptureEventHandlerName,
     bubbleHandlerName: NanoBubbleEventHandlerName,
   ): void {
-    const length = fiberChain.length;
+    const length = handlers.length;
 
     for (let i = length - 1; i >= 0 && !event.isPropagationStopped(); i--) {
-      const fiber = fiberChain[i] as NanoFiber;
-      const props = fiber.memoizedProps as NanoDomEventProps<unknown>;
-      const captureHandler = props[captureHandlerName] as
+      const handler = handlers[i] as NanoEventTarget;
+      const captureHandler = handler[captureHandlerName] as
         | NanoEventHandler<NanoEvent<Event, unknown>>
         | undefined;
       captureHandler?.(event);
     }
 
     for (let i = 0; i < length && !event.isPropagationStopped(); i++) {
-      const fiber = fiberChain[i] as NanoFiber;
-      const props = fiber.memoizedProps as NanoDomEventProps<unknown>;
-      const bubbleHandler = props[bubbleHandlerName] as
+      const handler = handlers[i] as NanoEventTarget;
+      const bubbleHandler = handler[bubbleHandlerName] as
         | NanoEventHandler<NanoEvent<Event, unknown>>
         | undefined;
       bubbleHandler?.(event);
