@@ -164,8 +164,7 @@ export function commitDeletion(current: NanoFiber): void {
 function unmountHostComponents(current: NanoFiber, detach: boolean): void {
   commitUnmount(current, detach);
 
-  const isElement =
-    current.tag === NanoElementTag.HostComponent || NanoElementTag.HostText;
+  const isElement = current.tag === NanoElementTag.HostComponent;
   const isPortal = current.tag === NanoElementTag.HostPortal;
   const detachChildren = isPortal || (detach && !isElement);
 
