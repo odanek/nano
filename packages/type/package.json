@@ -22,7 +22,7 @@
     "csstype": "^3.1.0"
   },
   "devDependencies": {
-    "typescript": "^5.7.0"
+    "typescript": "^5.8.0"
   },
   "scripts": {
     "clean": "tsc --build --clean",
