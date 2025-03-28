@@ -26,6 +26,7 @@
   },
   "scripts": {
     "clean": "tsc --build --clean",
-    "build": "tsc"
+    "build": "tsc",
+    "typecheck": "tsc --noEmit"
   }
 }
