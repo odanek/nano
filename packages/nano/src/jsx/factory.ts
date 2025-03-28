@@ -37,7 +37,12 @@ function jsxHostComponent(
   key?: NanoElementKey,
 ): NanoElement<unknown> {
   const { ref, ...other } = (props as NanoRefProps) ?? emptyObject;
-  return NanoElement.hostComponent(type, other as unknown, ref ?? null, key);
+  return NanoElement.hostComponent(
+    type,
+    other as unknown,
+    ref ?? null,
+    key ?? null,
+  );
 }
 
 function jsxFunctionComponent<T = unknown>(
@@ -45,5 +50,5 @@ function jsxFunctionComponent<T = unknown>(
   props: T,
   key?: NanoElementKey,
 ): NanoElement<T> {
-  return NanoElement.functionComponent(type, props, key);
+  return NanoElement.functionComponent(type, props, key ?? null);
 }
