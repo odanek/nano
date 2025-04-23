@@ -7,6 +7,8 @@ export class NanoMouseEvent<E extends MouseEvent, T> extends NanoUiEvent<E, T> {
   public readonly buttons: number;
   public readonly clientX: number;
   public readonly clientY: number;
+  public readonly offsetX: number;
+  public readonly offsetY: number;
   public readonly ctrlKey: boolean;
   public readonly metaKey: boolean;
   public readonly movementX: number;
@@ -25,6 +27,8 @@ export class NanoMouseEvent<E extends MouseEvent, T> extends NanoUiEvent<E, T> {
     this.buttons = event.buttons;
     this.clientX = event.clientX;
     this.clientY = event.clientY;
+    this.offsetX = event.offsetX;
+    this.offsetY = event.offsetY;
     this.ctrlKey = event.ctrlKey;
     this.metaKey = event.metaKey;
     this.movementX = event.movementX;
