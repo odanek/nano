@@ -1272,7 +1272,7 @@ export interface NanoDomElement {
 export interface NanoSvgProps<T> extends NanoAriaProps, NanoDomProps<T> {
   // Attributes which also defined in HTMLAttributes
   // See comment in SVGDOMPropertyConfig.js
-  class?: string | undefined;
+  class?: NanoDomClass | undefined;
   color?: string | undefined;
   height?: number | string | undefined;
   id?: string | undefined;
