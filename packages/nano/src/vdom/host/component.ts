@@ -211,7 +211,7 @@ function diffStyle(
 }
 
 function classNameString(name: string | string[]): string | null {
-  if (name === null || undefined) {
+  if (name === null || name === undefined) {
     return null;
   }
   return isString(name) ? name : name.join(' ');
