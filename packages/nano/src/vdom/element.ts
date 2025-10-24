@@ -5,17 +5,19 @@ import { type NanoFragmentProps } from './fragment';
 import { type NanoContext, type NanoContextProps } from './context';
 import { type NanoPortalProps } from './portal';
 import { type NanoDecoratorProps } from './host/decorator';
+import type { ValueOf } from '../util';
 
-export enum NanoElementTag {
-  HostRoot,
-  HostComponent,
-  HostText,
-  HostPortal,
-  HostDecorator,
-  FunctionComponent,
-  Fragment,
-  Context,
-}
+export const NanoElementTag = {
+  HostRoot: 0,
+  HostComponent: 1,
+  HostText: 2,
+  HostPortal: 3,
+  HostDecorator: 4,
+  FunctionComponent: 5,
+  Fragment: 6,
+  Context: 7,
+};
+export type NanoElementTagValue = ValueOf<typeof NanoElementTag>;
 
 export type NanoElementKey = unknown;
 export type NanoElementType<P = unknown> =
@@ -26,14 +28,14 @@ export type NanoElementType<P = unknown> =
   | NanoComponent<P>;
 
 export class NanoElement<P = unknown> {
-  public tag: NanoElementTag;
+  public tag: NanoElementTagValue;
   public type: NanoElementType<P>;
   public key: NanoElementKey;
   public ref: NanoRef | null;
   public props: P;
 
   constructor(
-    tag: NanoElementTag,
+    tag: NanoElementTagValue,
     type: NanoElementType<P>,
     key: NanoElementKey,
     ref: NanoRef | null,

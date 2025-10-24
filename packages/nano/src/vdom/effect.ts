@@ -1,24 +1,25 @@
 import { type NanoEffectHookPayload, NanoHook, NanoHookTag } from './hook';
 import { NanoFiber } from './fiber';
-import { isFlag, isFunction, isValue } from '../util';
+import { isFlag, isFunction, isValue, type ValueOf } from '../util';
 
-export enum NanoEffectTag {
-  None = 0x00,
-  Placement = 0x01,
-  Update = 0x02,
-  Effect = 0x04,
-  Style = 0x08,
-  Deletion = 0x10,
-  ContentReset = 0x20,
-  Ref = 0x40,
-}
+export const NanoEffectTag = {
+  None: 0x00,
+  Placement: 0x01,
+  Update: 0x02,
+  Effect: 0x04,
+  Style: 0x08,
+  Deletion: 0x10,
+  ContentReset: 0x20,
+  Ref: 0x40,
+};
+export type NanoEffectTagValue = ValueOf<typeof NanoEffectTag>;
 
-export enum NanoEffectFlag {
-  None = 0x00,
-  Create = 0x01,
-  Destroy = 0x02,
-  Passive = 0x04,
-}
+export const NanoEffectFlag = {
+  None: 0x00,
+  Create: 0x01,
+  Destroy: 0x02,
+  Passive: 0x04,
+};
 
 export let passiveEffects: NanoEffectHookPayload[] = [];
 let passiveEffectHandle: number | null = null;

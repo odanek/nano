@@ -1,7 +1,7 @@
 import {
   NanoElement,
   type NanoElementKey,
-  NanoElementTag,
+  type NanoElementTagValue,
   type NanoElementType,
 } from './element';
 import { NanoRef } from './ref';
@@ -9,12 +9,12 @@ import { NanoFiberRoot } from './fiber-root';
 import { type NanoHostComponentStateNode } from './host/component';
 import { type NanoHostTextStateNode } from './host/text';
 import { type NanoContextKey } from './context';
-import { NanoEffectTag } from './effect';
+import { NanoEffectTag, type NanoEffectTagValue } from './effect';
 import { emptyArray, emptyObject } from '../util';
 
 const fiberKey = Symbol('nano-fiber-key');
 export class NanoFiber<P = unknown> {
-  public tag: NanoElementTag;
+  public tag: NanoElementTagValue;
   public type: NanoElementType<P>;
   public key: NanoElementKey;
   public ref: NanoRef | null;
@@ -33,12 +33,12 @@ export class NanoFiber<P = unknown> {
   public fullContext: Record<NanoContextKey, unknown>;
   public contextTypes: readonly NanoContextKey[];
   public updateQueue: Array<unknown> | null;
-  public effectTag: NanoEffectTag;
+  public effectTag: NanoEffectTagValue;
   public deletions: Array<NanoFiber> | null;
 
   public alternate: NanoFiber<P> | null;
 
-  constructor(tag: NanoElementTag, pendingProps: P, key: NanoElementKey) {
+  constructor(tag: NanoElementTagValue, pendingProps: P, key: NanoElementKey) {
     this.tag = tag;
     this.type = null;
     this.key = key;
@@ -66,7 +66,7 @@ export class NanoFiber<P = unknown> {
 }
 
 export function createFiber<P>(
-  tag: NanoElementTag,
+  tag: NanoElementTagValue,
   pendingProps: P,
   key: NanoElementKey,
 ): NanoFiber<P> {

@@ -1,6 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type AnyFunction = (...args: any[]) => any;
 export type PlainObject = Record<string, unknown>;
+export type ValueOf<T> = T[keyof T];
 
 export const emptyObject: Readonly<Record<string | number, unknown>> =
   Object.freeze({});

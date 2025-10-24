@@ -2,30 +2,31 @@ import { type NanoContext } from './context';
 import { type NanoStyleBundle, type NanoStyleSheet } from '../style/style';
 import { NanoRef } from './ref';
 import { NanoFiber } from './fiber';
-import { type AnyFunction } from '../util';
+import { type AnyFunction, type ValueOf } from '../util';
 import type { NanoEventDispatcher } from '../event/dispatcher';
 
 export class NanoHook<P = unknown> {
-  public tag: NanoHookTag;
+  public tag: NanoHookTagValue;
   public next: NanoHook | null;
   public payload: P | null;
 
-  constructor(tag: NanoHookTag) {
+  constructor(tag: NanoHookTagValue) {
     this.tag = tag;
     this.next = null;
     this.payload = null;
   }
 }
 
-export enum NanoHookTag {
-  Effect,
-  Context,
-  Style,
-  Reducer,
-  Ref,
-  Callback,
-  Memo,
-}
+export const NanoHookTag = {
+  Effect: 1,
+  Context: 2,
+  Style: 3,
+  Reducer: 4,
+  Ref: 5,
+  Callback: 6,
+  Memo: 7,
+};
+export type NanoHookTagValue = ValueOf<typeof NanoHookTag>;
 
 export type NanoReducer<T, A> = (state: T, action: A) => T;
 export type NanoEffectCleanup = () => void;

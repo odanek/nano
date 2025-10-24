@@ -1,8 +1,8 @@
-import { NanoEventType } from './type';
+import { NanoEventType, type NanoEventTypeValue } from './type';
 
 export class NanoEvent<E extends Event, T> {
   public readonly nativeEvent: E;
-  public readonly type: NanoEventType;
+  public readonly type: NanoEventTypeValue;
   public readonly target: T;
   public readonly bubbles: boolean;
   public readonly cancelable: boolean;
@@ -40,7 +40,7 @@ export class NanoEvent<E extends Event, T> {
   }
 }
 
-function getType(type: string): NanoEventType {
+function getType(type: string): NanoEventTypeValue {
   switch (type) {
     case 'auxclic':
       return NanoEventType.AuxClick;

@@ -20,6 +20,7 @@ import {
   type NanoCallbackHookPayload,
   type NanoMemoHookPayload,
   type NanoStyleSheetHookPayload,
+  type NanoHookTagValue,
 } from './hook';
 import { NanoRef } from './ref';
 import { findFiberRoot } from './traversal';
@@ -165,7 +166,7 @@ export function runStyleEffects(
   }
 }
 
-function mountWorkInProgressHook(tag: NanoHookTag): NanoHook {
+function mountWorkInProgressHook(tag: NanoHookTagValue): NanoHook {
   const hook = new NanoHook(tag);
 
   if (workInProgressHook === null) {
@@ -178,7 +179,7 @@ function mountWorkInProgressHook(tag: NanoHookTag): NanoHook {
   return hook;
 }
 
-function updateWorkInProgressHook(tag: NanoHookTag): NanoHook {
+function updateWorkInProgressHook(tag: NanoHookTagValue): NanoHook {
   if (currentHook === null) {
     const current = (workInProgressFiber as NanoFiber).alternate as NanoFiber;
     currentHook = current.memoizedState as NanoHook;
