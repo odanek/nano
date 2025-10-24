@@ -199,7 +199,7 @@ function diffStyle(
   for (const [key, value] of Object.entries(newStyle)) {
     const oldValue = oldStyle[key as keyof NanoDomStyle];
     if (value !== oldValue) {
-      diff.push(SET_STYLE, key, value === undefined ? null : value);
+      diff.push(SET_STYLE, key, value === undefined ? null : value as string);
     }
   }
   for (const key of Object.keys(oldStyle)) {

@@ -11,8 +11,8 @@
     "url": "git:https://github.com/odanek/nano.git"
   },
   "devDependencies": {
-    "typescript": "^5.8.0",
-    "vite": "^7.0.0"
+    "typescript": "^5.9.0",
+    "vite": "^7.1.0"
   },
   "dependencies": {
     "@nano-ui/nano": "file:../../packages/nano"
