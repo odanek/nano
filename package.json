@@ -25,6 +25,9 @@
   },
   "scripts": {
     "lint": "eslint . && prettier --check .",
-    "lint:fix": "eslint --fix . && prettier --write --list-different ."
+    "lint:fix": "eslint --fix . && prettier --write --list-different .",
+    "clean": "npm run clean --w packages/nano",
+    "build": "npm run build --w packages/nano",
+    "typecheck": "npm run typecheck --w packages/nano"
   }
 }
