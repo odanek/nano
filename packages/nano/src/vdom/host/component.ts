@@ -65,7 +65,7 @@ export function updateHostComponentInstance(
       node.style[value] = diff[i++];
     } else if (key === SET_TEXT_CHILD) {
       setHostTextContent(node, value as string);
-    } else if (key === 'value' && node.tagName === 'INPUT') {
+    } else if (key === 'value' && isInputElement(node)) { 
       (node as HTMLInputElement).value = value ?? '';
     } else if (value === null) {
       node.removeAttribute(key);
@@ -73,6 +73,10 @@ export function updateHostComponentInstance(
       node.setAttribute(key, value);
     }
   }
+}
+
+function isInputElement(node: Element): boolean {
+  return node.tagName === 'INPUT' || node.tagName === 'TEXTAREA' || node.tagName === 'SELECT'
 }
 
 function createElement(type: string): NanoHostComponentStateNode {
@@ -102,7 +106,7 @@ export function setInitialProperties(node: Element, props: PlainObject): void {
         // @ts-expect-error Setting a custom style
         node.style[styleKey] = styleValue;
       }
-    } else if (key === 'value' && node.tagName === 'INPUT') {
+    } else if (key === 'value' && isInputElement(node)) {
       (node as HTMLInputElement).value = (value as string) ?? '';
     } else if (key !== 'children' && !key.startsWith('on')) {
       if (value === true) {
