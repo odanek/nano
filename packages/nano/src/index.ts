@@ -13,7 +13,12 @@ import { NanoPortal } from './vdom/portal';
 import { NanoEventFilter } from './event/event-filter';
 import { NanoDecorator } from './vdom/host/decorator';
 import { createContext, type NanoContext } from './vdom/context';
-import { type NanoDomClass, type NanoDomStyle } from './vdom/host/type';
+import {
+  type NanoDomClass,
+  type NanoDomEventProps,
+  type NanoDomStyle,
+  type NanoHtmlProps,
+} from './vdom/host/type';
 import { classNames } from './vdom/host/component';
 
 import { NanoGenericEvent } from './event/generic-event';
@@ -47,6 +52,7 @@ import {
 } from './style/style';
 
 import * as JSX from './jsx/runtime';
+import type { NanoEventDispatcher } from './event/dispatcher';
 
 export {
   render,
@@ -62,10 +68,13 @@ export {
   NanoFragment,
   NanoPortal,
   NanoEventFilter,
+  type NanoEventDispatcher,
   NanoDecorator,
   createContext,
   type NanoDomClass,
   type NanoDomStyle,
+  type NanoHtmlProps,
+  type NanoDomEventProps,
   classNames,
   // Events
   NanoGenericEvent,
