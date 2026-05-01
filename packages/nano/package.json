@@ -31,10 +31,10 @@
     "url": "git:https://github.com/odanek/nano.git"
   },
   "dependencies": {
-    "csstype": "^3.1.0"
+    "csstype": "^3.2.0"
   },
   "devDependencies": {
-    "typescript": "^5.9.0"
+    "typescript": "^6.0.0"
   },
   "scripts": {
     "clean": "tsc --build --clean",

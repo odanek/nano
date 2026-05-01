@@ -65,7 +65,7 @@ export function updateHostComponentInstance(
       node.style[value] = diff[i++];
     } else if (key === SET_TEXT_CHILD) {
       setHostTextContent(node, value as string);
-    } else if (key === 'value' && isInputElement(node)) { 
+    } else if (key === 'value' && isInputElement(node)) {
       (node as HTMLInputElement).value = value ?? '';
     } else if (value === null) {
       node.removeAttribute(key);
@@ -76,7 +76,11 @@ export function updateHostComponentInstance(
 }
 
 function isInputElement(node: Element): boolean {
-  return node.tagName === 'INPUT' || node.tagName === 'TEXTAREA' || node.tagName === 'SELECT'
+  return (
+    node.tagName === 'INPUT' ||
+    node.tagName === 'TEXTAREA' ||
+    node.tagName === 'SELECT'
+  );
 }
 
 function createElement(type: string): NanoHostComponentStateNode {
@@ -203,7 +207,7 @@ function diffStyle(
   for (const [key, value] of Object.entries(newStyle)) {
     const oldValue = oldStyle[key as keyof NanoDomStyle];
     if (value !== oldValue) {
-      diff.push(SET_STYLE, key, value === undefined ? null : value as string);
+      diff.push(SET_STYLE, key, value === undefined ? null : (value as string));
     }
   }
   for (const key of Object.keys(oldStyle)) {
