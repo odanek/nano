@@ -2,9 +2,6 @@ import { NanoStyle, type NanoStyleBundle } from './style.js';
 
 type RefCountMap<T> = Map<T, number>;
 
-const styleSheet = document.createElement('style');
-styleSheet.classList.add('nano-styles');
-
 const activeStyles: RefCountMap<NanoStyle> = new Map();
 const activeBundles: RefCountMap<NanoStyleBundle> = new Map();
 const cleanupTimeout: number = 2000;
@@ -13,8 +10,9 @@ let cleanupHandle: number | null = null;
 
 export function connectBundle(bundle: NanoStyleBundle): void {
   if (retain(activeBundles, bundle)) {
+    const styleSheet = getStyleSheet();
     for (const style of Object.values(bundle)) {
-      connectStyle(style);
+      connectStyle(styleSheet, style);
     }
   }
 }
@@ -68,6 +66,7 @@ function cleanupBundle(
 }
 
 function cleanupStyles(): void {
+  const styleSheet = getStyleSheet();
   const sheet = styleSheet.sheet;
   let index = 0;
   for (const [style, referenceCount] of activeStyles.entries()) {
@@ -107,7 +106,7 @@ function release<T>(map: RefCountMap<T>, object: T): boolean {
   return referenceCount === 0;
 }
 
-function connectStyle(style: NanoStyle): void {
+function connectStyle(styleSheet: HTMLStyleElement, style: NanoStyle): void {
   if (retain(activeStyles, style)) {
     if (activeStyles.size === 1) {
       document.head.appendChild(styleSheet);
@@ -122,4 +121,13 @@ function disconnectStyle(style: NanoStyle, cleanup: boolean): void {
   if (release(activeStyles, style) && cleanup !== false) {
     scheduleCleanup();
   }
+}
+
+let styleSheetInstance: HTMLStyleElement | null = null;
+function getStyleSheet(): HTMLStyleElement {
+  if (styleSheetInstance === null) {
+    styleSheetInstance = document.createElement('style');
+    styleSheetInstance.classList.add('nano-styles');
+  }
+  return styleSheetInstance;
 }
