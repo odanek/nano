@@ -1,32 +1,27 @@
+import { defineConfig, globalIgnores } from 'eslint/config';
 import globals from 'globals';
 import js from '@eslint/js';
 import ts from 'typescript-eslint';
-import react from 'eslint-plugin-react';
 
-export default [
+export default defineConfig([
+  globalIgnores(['**/build/', '**/dist/']),
   {
     files: ['**/*.{js,jsx,ts,tsx}'],
     languageOptions: {
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
       globals: globals.browser,
     },
-    settings: {
-      react: {
-        version: '17',
-      },
-    },
-  },
-  {
-    ignores: ['**/build/', '**/dist/'],
   },
   js.configs.recommended,
   ...ts.configs.recommended,
-  react.configs.flat.recommended,
   {
     rules: {
       eqeqeq: 2,
-      'react/react-in-jsx-scope': 'off',
-      'react/no-unknown-property': [2, { ignore: ['class'] }],
       '@typescript-eslint/explicit-function-return-type': 2,
     },
   },
-];
+]);

@@ -221,7 +221,7 @@ function childReconciler(shouldTrackSideEffects: boolean): NanoReconciler {
     let oldFiber = currentFirstChild;
     let lastPlacedIndex = 0;
     let newIdx = 0;
-    let nextOldFiber = null;
+    let nextOldFiber;
 
     let step = newChildren.next();
     for (
