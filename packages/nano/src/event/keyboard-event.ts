@@ -1,7 +1,10 @@
 import { type NanoModifierKey } from './type';
 import { NanoUiEvent } from './ui-event';
 
-export class NanoKeyboardEvent<T> extends NanoUiEvent<KeyboardEvent, T> {
+export class NanoKeyboardEvent<T extends EventTarget> extends NanoUiEvent<
+  T,
+  KeyboardEvent
+> {
   public readonly altKey: boolean;
   /** @deprecated */
   public readonly charCode: number;

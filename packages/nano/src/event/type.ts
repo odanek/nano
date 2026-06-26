@@ -50,9 +50,10 @@ export type NanoEventTypeValue = ValueOf<typeof NanoEventType>;
 export type NanoEventHandler<E> = (event: E) => void;
 
 export type NanoCaptureEventHandlerName =
-  keyof NanoDomCaptureEventProps<unknown>;
+  keyof NanoDomCaptureEventProps<EventTarget>;
 
-export type NanoBubbleEventHandlerName = keyof NanoDomBubbleEventProps<unknown>;
+export type NanoBubbleEventHandlerName =
+  keyof NanoDomBubbleEventProps<EventTarget>;
 
 export type NanoModifierKey =
   | 'Alt'

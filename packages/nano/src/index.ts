@@ -21,7 +21,7 @@ import {
 } from './vdom/host/type';
 import { classNames } from './vdom/host/component';
 
-import { NanoGenericEvent } from './event/generic-event';
+import { NanoEvent } from './event/event';
 import { NanoClipboardEvent } from './event/clipboard-event';
 import { NanoFocusEvent } from './event/focus-event';
 import { NanoInputEvent } from './event/input-event';
@@ -77,7 +77,7 @@ export {
   type NanoDomEventProps,
   classNames,
   // Events
-  NanoGenericEvent,
+  NanoEvent,
   NanoClipboardEvent,
   NanoFocusEvent,
   NanoInputEvent,

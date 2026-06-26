@@ -19,7 +19,7 @@ import { NanoTouchEvent } from './touch-event.js';
 import { capitalizeFirstLetter } from '../util.js';
 import { NanoEventFilter } from './event-filter.js';
 
-type NanoEventTarget = NanoDomEventProps<unknown>;
+type NanoEventTarget = NanoDomEventProps<EventTarget>;
 
 export class NanoEventDispatcher {
   private eventHandler: (event: Event) => void;
@@ -115,7 +115,7 @@ export class NanoEventDispatcher {
 
   private runHandlerChain(
     handlers: NanoEventTarget[],
-    event: NanoEvent<Event, unknown>,
+    event: NanoEvent,
     captureHandlerName: NanoCaptureEventHandlerName,
     bubbleHandlerName: NanoBubbleEventHandlerName,
   ): void {
@@ -124,7 +124,7 @@ export class NanoEventDispatcher {
     for (let i = length - 1; i >= 0 && !event.isPropagationStopped(); i--) {
       const handler = handlers[i] as NanoEventTarget;
       const captureHandler = handler[captureHandlerName] as
-        | NanoEventHandler<NanoEvent<Event, unknown>>
+        | NanoEventHandler<NanoEvent>
         | undefined;
       captureHandler?.(event);
     }
@@ -132,13 +132,13 @@ export class NanoEventDispatcher {
     for (let i = 0; i < length && !event.isPropagationStopped(); i++) {
       const handler = handlers[i] as NanoEventTarget;
       const bubbleHandler = handler[bubbleHandlerName] as
-        | NanoEventHandler<NanoEvent<Event, unknown>>
+        | NanoEventHandler<NanoEvent>
         | undefined;
       bubbleHandler?.(event);
     }
   }
 
-  private createEvent(nativeEvent: Event): NanoEvent<Event, unknown> | null {
+  private createEvent(nativeEvent: Event): NanoEvent | null {
     switch (nativeEvent.type) {
       case 'focusin':
       case 'focusout':
@@ -184,7 +184,7 @@ export class NanoEventDispatcher {
     }
   }
 
-  private isBubblingEvent(event: NanoEvent<Event, unknown>): boolean {
+  private isBubblingEvent(event: NanoEvent): boolean {
     return !nonBubblingEvents.includes(event.type);
   }
 }

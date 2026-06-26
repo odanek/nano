@@ -1,6 +1,9 @@
 import { NanoEventType, type NanoEventTypeValue } from './type';
 
-export class NanoEvent<E extends Event, T> {
+export class NanoEvent<
+  T extends EventTarget = EventTarget,
+  E extends Event = Event,
+> {
   public readonly nativeEvent: E;
   public readonly type: NanoEventTypeValue;
   public readonly target: T;

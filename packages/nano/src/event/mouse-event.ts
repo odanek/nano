@@ -1,7 +1,10 @@
 import { type NanoModifierKey } from './type';
 import { NanoUiEvent } from './ui-event';
 
-export class NanoMouseEvent<E extends MouseEvent, T> extends NanoUiEvent<E, T> {
+export class NanoMouseEvent<
+  T extends EventTarget,
+  E extends MouseEvent = MouseEvent,
+> extends NanoUiEvent<T, E> {
   public readonly altKey: boolean;
   public readonly button: number;
   public readonly buttons: number;

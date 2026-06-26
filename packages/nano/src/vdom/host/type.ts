@@ -6,6 +6,7 @@ import {
   type NanoKeyProps,
   type NanoRefProps,
 } from '../type';
+import { NanoEvent } from '../../event/event';
 import { NanoMouseEvent } from '../../event/mouse-event';
 import { NanoWheelEvent } from '../../event/wheel-event';
 import { NanoFocusEvent } from '../../event/focus-event';
@@ -13,7 +14,6 @@ import { NanoClipboardEvent } from '../../event/clipboard-event';
 import { NanoKeyboardEvent } from '../../event/keyboard-event';
 import { NanoInputEvent } from '../../event/input-event';
 import { NanoTouchEvent } from '../../event/touch-event';
-import { NanoGenericEvent } from '../../event/generic-event';
 
 // Largely taken from https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/react/index.d.ts
 
@@ -26,14 +26,14 @@ export type NanoHostComponentHtmlProps<
   E extends HTMLElement,
 > = NanoRefProps & NanoKeyProps & P;
 
-export type NanoHostComponentSvgProps<T> = NanoRefProps &
+export type NanoHostComponentSvgProps<T extends EventTarget> = NanoRefProps &
   NanoKeyProps &
   NanoSvgProps<T>;
 
 export type NanoDomClass = string | string[];
 export type NanoDomStyle = CSSProperties<string | number>;
 
-export type NanoDomCaptureEventProps<T> = {
+export type NanoDomCaptureEventProps<T extends EventTarget> = {
   // Pointer
   onCaptureAuxClick?: NanoEventHandler<NanoPointerEvent<T>> | undefined;
   onCapturePointerCancel?: NanoEventHandler<NanoPointerEvent<T>> | undefined;
@@ -47,9 +47,7 @@ export type NanoDomCaptureEventProps<T> = {
   onCaptureClick?: NanoEventHandler<NanoPointerEvent<T>> | undefined;
   onCaptureContextMenu?: NanoEventHandler<NanoPointerEvent<T>> | undefined;
   // Mouse
-  onCaptureDblClick?:
-    | NanoEventHandler<NanoMouseEvent<MouseEvent, T>>
-    | undefined;
+  onCaptureDblClick?: NanoEventHandler<NanoMouseEvent<T>> | undefined;
   // Wheel
   onCaptureWheel?: NanoEventHandler<NanoWheelEvent<T>> | undefined;
   // Focus
@@ -67,9 +65,9 @@ export type NanoDomCaptureEventProps<T> = {
   onCaptureInput?: NanoEventHandler<NanoInputEvent<T>> | undefined;
   onCaptureBeforeInput?: NanoEventHandler<NanoInputEvent<T>> | undefined;
   // Generic
-  onCaptureChange?: NanoEventHandler<NanoGenericEvent<T>> | undefined;
-  onCaptureSelect?: NanoEventHandler<NanoGenericEvent<T>> | undefined;
-  onCaptureScroll?: NanoEventHandler<NanoGenericEvent<T>> | undefined;
+  onCaptureChange?: NanoEventHandler<NanoEvent<T>> | undefined;
+  onCaptureSelect?: NanoEventHandler<NanoEvent<T>> | undefined;
+  onCaptureScroll?: NanoEventHandler<NanoEvent<T>> | undefined;
   // Touch
   onCaptureTouchCancel?: NanoEventHandler<NanoTouchEvent<T>> | undefined;
   onCaptureTouchStart?: NanoEventHandler<NanoTouchEvent<T>> | undefined;
@@ -78,7 +76,7 @@ export type NanoDomCaptureEventProps<T> = {
   // TODO Add missing events
 };
 
-export type NanoDomBubbleEventProps<T> = {
+export type NanoDomBubbleEventProps<T extends EventTarget> = {
   // Pointer
   onAuxClick?: NanoEventHandler<NanoPointerEvent<T>> | undefined;
   onPointerCancel?: NanoEventHandler<NanoPointerEvent<T>> | undefined;
@@ -92,7 +90,7 @@ export type NanoDomBubbleEventProps<T> = {
   onClick?: NanoEventHandler<NanoPointerEvent<T>> | undefined;
   onContextMenu?: NanoEventHandler<NanoPointerEvent<T>> | undefined;
   // Mouse
-  onDblClick?: NanoEventHandler<NanoMouseEvent<MouseEvent, T>> | undefined;
+  onDblClick?: NanoEventHandler<NanoMouseEvent<T>> | undefined;
   // Wheel
   onWheel?: NanoEventHandler<NanoWheelEvent<T>> | undefined;
   // Focus
@@ -110,9 +108,9 @@ export type NanoDomBubbleEventProps<T> = {
   onInput?: NanoEventHandler<NanoInputEvent<T>> | undefined;
   onBeforeInput?: NanoEventHandler<NanoInputEvent<T>> | undefined;
   // Generic
-  onChange?: NanoEventHandler<NanoGenericEvent<T>> | undefined;
-  onSelect?: NanoEventHandler<NanoGenericEvent<T>> | undefined;
-  onScroll?: NanoEventHandler<NanoGenericEvent<T>> | undefined;
+  onChange?: NanoEventHandler<NanoEvent<T>> | undefined;
+  onSelect?: NanoEventHandler<NanoEvent<T>> | undefined;
+  onScroll?: NanoEventHandler<NanoEvent<T>> | undefined;
   // Touch
   onTouchCancel?: NanoEventHandler<NanoTouchEvent<T>> | undefined;
   onTouchStart?: NanoEventHandler<NanoTouchEvent<T>> | undefined;
@@ -120,10 +118,12 @@ export type NanoDomBubbleEventProps<T> = {
   onTouchEnd?: NanoEventHandler<NanoTouchEvent<T>> | undefined;
   // TODO Add missing events
 };
-export type NanoDomEventProps<T> = NanoDomCaptureEventProps<T> &
-  NanoDomBubbleEventProps<T>;
+export type NanoDomEventProps<T extends EventTarget> =
+  NanoDomCaptureEventProps<T> & NanoDomBubbleEventProps<T>;
 
-export interface NanoDomProps<T> extends NanoDomEventProps<T> {
+export interface NanoDomProps<
+  T extends EventTarget,
+> extends NanoDomEventProps<T> {
   children?: NanoChildren;
 }
 
@@ -296,7 +296,8 @@ export type NanoAriaRole =
   | 'treegrid'
   | 'treeitem';
 
-export interface NanoHtmlProps<T> extends NanoAriaProps, NanoDomProps<T> {
+export interface NanoHtmlProps<T extends EventTarget>
+  extends NanoAriaProps, NanoDomProps<T> {
   // Standard HTML Attributes
   accessKey?: string | undefined;
   autoCapitalize?:
@@ -398,7 +399,9 @@ type HTMLAttributeAnchorTarget =
   | '_top'
   | (string & {});
 
-export interface NanoHtmlAnchorProps<T> extends NanoHtmlProps<T> {
+export interface NanoHtmlAnchorProps<
+  T extends EventTarget,
+> extends NanoHtmlProps<T> {
   download?: unknown;
   href?: string | undefined;
   hrefLang?: string | undefined;
@@ -409,7 +412,7 @@ export interface NanoHtmlAnchorProps<T> extends NanoHtmlProps<T> {
   referrerPolicy?: HTMLAttributeReferrerPolicy | undefined;
 }
 
-interface NanoHtmlAreaProps<T> extends NanoHtmlProps<T> {
+interface NanoHtmlAreaProps<T extends EventTarget> extends NanoHtmlProps<T> {
   alt?: string | undefined;
   coords?: string | undefined;
   download?: unknown;
@@ -422,18 +425,22 @@ interface NanoHtmlAreaProps<T> extends NanoHtmlProps<T> {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-interface NanoHtmlAudioProps<T> extends NanoHtmlMediaProps<T> {}
+interface NanoHtmlAudioProps<
+  T extends EventTarget,
+> extends NanoHtmlMediaProps<T> {}
 
-interface NanoHtmlBaseProps<T> extends NanoHtmlProps<T> {
+interface NanoHtmlBaseProps<T extends EventTarget> extends NanoHtmlProps<T> {
   href?: string | undefined;
   target?: string | undefined;
 }
 
-interface NanoHtmlBlockquoteProps<T> extends NanoHtmlProps<T> {
+interface NanoHtmlBlockquoteProps<
+  T extends EventTarget,
+> extends NanoHtmlProps<T> {
   cite?: string | undefined;
 }
 
-interface NanoHtmlButtonProps<T> extends NanoHtmlProps<T> {
+interface NanoHtmlButtonProps<T extends EventTarget> extends NanoHtmlProps<T> {
   disabled?: boolean | undefined;
   form?: string | undefined;
   formAction?: string | undefined;
@@ -446,58 +453,62 @@ interface NanoHtmlButtonProps<T> extends NanoHtmlProps<T> {
   value?: string | readonly string[] | number | undefined;
 }
 
-interface NanoHtmlCanvasProps<T> extends NanoHtmlProps<T> {
+interface NanoHtmlCanvasProps<T extends EventTarget> extends NanoHtmlProps<T> {
   height?: number | string | undefined;
   width?: number | string | undefined;
 }
 
-interface NanoHtmlColProps<T> extends NanoHtmlProps<T> {
+interface NanoHtmlColProps<T extends EventTarget> extends NanoHtmlProps<T> {
   span?: number | undefined;
   width?: number | string | undefined;
 }
 
-interface NanoHtmlColgroupProps<T> extends NanoHtmlProps<T> {
+interface NanoHtmlColgroupProps<
+  T extends EventTarget,
+> extends NanoHtmlProps<T> {
   span?: number | undefined;
 }
 
-interface NanoHtmlDataProps<T> extends NanoHtmlProps<T> {
+interface NanoHtmlDataProps<T extends EventTarget> extends NanoHtmlProps<T> {
   value?: string | readonly string[] | number | undefined;
 }
 
-interface NanoHtmlDelProps<T> extends NanoHtmlProps<T> {
+interface NanoHtmlDelProps<T extends EventTarget> extends NanoHtmlProps<T> {
   cite?: string | undefined;
   dateTime?: string | undefined;
 }
 
-interface NanoHtmlDetailsProps<T> extends NanoHtmlProps<T> {
+interface NanoHtmlDetailsProps<T extends EventTarget> extends NanoHtmlProps<T> {
   open?: boolean | undefined;
-  onToggle?: NanoEventHandler<NanoGenericEvent<T>> | undefined;
-  onCaptureToggle?: NanoEventHandler<NanoGenericEvent<T>> | undefined;
+  onToggle?: NanoEventHandler<NanoEvent<T>> | undefined;
+  onCaptureToggle?: NanoEventHandler<NanoEvent<T>> | undefined;
   name?: string | undefined;
 }
 
-interface NanoHtmlDialogProps<T> extends NanoHtmlProps<T> {
-  onCancel?: NanoEventHandler<NanoGenericEvent<T>> | undefined;
-  onCaptureCancel?: NanoEventHandler<NanoGenericEvent<T>> | undefined;
-  onClose?: NanoEventHandler<NanoGenericEvent<T>> | undefined;
-  onCaptureClose?: NanoEventHandler<NanoGenericEvent<T>> | undefined;
+interface NanoHtmlDialogProps<T extends EventTarget> extends NanoHtmlProps<T> {
+  onCancel?: NanoEventHandler<NanoEvent<T>> | undefined;
+  onCaptureCancel?: NanoEventHandler<NanoEvent<T>> | undefined;
+  onClose?: NanoEventHandler<NanoEvent<T>> | undefined;
+  onCaptureClose?: NanoEventHandler<NanoEvent<T>> | undefined;
   open?: boolean | undefined;
 }
 
-interface NanoHtmlEmbedProps<T> extends NanoHtmlProps<T> {
+interface NanoHtmlEmbedProps<T extends EventTarget> extends NanoHtmlProps<T> {
   height?: number | string | undefined;
   src?: string | undefined;
   type?: string | undefined;
   width?: number | string | undefined;
 }
 
-interface NanoHtmlFieldsetProps<T> extends NanoHtmlProps<T> {
+interface NanoHtmlFieldsetProps<
+  T extends EventTarget,
+> extends NanoHtmlProps<T> {
   disabled?: boolean | undefined;
   form?: string | undefined;
   name?: string | undefined;
 }
 
-interface NanoHtmlFormProps<T> extends NanoHtmlProps<T> {
+interface NanoHtmlFormProps<T extends EventTarget> extends NanoHtmlProps<T> {
   acceptCharset?: string | undefined;
   action?: string | undefined;
   autoComplete?: string | undefined;
@@ -508,11 +519,11 @@ interface NanoHtmlFormProps<T> extends NanoHtmlProps<T> {
   target?: string | undefined;
 }
 
-interface NanoHtmlHtmlProps<T> extends NanoHtmlProps<T> {
+interface NanoHtmlHtmlProps<T extends EventTarget> extends NanoHtmlProps<T> {
   manifest?: string | undefined;
 }
 
-interface NanoHtmlIframeProps<T> extends NanoHtmlProps<T> {
+interface NanoHtmlIframeProps<T extends EventTarget> extends NanoHtmlProps<T> {
   allow?: string | undefined;
   allowFullScreen?: boolean | undefined;
   allowTransparency?: boolean | undefined;
@@ -535,7 +546,7 @@ interface NanoHtmlIframeProps<T> extends NanoHtmlProps<T> {
   width?: number | string | undefined;
 }
 
-interface NanoHtmlImgProps<T> extends NanoHtmlProps<T> {
+interface NanoHtmlImgProps<T extends EventTarget> extends NanoHtmlProps<T> {
   alt?: string | undefined;
   crossOrigin?: CrossOrigin;
   decoding?: 'async' | 'auto' | 'sync' | undefined;
@@ -637,7 +648,7 @@ type AutoFill =
   | `${OptionalPrefixToken<AutoFillSection>}${OptionalPrefixToken<AutoFillAddressKind>}${AutoFillField}${OptionalPostfixToken<AutoFillCredentialField>}`;
 type NanoHtmlInputAutoCompleteAttribute = AutoFill | (string & {});
 
-interface NanoHtmlInputProps<T> extends NanoHtmlProps<T> {
+interface NanoHtmlInputProps<T extends EventTarget> extends NanoHtmlProps<T> {
   accept?: string | undefined;
   alt?: string | undefined;
   autoComplete?: NanoHtmlInputAutoCompleteAttribute | undefined;
@@ -668,16 +679,16 @@ interface NanoHtmlInputProps<T> extends NanoHtmlProps<T> {
   type?: NanoHtmlInputTypeAttribute | undefined;
   value?: string | readonly string[] | number | undefined;
   width?: number | string | undefined;
-  onChange?: NanoEventHandler<NanoGenericEvent<T>> | undefined;
-  onCaptureChange?: NanoEventHandler<NanoGenericEvent<T>> | undefined;
+  onChange?: NanoEventHandler<NanoEvent<T>> | undefined;
+  onCaptureChange?: NanoEventHandler<NanoEvent<T>> | undefined;
 }
 
-interface NanoHtmlInsProps<T> extends NanoHtmlProps<T> {
+interface NanoHtmlInsProps<T extends EventTarget> extends NanoHtmlProps<T> {
   cite?: string | undefined;
   dateTime?: string | undefined;
 }
 
-interface NanoHtmlKeygenProps<T> extends NanoHtmlProps<T> {
+interface NanoHtmlKeygenProps<T extends EventTarget> extends NanoHtmlProps<T> {
   challenge?: string | undefined;
   disabled?: boolean | undefined;
   form?: string | undefined;
@@ -686,16 +697,16 @@ interface NanoHtmlKeygenProps<T> extends NanoHtmlProps<T> {
   name?: string | undefined;
 }
 
-interface NanoHtmlLabelProps<T> extends NanoHtmlProps<T> {
+interface NanoHtmlLabelProps<T extends EventTarget> extends NanoHtmlProps<T> {
   form?: string | undefined;
   htmlFor?: string | undefined;
 }
 
-interface NanoHtmlLiProps<T> extends NanoHtmlProps<T> {
+interface NanoHtmlLiProps<T extends EventTarget> extends NanoHtmlProps<T> {
   value?: string | readonly string[] | number | undefined;
 }
 
-interface NanoHtmlLinkProps<T> extends NanoHtmlProps<T> {
+interface NanoHtmlLinkProps<T extends EventTarget> extends NanoHtmlProps<T> {
   as?: string | undefined;
   crossOrigin?: CrossOrigin;
   fetchPriority?: 'high' | 'low' | 'auto';
@@ -711,15 +722,15 @@ interface NanoHtmlLinkProps<T> extends NanoHtmlProps<T> {
   charSet?: string | undefined;
 }
 
-interface NanoHtmlMapProps<T> extends NanoHtmlProps<T> {
+interface NanoHtmlMapProps<T extends EventTarget> extends NanoHtmlProps<T> {
   name?: string | undefined;
 }
 
-interface NanoHtmlMenuProps<T> extends NanoHtmlProps<T> {
+interface NanoHtmlMenuProps<T extends EventTarget> extends NanoHtmlProps<T> {
   type?: string | undefined;
 }
 
-interface NanoHtmlMediaProps<T> extends NanoHtmlProps<T> {
+interface NanoHtmlMediaProps<T extends EventTarget> extends NanoHtmlProps<T> {
   autoPlay?: boolean | undefined;
   controls?: boolean | undefined;
   controlsList?: string | undefined;
@@ -732,7 +743,7 @@ interface NanoHtmlMediaProps<T> extends NanoHtmlProps<T> {
   src?: string | undefined;
 }
 
-interface NanoHtmlMetaProps<T> extends NanoHtmlProps<T> {
+interface NanoHtmlMetaProps<T extends EventTarget> extends NanoHtmlProps<T> {
   charSet?: string | undefined;
   content?: string | undefined;
   httpEquiv?: string | undefined;
@@ -740,7 +751,7 @@ interface NanoHtmlMetaProps<T> extends NanoHtmlProps<T> {
   name?: string | undefined;
 }
 
-interface NanoHtmlMeterProps<T> extends NanoHtmlProps<T> {
+interface NanoHtmlMeterProps<T extends EventTarget> extends NanoHtmlProps<T> {
   form?: string | undefined;
   high?: number | undefined;
   low?: number | undefined;
@@ -750,7 +761,7 @@ interface NanoHtmlMeterProps<T> extends NanoHtmlProps<T> {
   value?: string | readonly string[] | number | undefined;
 }
 
-interface NanoHtmlObjectProps<T> extends NanoHtmlProps<T> {
+interface NanoHtmlObjectProps<T extends EventTarget> extends NanoHtmlProps<T> {
   classID?: string | undefined;
   data?: string | undefined;
   form?: string | undefined;
@@ -762,49 +773,53 @@ interface NanoHtmlObjectProps<T> extends NanoHtmlProps<T> {
   wmode?: string | undefined;
 }
 
-interface NanoHtmlOlProps<T> extends NanoHtmlProps<T> {
+interface NanoHtmlOlProps<T extends EventTarget> extends NanoHtmlProps<T> {
   reversed?: boolean | undefined;
   start?: number | undefined;
   type?: '1' | 'a' | 'A' | 'i' | 'I' | undefined;
 }
 
-interface NanoHtmlOptgroupProps<T> extends NanoHtmlProps<T> {
+interface NanoHtmlOptgroupProps<
+  T extends EventTarget,
+> extends NanoHtmlProps<T> {
   disabled?: boolean | undefined;
   label?: string | undefined;
 }
 
-interface NanoHtmlOptionProps<T> extends NanoHtmlProps<T> {
+interface NanoHtmlOptionProps<T extends EventTarget> extends NanoHtmlProps<T> {
   disabled?: boolean | undefined;
   label?: string | undefined;
   selected?: boolean | undefined;
   value?: string | readonly string[] | number | undefined;
 }
 
-interface NanoHtmlOutputProps<T> extends NanoHtmlProps<T> {
+interface NanoHtmlOutputProps<T extends EventTarget> extends NanoHtmlProps<T> {
   form?: string | undefined;
   htmlFor?: string | undefined;
   name?: string | undefined;
 }
 
-interface NanoHtmlParamProps<T> extends NanoHtmlProps<T> {
+interface NanoHtmlParamProps<T extends EventTarget> extends NanoHtmlProps<T> {
   name?: string | undefined;
   value?: string | readonly string[] | number | undefined;
 }
 
-interface NanoHtmlProgressProps<T> extends NanoHtmlProps<T> {
+interface NanoHtmlProgressProps<
+  T extends EventTarget,
+> extends NanoHtmlProps<T> {
   max?: number | string | undefined;
   value?: string | readonly string[] | number | undefined;
 }
 
-interface NanoHtmlQuoteProps<T> extends NanoHtmlProps<T> {
+interface NanoHtmlQuoteProps<T extends EventTarget> extends NanoHtmlProps<T> {
   cite?: string | undefined;
 }
 
-interface NanoHtmlSlotProps<T> extends NanoHtmlProps<T> {
+interface NanoHtmlSlotProps<T extends EventTarget> extends NanoHtmlProps<T> {
   name?: string | undefined;
 }
 
-interface NanoHtmlScriptProps<T> extends NanoHtmlProps<T> {
+interface NanoHtmlScriptProps<T extends EventTarget> extends NanoHtmlProps<T> {
   async?: boolean | undefined;
   /** @deprecated */
   charSet?: string | undefined;
@@ -817,7 +832,7 @@ interface NanoHtmlScriptProps<T> extends NanoHtmlProps<T> {
   type?: string | undefined;
 }
 
-interface NanoHtmlSelectProps<T> extends NanoHtmlProps<T> {
+interface NanoHtmlSelectProps<T extends EventTarget> extends NanoHtmlProps<T> {
   autoComplete?: string | undefined;
   disabled?: boolean | undefined;
   form?: string | undefined;
@@ -826,11 +841,11 @@ interface NanoHtmlSelectProps<T> extends NanoHtmlProps<T> {
   required?: boolean | undefined;
   size?: number | undefined;
   value?: string | readonly string[] | number | undefined;
-  onChange?: NanoEventHandler<NanoGenericEvent<T>> | undefined;
-  onCaptureChange?: NanoEventHandler<NanoGenericEvent<T>> | undefined;
+  onChange?: NanoEventHandler<NanoEvent<T>> | undefined;
+  onCaptureChange?: NanoEventHandler<NanoEvent<T>> | undefined;
 }
 
-interface NanoHtmlSourceProps<T> extends NanoHtmlProps<T> {
+interface NanoHtmlSourceProps<T extends EventTarget> extends NanoHtmlProps<T> {
   height?: number | string | undefined;
   media?: string | undefined;
   sizes?: string | undefined;
@@ -840,13 +855,13 @@ interface NanoHtmlSourceProps<T> extends NanoHtmlProps<T> {
   width?: number | string | undefined;
 }
 
-interface NanoHtmlStyleProps<T> extends NanoHtmlProps<T> {
+interface NanoHtmlStyleProps<T extends EventTarget> extends NanoHtmlProps<T> {
   media?: string | undefined;
   scoped?: boolean | undefined;
   type?: string | undefined;
 }
 
-interface NanoHtmlTableProps<T> extends NanoHtmlProps<T> {
+interface NanoHtmlTableProps<T extends EventTarget> extends NanoHtmlProps<T> {
   align?: 'left' | 'center' | 'right' | undefined;
   bgcolor?: string | undefined;
   border?: number | undefined;
@@ -858,7 +873,9 @@ interface NanoHtmlTableProps<T> extends NanoHtmlProps<T> {
   width?: number | string | undefined;
 }
 
-interface NanoHtmlTextareaProps<T> extends NanoHtmlProps<T> {
+interface NanoHtmlTextareaProps<
+  T extends EventTarget,
+> extends NanoHtmlProps<T> {
   autoComplete?: string | undefined;
   cols?: number | undefined;
   dirName?: string | undefined;
@@ -873,11 +890,11 @@ interface NanoHtmlTextareaProps<T> extends NanoHtmlProps<T> {
   rows?: number | undefined;
   value?: string | readonly string[] | number | undefined;
   wrap?: string | undefined;
-  onChange?: NanoEventHandler<NanoGenericEvent<T>> | undefined;
-  onCaptureChange?: NanoEventHandler<NanoGenericEvent<T>> | undefined;
+  onChange?: NanoEventHandler<NanoEvent<T>> | undefined;
+  onCaptureChange?: NanoEventHandler<NanoEvent<T>> | undefined;
 }
 
-interface NanoHtmlTdProps<T> extends NanoHtmlProps<T> {
+interface NanoHtmlTdProps<T extends EventTarget> extends NanoHtmlProps<T> {
   align?: 'left' | 'center' | 'right' | 'justify' | 'char' | undefined;
   colSpan?: number | undefined;
   headers?: string | undefined;
@@ -889,7 +906,7 @@ interface NanoHtmlTdProps<T> extends NanoHtmlProps<T> {
   valign?: 'top' | 'middle' | 'bottom' | 'baseline' | undefined;
 }
 
-interface NanoHtmlThProps<T> extends NanoHtmlProps<T> {
+interface NanoHtmlThProps<T extends EventTarget> extends NanoHtmlProps<T> {
   align?: 'left' | 'center' | 'right' | 'justify' | 'char' | undefined;
   colSpan?: number | undefined;
   headers?: string | undefined;
@@ -898,11 +915,11 @@ interface NanoHtmlThProps<T> extends NanoHtmlProps<T> {
   abbr?: string | undefined;
 }
 
-interface NanoHtmlTimeProps<T> extends NanoHtmlProps<T> {
+interface NanoHtmlTimeProps<T extends EventTarget> extends NanoHtmlProps<T> {
   dateTime?: string | undefined;
 }
 
-interface NanoHtmlTrackProps<T> extends NanoHtmlProps<T> {
+interface NanoHtmlTrackProps<T extends EventTarget> extends NanoHtmlProps<T> {
   default?: boolean | undefined;
   kind?: string | undefined;
   label?: string | undefined;
@@ -910,7 +927,7 @@ interface NanoHtmlTrackProps<T> extends NanoHtmlProps<T> {
   srcLang?: string | undefined;
 }
 
-interface NanoHtmlVideoProps<T> extends NanoHtmlProps<T> {
+interface NanoHtmlVideoProps<T extends EventTarget> extends NanoHtmlProps<T> {
   height?: number | string | undefined;
   playsInline?: boolean | undefined;
   poster?: string | undefined;
@@ -919,7 +936,7 @@ interface NanoHtmlVideoProps<T> extends NanoHtmlProps<T> {
   disableRemotePlayback?: boolean | undefined;
 }
 
-interface NanoHtmlWebViewProps<T> extends NanoHtmlProps<T> {
+interface NanoHtmlWebViewProps<T extends EventTarget> extends NanoHtmlProps<T> {
   allowFullScreen?: boolean | undefined;
   allowpopups?: boolean | undefined;
   autosize?: boolean | undefined;
@@ -1269,7 +1286,8 @@ export interface NanoDomElement {
   >;
 }
 
-export interface NanoSvgProps<T> extends NanoAriaProps, NanoDomProps<T> {
+export interface NanoSvgProps<T extends EventTarget>
+  extends NanoAriaProps, NanoDomProps<T> {
   // Attributes which also defined in HTMLAttributes
   // See comment in SVGDOMPropertyConfig.js
   class?: NanoDomClass | undefined;
