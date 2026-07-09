@@ -1,8 +1,7 @@
 import { NanoEvent } from './event';
-export class NanoFocusEvent<T extends EventTarget> extends NanoEvent<
-  T,
-  FocusEvent
-> {
+export class NanoFocusEvent<
+  T extends EventTarget = EventTarget,
+> extends NanoEvent<T, FocusEvent> {
   public readonly relatedTarget: EventTarget | null;
 
   constructor(event: FocusEvent) {

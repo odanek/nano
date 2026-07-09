@@ -1,8 +1,8 @@
 import { NanoEvent } from './event';
 
 export class NanoUiEvent<
-  T extends EventTarget,
-  E extends UIEvent,
+  T extends EventTarget = EventTarget,
+  E extends UIEvent = UIEvent,
 > extends NanoEvent<T, E> {
   public readonly detail: number;
   public readonly view: Window | null;

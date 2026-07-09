@@ -1,9 +1,8 @@
 import { NanoEvent } from './event';
 
-export class NanoClipboardEvent<T extends EventTarget> extends NanoEvent<
-  T,
-  ClipboardEvent
-> {
+export class NanoClipboardEvent<
+  T extends EventTarget = EventTarget,
+> extends NanoEvent<T, ClipboardEvent> {
   public readonly clipboardData: DataTransfer | null;
 
   constructor(event: ClipboardEvent) {

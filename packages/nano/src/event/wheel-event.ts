@@ -1,9 +1,8 @@
 import { NanoMouseEvent } from './mouse-event';
 
-export class NanoWheelEvent<T extends EventTarget> extends NanoMouseEvent<
-  T,
-  WheelEvent
-> {
+export class NanoWheelEvent<
+  T extends EventTarget = EventTarget,
+> extends NanoMouseEvent<T, WheelEvent> {
   public readonly deltaMode: number;
   public readonly deltaX: number;
   public readonly deltaY: number;

@@ -1,9 +1,8 @@
 import { NanoUiEvent } from './ui-event';
 
-export class NanoTouchEvent<T extends EventTarget> extends NanoUiEvent<
-  T,
-  TouchEvent
-> {
+export class NanoTouchEvent<
+  T extends EventTarget = EventTarget,
+> extends NanoUiEvent<T, TouchEvent> {
   public readonly altKey: boolean;
   public readonly changedTouches: TouchList;
   public readonly ctrlKey: boolean;

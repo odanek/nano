@@ -1,10 +1,9 @@
 import { NanoMouseEvent } from './mouse-event';
 import { type NanoPointerType } from './type';
 
-export class NanoPointerEvent<T extends EventTarget> extends NanoMouseEvent<
-  T,
-  PointerEvent
-> {
+export class NanoPointerEvent<
+  T extends EventTarget = EventTarget,
+> extends NanoMouseEvent<T, PointerEvent> {
   public readonly pointerId: number;
   public readonly pressure: number;
   public readonly tangentialPressure: number;
