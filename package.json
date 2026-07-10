@@ -19,14 +19,17 @@
     "eslint": "^10.5.0",
     "globals": "^17.7.0",
     "prettier": "^3.8.0",
+    "typescript": "^6.0.0",
     "typescript-eslint": "^8.62.0",
-    "typescript": "^6.0.0"
+    "vitest": "^4.1.10"
   },
   "scripts": {
     "lint": "eslint . && prettier --check .",
     "lint:fix": "eslint --fix . && prettier --write --list-different .",
     "clean": "npm run clean --w packages/nano",
     "build": "npm run build --w packages/nano",
-    "typecheck": "npm run typecheck --w packages/nano"
+    "typecheck": "npm run typecheck --w packages/nano",
+    "test": "vitest run",
+    "test:watch": "vitest"
   }
 }

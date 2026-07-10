@@ -39,6 +39,6 @@
   "scripts": {
     "clean": "tsc --build --clean",
     "build": "tsc",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit && tsc --project tsconfig.test.json"
   }
 }

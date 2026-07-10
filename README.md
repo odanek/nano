@@ -39,6 +39,7 @@ components, reducers, events, and scoped styles working together.
 ```sh
 npm run typecheck  # check the library
 npm run build      # build @nano-ui/nano
+npm test           # run the test suite
 npm run lint       # lint and verify formatting
 ```
 
