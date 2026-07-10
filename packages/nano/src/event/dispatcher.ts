@@ -197,6 +197,7 @@ const nativeEventType = [
   'pointerover',
   'pointerout',
   'pointermove',
+  'auxclick',
   'click',
   'dblclick',
   'wheel',
@@ -214,6 +215,10 @@ const nativeEventType = [
   'copy',
   'paste',
   'select',
+  'touchcancel',
+  'touchstart',
+  'touchmove',
+  'touchend',
 ];
 
 const nonBubblingEvents = [

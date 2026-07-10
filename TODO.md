@@ -1,2 +1,4 @@
+- Add unit tests
+- Address the problems found by Sol
 - Vite plugin for css-in-js minification
 - Nano decorator overwrites class - cannot be used on elements that have some other class already

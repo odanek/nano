@@ -45,7 +45,7 @@ export class NanoEvent<
 
 function getType(type: string): NanoEventTypeValue {
   switch (type) {
-    case 'auxclic':
+    case 'auxclick':
       return NanoEventType.AuxClick;
     case 'cut':
       return NanoEventType.Cut;
