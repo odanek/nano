@@ -1,1 +1,2 @@
-- ESBuild plugin for css-in-js minification
+- Vite plugin for css-in-js minification
+- Nano decorator overwrites class - cannot be used on elements that have some other class already

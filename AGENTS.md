@@ -11,7 +11,7 @@ provides JSX, a virtual DOM, hooks and CSS-in-JS utilities.
   - `src/style/`: CSS-in-JS utilities and stylesheet management.
   - `src/jsx/`: JSX factory and runtime exports.
 - `samples/todo/`: Vite-based integration sample.
-- `README.md`: short project overview. 
+- `README.md`: short project overview.
 - `TODO.md`: planned work.
 
 ## Commands
