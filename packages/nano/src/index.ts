@@ -11,15 +11,15 @@ import { NanoRef } from './vdom/ref';
 import { NanoFragment } from './vdom/fragment';
 import { NanoPortal } from './vdom/portal';
 import { NanoEventFilter } from './event/event-filter';
-import { NanoDecorator } from './vdom/host/decorator';
+import { NanoDecorator } from './dom/decorator';
 import { createContext, type NanoContext } from './vdom/context';
 import {
   type NanoDomClass,
-  type NanoDomEventProps,
+  type DomEventProps,
   type NanoDomStyle,
-  type NanoHtmlProps,
-} from './vdom/host/type';
-import { classNames } from './vdom/host/component';
+} from './dom';
+import { type HtmlProps } from './jsx/intrinsic/html';
+import { classNames } from './dom/element';
 
 import { NanoEvent } from './event/event';
 import { NanoClipboardEvent } from './event/clipboard-event';
@@ -73,8 +73,8 @@ export {
   createContext,
   type NanoDomClass,
   type NanoDomStyle,
-  type NanoHtmlProps,
-  type NanoDomEventProps,
+  type HtmlProps,
+  type DomEventProps,
   classNames,
   // Events
   NanoEvent,

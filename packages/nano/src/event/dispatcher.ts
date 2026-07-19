@@ -14,12 +14,12 @@ import {
   NanoEventType,
 } from './type';
 import { NanoMouseEvent } from './mouse-event';
-import { type NanoDomEventProps } from '../vdom/host/type';
+import { type DomEventProps } from '../dom/event';
 import { NanoTouchEvent } from './touch-event';
 import { capitalizeFirstLetter } from '../shared/string';
 import { NanoEventFilter } from './event-filter';
 
-type NanoEventTarget = NanoDomEventProps<EventTarget>;
+type NanoEventTarget = DomEventProps<EventTarget>;
 
 export class NanoEventDispatcher {
   private eventHandler: (event: Event) => void;

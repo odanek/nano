@@ -1,6 +1,6 @@
 import { markInstanceFiber, NanoFiber } from '../fiber';
-import { createHostComponentInstance } from '../host/component';
-import { createHostTextInstance } from '../host/text';
+import { createHostComponentInstance } from '../../dom/element'; // TODO
+import { createHostTextInstance } from '../../dom/text'; // TODO
 import { type NanoFiberRootState } from '../fiber-root';
 import { type NanoChildren, type NanoChildrenProps } from '../type';
 import {

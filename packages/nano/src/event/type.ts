@@ -1,8 +1,8 @@
 import type { ValueOf } from '../shared/type';
 import {
-  type NanoDomBubbleEventProps,
-  type NanoDomCaptureEventProps,
-} from '../vdom/host/type';
+  type DomBubbleEventProps,
+  type DomCaptureEventProps,
+} from '../dom/event';
 
 export const NanoEventType = {
   // Pointer events
@@ -50,10 +50,9 @@ export type NanoEventTypeValue = ValueOf<typeof NanoEventType>;
 export type NanoEventHandler<E> = (event: E) => void;
 
 export type NanoCaptureEventHandlerName =
-  keyof NanoDomCaptureEventProps<EventTarget>;
+  keyof DomCaptureEventProps<EventTarget>;
 
-export type NanoBubbleEventHandlerName =
-  keyof NanoDomBubbleEventProps<EventTarget>;
+export type NanoBubbleEventHandlerName = keyof DomBubbleEventProps<EventTarget>;
 
 export type NanoModifierKey =
   | 'Alt'

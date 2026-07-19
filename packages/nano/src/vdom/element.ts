@@ -1,10 +1,10 @@
 import { type NanoComponent } from './type';
 import { NanoRef } from './ref';
-import { type NanoHostTextProps } from './host/text';
+import { type NanoHostTextProps } from '../dom/text'; // TODO
 import { type NanoFragmentProps } from './fragment';
 import { type NanoContext, type NanoContextProps } from './context';
 import { type NanoPortalProps } from './portal';
-import { type NanoDecoratorProps } from './host/decorator';
+import { type NanoDecoratorProps } from '../dom/decorator';
 import type { ValueOf } from '../shared/type';
 
 export const NanoElementTag = {

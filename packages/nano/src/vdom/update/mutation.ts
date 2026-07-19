@@ -4,7 +4,7 @@ import {
   type NanoHostTextStateNode,
   resetHostTextContent,
   updateHostTextInstance,
-} from '../host/text';
+} from '../../dom/text'; // TODO
 import {
   getDecoratorRoot,
   getHostParentFiber,
@@ -17,13 +17,13 @@ import {
   type NanoHostComponentStateNode,
   setInitialProperties,
   updateHostComponentInstance,
-} from '../host/component';
+} from '../../dom/element'; // TODO
 import { runStyleEffects } from '../function-component';
 import { NanoEffectTag } from '../effect';
 import { NanoElementTag } from '../element';
 import { type PlainObject } from '../../shared/type';
 import { isFlag } from '../../shared/flags';
-import { type NanoDecoratorProps } from '../host/decorator';
+import { type NanoDecoratorProps } from '../../dom/decorator';
 
 export function commitResetTextContent(fiber: NanoFiber): void {
   resetHostTextContent(fiber.stateNode as NanoHostTextStateNode);

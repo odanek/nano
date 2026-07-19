@@ -6,8 +6,8 @@ import {
 } from './element';
 import { NanoRef } from './ref';
 import { NanoFiberRoot } from './fiber-root';
-import { type NanoHostComponentStateNode } from './host/component';
-import { type NanoHostTextStateNode } from './host/text';
+import { type NanoHostComponentStateNode } from '../dom/element'; // TODO
+import { type NanoHostTextStateNode } from '../dom/text'; // TODO
 import { type NanoContextKey } from './context';
 import { NanoEffectTag, type NanoEffectTagValue } from './effect';
 import { emptyObject } from '../shared/object';

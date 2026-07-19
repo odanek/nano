@@ -5,7 +5,7 @@ import {
   type NanoKeyProps,
   type NanoNode,
 } from '../vdom/type';
-import { type NanoIntrinsicElements } from './intrinsic-elements';
+import { type IntrinsicElements as NanoIntrinsicElements } from './intrinsic/index';
 
 export { jsx, jsxs, jsxDEV } from './factory';
 
