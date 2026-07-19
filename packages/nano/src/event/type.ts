@@ -1,4 +1,4 @@
-import type { ValueOf } from '../util';
+import type { ValueOf } from '../shared/type';
 import {
   type NanoDomBubbleEventProps,
   type NanoDomCaptureEventProps,

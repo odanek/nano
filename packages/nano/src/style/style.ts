@@ -1,4 +1,4 @@
-import { isFunction } from '../util';
+import { isFunction } from '../shared/predicate';
 
 export type NanoStyleId = string;
 export type NanoStyleBundle = {

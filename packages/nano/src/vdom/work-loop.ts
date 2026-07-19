@@ -21,7 +21,7 @@ import {
   runPassiveEffects,
   schedulePassiveEffects,
 } from './effect';
-import { isFlag } from '../util';
+import { isFlag } from '../shared/flags';
 
 export function performSyncWorkOnRoot(root: NanoFiberRoot): void {
   // console.time('Virtual dom update');

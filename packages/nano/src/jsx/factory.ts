@@ -4,7 +4,8 @@ import {
   type NanoElementKey,
   type NanoElementType,
 } from '../vdom/element';
-import { emptyObject, isFunction, isString } from '../util';
+import { isFunction, isString } from '../shared/predicate';
+import { emptyObject } from '../shared/object';
 
 export function jsx(
   type: NanoElementType,
@@ -25,6 +26,7 @@ export const jsxs: (
   props: unknown,
   key?: NanoElementKey,
 ) => NanoElement = jsx;
+
 export const jsxDEV: (
   type: NanoElementType,
   props: unknown,

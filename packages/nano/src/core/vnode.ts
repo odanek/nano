@@ -89,5 +89,7 @@ export interface DecoratorVNode<D = unknown> {
 }
 
 export type FragmentProps = PropsWithChildren;
-export type PortalProps<Container = unknown> = PropsWithChildren<{ target: Container }>;
+export type PortalProps<Container = unknown> = PropsWithChildren<{
+  target: Container;
+}>;
 export type DecoratorProps<D = unknown> = PropsWithChildren<D>;

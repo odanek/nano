@@ -1,6 +1,8 @@
 import { type NanoEffectHookPayload, NanoHook, NanoHookTag } from './hook';
 import { NanoFiber } from './fiber';
-import { isFlag, isFunction, isValue, type ValueOf } from '../util';
+import { isFunction, isValue } from '../shared/predicate';
+import { type ValueOf } from '../shared/type';
+import { isFlag } from '../shared/flags';
 
 export const NanoEffectTag = {
   None: 0x00,

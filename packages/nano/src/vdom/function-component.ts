@@ -26,13 +26,9 @@ import { NanoRef } from './ref';
 import { findFiberRoot } from './traversal';
 import { type NanoChildren, type NanoComponent } from './type';
 import { NanoEffectFlag, NanoEffectTag, pushPassiveEffect } from './effect';
-import {
-  type AnyFunction,
-  arrayEquals,
-  objectEquals,
-  objectHasOwnProperty,
-  type PlainObject,
-} from '../util';
+import { objectEquals, objectHasOwnProperty } from '../shared/object';
+import { arrayEquals } from '../shared/array';
+import type { AnyFunction, PlainObject } from '../shared/type';
 import type { NanoEventDispatcher } from '../event/dispatcher';
 
 type NanoFunctionComponentProps = PlainObject;

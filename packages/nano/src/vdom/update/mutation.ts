@@ -21,7 +21,8 @@ import {
 import { runStyleEffects } from '../function-component';
 import { NanoEffectTag } from '../effect';
 import { NanoElementTag } from '../element';
-import { isFlag, type PlainObject } from '../../util';
+import { type PlainObject } from '../../shared/type';
+import { isFlag } from '../../shared/flags';
 import { type NanoDecoratorProps } from '../host/decorator';
 
 export function commitResetTextContent(fiber: NanoFiber): void {

@@ -20,7 +20,7 @@ import {
 } from '../function-component';
 import { NanoElementTag } from '../element';
 import { NanoEffectTag } from '../effect';
-import { isNumber, isString } from '../../util';
+import { isNumber, isString } from '../../shared/predicate';
 
 export function beginWork(
   current: NanoFiber | null,

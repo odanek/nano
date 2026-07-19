@@ -1,4 +1,4 @@
-import type { Renderable } from "../core/renderable";
+import type { Renderable } from '../core/renderable';
 
 export interface Root {
   render(node: Renderable): void;

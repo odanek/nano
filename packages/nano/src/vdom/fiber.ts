@@ -10,7 +10,8 @@ import { type NanoHostComponentStateNode } from './host/component';
 import { type NanoHostTextStateNode } from './host/text';
 import { type NanoContextKey } from './context';
 import { NanoEffectTag, type NanoEffectTagValue } from './effect';
-import { emptyArray, emptyObject } from '../util';
+import { emptyObject } from '../shared/object';
+import { emptyArray } from '../shared/array';
 
 const fiberKey = Symbol('nano-fiber-key');
 export class NanoFiber<P = unknown> {

@@ -2,7 +2,7 @@ import { NanoFiber } from './fiber';
 import { NanoFiberRoot } from './fiber-root';
 import { NanoElementTag } from './element';
 import { NanoEffectTag } from './effect';
-import { isFlag } from '../util';
+import { isFlag } from '../shared/flags';
 
 type TraversalCallback = (fiber: NanoFiber) => void;
 

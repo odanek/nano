@@ -7,7 +7,13 @@ import {
 import { type NanoNode } from '../type';
 import { type NanoFragmentProps } from '../fragment';
 import { NanoEffectTag } from '../effect';
-import { isArray, isIterable, isNumber, isString, isValue } from '../../util';
+import {
+  isArray,
+  isIterable,
+  isNumber,
+  isString,
+  isValue,
+} from '../../shared/predicate';
 
 type NanoReconciler = (
   returnFiber: NanoFiber,

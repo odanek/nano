@@ -2,7 +2,7 @@ import { type NanoContext } from './context';
 import { type NanoStyleBundle, type NanoStyleSheet } from '../style/style';
 import { NanoRef } from './ref';
 import { NanoFiber } from './fiber';
-import { type AnyFunction, type ValueOf } from '../util';
+import { type AnyFunction, type ValueOf } from '../shared/type';
 import type { NanoEventDispatcher } from '../event/dispatcher';
 
 export class NanoHook<P = unknown> {

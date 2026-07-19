@@ -1,4 +1,5 @@
-import { emptyArray, isIterable, isValue } from '../util';
+import { isIterable, isValue } from '../shared/predicate';
+import { emptyArray } from '../shared/array';
 import { NanoElement } from './element';
 import {
   type NanoChildrenProps,

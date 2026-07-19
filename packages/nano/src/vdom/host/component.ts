@@ -2,7 +2,8 @@ import { setHostTextContent } from './text';
 import { NanoFiber } from '../fiber';
 import { type NanoDomClass, type NanoDomStyle } from './type';
 import { type NanoChildrenProps } from '../type';
-import { isNumber, isString, type PlainObject } from '../../util';
+import { isNumber, isString } from '../../shared/predicate';
+import { type PlainObject } from '../../shared/type';
 
 export type NanoHostComponentStateNode = HTMLElement | SVGElement;
 export type NanoHostComponentPropsDiff = Array<string | null>;

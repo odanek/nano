@@ -1,23 +1,23 @@
-import { getInstanceFiber, NanoFiber } from '../vdom/fiber.js';
-import { NanoFocusEvent } from './focus-event.js';
-import { NanoPointerEvent } from './pointer-event.js';
-import { NanoKeyboardEvent } from './keyboard-event.js';
-import { NanoWheelEvent } from './wheel-event.js';
-import { NanoInputEvent } from './input-event.js';
-import { NanoClipboardEvent } from './clipboard-event.js';
-import { NanoEvent } from './event.js';
-import { NanoElementTag } from '../vdom/element.js';
+import { getInstanceFiber, NanoFiber } from '../vdom/fiber';
+import { NanoFocusEvent } from './focus-event';
+import { NanoPointerEvent } from './pointer-event';
+import { NanoKeyboardEvent } from './keyboard-event';
+import { NanoWheelEvent } from './wheel-event';
+import { NanoInputEvent } from './input-event';
+import { NanoClipboardEvent } from './clipboard-event';
+import { NanoEvent } from './event';
+import { NanoElementTag } from '../vdom/element';
 import {
   type NanoBubbleEventHandlerName,
   type NanoCaptureEventHandlerName,
   type NanoEventHandler,
   NanoEventType,
-} from './type.js';
-import { NanoMouseEvent } from './mouse-event.js';
-import { type NanoDomEventProps } from '../vdom/host/type.js';
-import { NanoTouchEvent } from './touch-event.js';
-import { capitalizeFirstLetter } from '../util.js';
-import { NanoEventFilter } from './event-filter.js';
+} from './type';
+import { NanoMouseEvent } from './mouse-event';
+import { type NanoDomEventProps } from '../vdom/host/type';
+import { NanoTouchEvent } from './touch-event';
+import { capitalizeFirstLetter } from '../shared/string';
+import { NanoEventFilter } from './event-filter';
 
 type NanoEventTarget = NanoDomEventProps<EventTarget>;
 

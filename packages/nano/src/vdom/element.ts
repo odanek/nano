@@ -5,7 +5,7 @@ import { type NanoFragmentProps } from './fragment';
 import { type NanoContext, type NanoContextProps } from './context';
 import { type NanoPortalProps } from './portal';
 import { type NanoDecoratorProps } from './host/decorator';
-import type { ValueOf } from '../util';
+import type { ValueOf } from '../shared/type';
 
 export const NanoElementTag = {
   HostRoot: 0,
