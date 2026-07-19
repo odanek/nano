@@ -5,13 +5,14 @@ import type {
   NanoEventHandler,
 } from '../../dom';
 import type { NanoKeyProps, NanoRefProps } from '../../vdom/type';
+import type { AriaProps, AriaRole } from './aria';
 import type {
-  AriaProps,
-  AriaRole,
   Booleanish,
   CrossOrigin,
   DomProps,
 } from './common';
+
+// Largely taken from https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/react/index.d.ts
 
 export interface HtmlProps<T extends HTMLElement>
   extends AriaProps, DomProps<T> {
