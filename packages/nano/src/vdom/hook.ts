@@ -3,7 +3,7 @@ import { type NanoStyleBundle, type NanoStyleSheet } from '../style/style';
 import { NanoRef } from './ref';
 import { NanoFiber } from './fiber';
 import { type AnyFunction, type ValueOf } from '../shared/type';
-import type { NanoEventDispatcher } from '../event/dispatcher';
+import type { NanoEventDispatcher } from '../dom/dispatcher';
 
 export class NanoHook<P = unknown> {
   public tag: NanoHookTagValue;

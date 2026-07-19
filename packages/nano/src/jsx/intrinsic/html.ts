@@ -1,6 +1,9 @@
-import type { NanoDomClass, NanoDomStyle } from '../../dom';
-import type { NanoEvent } from '../../event/event';
-import type { NanoEventHandler } from '../../event/type';
+import type {
+  NanoDomClass,
+  NanoDomStyle,
+  NanoEvent,
+  NanoEventHandler,
+} from '../../dom';
 import type { NanoKeyProps, NanoRefProps } from '../../vdom/type';
 import type {
   AriaProps,

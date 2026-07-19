@@ -29,7 +29,7 @@ import { NanoEffectFlag, NanoEffectTag, pushPassiveEffect } from './effect';
 import { objectEquals, objectHasOwnProperty } from '../shared/object';
 import { arrayEquals } from '../shared/array';
 import type { AnyFunction, PlainObject } from '../shared/type';
-import type { NanoEventDispatcher } from '../event/dispatcher';
+import type { NanoEventDispatcher } from '../dom/dispatcher';
 
 type NanoFunctionComponentProps = PlainObject;
 

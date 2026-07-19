@@ -1,23 +1,23 @@
 import { getInstanceFiber, NanoFiber } from '../vdom/fiber';
-import { NanoFocusEvent } from './focus-event';
-import { NanoPointerEvent } from './pointer-event';
-import { NanoKeyboardEvent } from './keyboard-event';
-import { NanoWheelEvent } from './wheel-event';
-import { NanoInputEvent } from './input-event';
-import { NanoClipboardEvent } from './clipboard-event';
-import { NanoEvent } from './event';
 import { NanoElementTag } from '../vdom/element';
 import {
+  NanoClipboardEvent,
+  NanoEvent,
+  NanoEventFilter,
+  NanoEventType,
+  NanoFocusEvent,
+  NanoInputEvent,
+  NanoKeyboardEvent,
+  NanoMouseEvent,
+  NanoPointerEvent,
+  NanoTouchEvent,
+  NanoWheelEvent,
+  type DomEventProps,
   type NanoBubbleEventHandlerName,
   type NanoCaptureEventHandlerName,
   type NanoEventHandler,
-  NanoEventType,
-} from './type';
-import { NanoMouseEvent } from './mouse-event';
-import { type DomEventProps } from '../dom/event';
-import { NanoTouchEvent } from './touch-event';
+} from './event';
 import { capitalizeFirstLetter } from '../shared/string';
-import { NanoEventFilter } from './event-filter';
 
 type NanoEventTarget = DomEventProps<EventTarget>;
 

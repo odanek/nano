@@ -10,25 +10,25 @@ import { NanoElement, type NanoElementKey } from './vdom/element';
 import { NanoRef } from './vdom/ref';
 import { NanoFragment } from './vdom/fragment';
 import { NanoPortal } from './vdom/portal';
-import { NanoEventFilter } from './event/event-filter';
 import { NanoDecorator } from './dom/decorator';
 import { createContext, type NanoContext } from './vdom/context';
+import { type HtmlProps } from './jsx/intrinsic/html';
+import { classNames } from './dom/element';
+
 import {
   type NanoDomClass,
   type DomEventProps,
   type NanoDomStyle,
+  NanoEvent,
+  NanoClipboardEvent,
+  NanoFocusEvent,
+  NanoInputEvent,
+  NanoKeyboardEvent,
+  NanoMouseEvent,
+  NanoPointerEvent,
+  NanoWheelEvent,
+  NanoEventFilter,
 } from './dom';
-import { type HtmlProps } from './jsx/intrinsic/html';
-import { classNames } from './dom/element';
-
-import { NanoEvent } from './event/event';
-import { NanoClipboardEvent } from './event/clipboard-event';
-import { NanoFocusEvent } from './event/focus-event';
-import { NanoInputEvent } from './event/input-event';
-import { NanoKeyboardEvent } from './event/keyboard-event';
-import { NanoMouseEvent } from './event/mouse-event';
-import { NanoPointerEvent } from './event/pointer-event';
-import { NanoWheelEvent } from './event/wheel-event';
 
 import {
   useCallback,
@@ -52,7 +52,7 @@ import {
 } from './style/style';
 
 import * as JSX from './jsx/runtime';
-import type { NanoEventDispatcher } from './event/dispatcher';
+import type { NanoEventDispatcher } from './dom/dispatcher';
 
 export {
   render,

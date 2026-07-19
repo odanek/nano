@@ -41,6 +41,7 @@ const typeNamespace: Record<string, string> = Object.freeze({
   view: svgNamespace,
 });
 
+// TODO Naming
 export function createHostComponentInstance(
   fiber: NanoFiber,
 ): NanoHostComponentStateNode {
