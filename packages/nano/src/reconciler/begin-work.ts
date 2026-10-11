@@ -1,60 +1,60 @@
-import { markInstanceFiber, NanoFiber } from '../vdom/fiber';
-import { createHostComponentInstance } from '../dom/element'; // TODO
-import { createHostTextInstance } from '../dom/text'; // TODO
+import { markInstanceFiber, Fiber } from './fiber';
+import { createElementInstance } from '../dom/element'; // TODO
+import { createTextInstance } from '../dom/text'; // TODO
 import { type NanoFiberRootState } from '../vdom/fiber-root';
-import { type NanoChildren, type NanoChildrenProps } from '../vdom/type';
 import {
   cloneChildFibers,
   mountChildFibers,
   reconcileChildFibers,
 } from './reconcile';
 import {
-  emptyContext,
-  getContextKey,
-  type NanoContext,
-  type NanoContextProps,
-} from '../vdom/context';
-import {
   renderFunctionComponent,
   updateFunctionComponent,
 } from '../vdom/function-component';
-import { NanoElementTag } from '../vdom/element';
 import { NanoEffectTag } from '../vdom/effect';
 import { isNumber, isString } from '../shared/predicate';
+import {
+  emptyContext,
+  getContextKey,
+  type Context,
+  type ContextProps,
+} from '../core/context';
+import { VNodeKind } from '../core/vnode';
+import type { PropsWithChildren, Renderable } from '../core/renderable';
 
 export function beginWork(
-  current: NanoFiber | null,
-  workInProgress: NanoFiber,
-): NanoFiber | null {
+  current: Fiber | null,
+  workInProgress: Fiber,
+): Fiber | null {
   propagateContext(workInProgress);
 
-  switch (workInProgress.tag) {
-    case NanoElementTag.FunctionComponent:
-      return beginFunctionComponent(current, workInProgress);
-    case NanoElementTag.HostRoot:
-      return beginHostRoot(current as NanoFiber, workInProgress);
-    case NanoElementTag.HostComponent:
-      return beginHostComponent(current, workInProgress);
-    case NanoElementTag.HostText:
-      return beginHostText(current, workInProgress);
-    case NanoElementTag.HostPortal:
-    case NanoElementTag.Fragment:
-    case NanoElementTag.Context:
-    case NanoElementTag.HostDecorator:
+  switch (workInProgress.kind) {
+    case VNodeKind.Component:
+      return beginComponent(current, workInProgress);
+    case VNodeKind.Root:
+      return beginRoot(current as Fiber, workInProgress);
+    case VNodeKind.Element:
       return beginElement(current, workInProgress);
+    case VNodeKind.Text:
+      return beginText(current, workInProgress);
+    case VNodeKind.Portal:
+    case VNodeKind.Fragment:
+    case VNodeKind.Context:
+    case VNodeKind.Decorator:
+      return beginNode(current, workInProgress);
   }
   return null;
 }
 
-function propagateContext(workInProgress: NanoFiber): void {
+function propagateContext(workInProgress: Fiber): void {
   const returnFiber = workInProgress.return;
   const fullContext =
     returnFiber === null ? emptyContext : returnFiber.fullContext;
 
-  if (workInProgress.tag === NanoElementTag.Context) {
-    const context = workInProgress.type as NanoContext;
+  if (workInProgress.kind === VNodeKind.Context) {
+    const context = workInProgress.type as Context;
     const key = getContextKey(context);
-    const value = (workInProgress.pendingProps as NanoContextProps).value;
+    const value = (workInProgress.pendingProps as ContextProps).value;
     workInProgress.fullContext = Object.freeze({
       ...fullContext,
       [key]: value,
@@ -64,10 +64,10 @@ function propagateContext(workInProgress: NanoFiber): void {
   }
 }
 
-function beginFunctionComponent(
-  current: NanoFiber | null,
-  workInProgress: NanoFiber,
-): NanoFiber | null {
+function beginComponent(
+  current: Fiber | null,
+  workInProgress: Fiber,
+): Fiber | null {
   if (current !== null) {
     const shouldUpdate = updateFunctionComponent(current, workInProgress);
     if (!shouldUpdate) {
@@ -81,10 +81,7 @@ function beginFunctionComponent(
   return workInProgress.child;
 }
 
-function beginHostRoot(
-  current: NanoFiber,
-  workInProgress: NanoFiber,
-): NanoFiber | null {
+function beginRoot(current: Fiber, workInProgress: Fiber): Fiber | null {
   const prevState = current.memoizedState as NanoFiberRootState;
   const prevChildren = prevState?.element ?? null;
 
@@ -103,19 +100,19 @@ function beginHostRoot(
   return workInProgress.child;
 }
 
-function beginHostComponent(
-  current: NanoFiber | null,
-  workInProgress: NanoFiber,
-): NanoFiber | null {
+function beginElement(
+  current: Fiber | null,
+  workInProgress: Fiber,
+): Fiber | null {
   if (current === null) {
-    workInProgress.stateNode = createHostComponentInstance(workInProgress);
+    workInProgress.stateNode = createElementInstance(workInProgress);
   }
 
-  const nextProps = workInProgress.pendingProps as NanoChildrenProps;
+  const nextProps = workInProgress.pendingProps as PropsWithChildren;
   const prevProps =
-    current !== null ? (current.memoizedProps as NanoChildrenProps) : null;
+    current !== null ? (current.memoizedProps as PropsWithChildren) : null;
 
-  let nextChildren = nextProps.children as NanoChildren;
+  let nextChildren = nextProps.children as Renderable;
   // Direct text child optimization - do not create a new fiber
   const isDirectTextChild = shouldSetTextContent(nextChildren);
 
@@ -123,7 +120,7 @@ function beginHostComponent(
     nextChildren = null;
   } else if (
     prevProps !== null &&
-    shouldSetTextContent(prevProps.children as NanoChildren)
+    shouldSetTextContent(prevProps.children as Renderable)
   ) {
     workInProgress.effectTag |= NanoEffectTag.ContentReset;
   }
@@ -135,12 +132,9 @@ function beginHostComponent(
   return workInProgress.child;
 }
 
-function beginHostText(
-  current: NanoFiber | null,
-  workInProgress: NanoFiber,
-): NanoFiber | null {
+function beginText(current: Fiber | null, workInProgress: Fiber): Fiber | null {
   if (current === null) {
-    workInProgress.stateNode = createHostTextInstance(
+    workInProgress.stateNode = createTextInstance(
       workInProgress.pendingProps as string,
     );
   }
@@ -148,21 +142,18 @@ function beginHostText(
   return null;
 }
 
-function beginElement(
-  current: NanoFiber | null,
-  workInProgress: NanoFiber,
-): NanoFiber | null {
-  const nextChildren = (workInProgress.pendingProps as NanoChildrenProps)
+function beginNode(current: Fiber | null, workInProgress: Fiber): Fiber | null {
+  const nextChildren = (workInProgress.pendingProps as PropsWithChildren)
     .children;
   reconcileChildren(current, workInProgress, nextChildren);
   return workInProgress.child;
 }
 
-function shouldSetTextContent(children: NanoChildren): boolean {
+function shouldSetTextContent(children: Renderable): boolean {
   return isString(children) || isNumber(children);
 }
 
-function markRef(current: NanoFiber | null, workInProgress: NanoFiber): void {
+function markRef(current: Fiber | null, workInProgress: Fiber): void {
   const ref = workInProgress.ref;
   if (
     (current === null && ref !== null) ||
@@ -173,17 +164,17 @@ function markRef(current: NanoFiber | null, workInProgress: NanoFiber): void {
 }
 
 function bailoutOnAlreadyFinishedWork(
-  current: NanoFiber,
-  workInProgress: NanoFiber,
-): NanoFiber | null {
+  current: Fiber,
+  workInProgress: Fiber,
+): Fiber | null {
   cloneChildFibers(current, workInProgress);
   return workInProgress.child;
 }
 
 function reconcileChildren(
-  current: NanoFiber | null,
-  workInProgress: NanoFiber,
-  nextChildren: NanoChildren,
+  current: Fiber | null,
+  workInProgress: Fiber,
+  nextChildren: Renderable | undefined,
 ): void {
   if (current === null) {
     workInProgress.child = mountChildFibers(workInProgress, null, nextChildren);

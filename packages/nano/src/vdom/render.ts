@@ -1,11 +1,8 @@
-import { type NanoNode } from './type';
-import { NanoFiberRoot } from './fiber-root';
+import type { Renderable } from '../core/renderable';
+import { FiberRoot } from './fiber-root';
 
-export function render(
-  element: NanoNode,
-  container: HTMLElement,
-): NanoFiberRoot {
-  const root = new NanoFiberRoot(container);
+export function render(element: Renderable, container: HTMLElement): FiberRoot {
+  const root = new FiberRoot(container);
   root.render(element);
   return root;
 }

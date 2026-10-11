@@ -1,11 +1,8 @@
-import { createWorkInProgress, NanoFiber } from '../vdom/fiber';
-import { NanoFiberRoot, type NanoFiberRootProps } from '../vdom/fiber-root';
+import { createWorkInProgress, Fiber } from './fiber';
+import { FiberRoot, type NanoFiberRootProps } from '../vdom/fiber-root';
 import { beginWork } from './begin-work';
 import { completeWork } from './complete-work';
-import {
-  commitBeforeDeletion,
-  commitBeforeMutation,
-} from './before-mutation';
+import { commitBeforeDeletion, commitBeforeMutation } from './before-mutation';
 import {
   commitDeletion,
   commitDetachRef,
@@ -23,7 +20,7 @@ import {
 } from '../vdom/effect';
 import { isFlag } from '../shared/flags';
 
-export function performSyncWorkOnRoot(root: NanoFiberRoot): void {
+export function performSyncWorkOnRoot(root: FiberRoot): void {
   // console.time('Virtual dom update');
 
   runPassiveEffects();
@@ -31,7 +28,7 @@ export function performSyncWorkOnRoot(root: NanoFiberRoot): void {
   const workInProgress = createWorkInProgress(root.current, null);
   root.workInProgress = workInProgress;
 
-  workLoopSync(workInProgress as NanoFiber<unknown>);
+  workLoopSync(workInProgress as Fiber<unknown>);
   commitRoot(root);
 
   schedulePassiveEffects();
@@ -39,7 +36,7 @@ export function performSyncWorkOnRoot(root: NanoFiberRoot): void {
   // console.timeEnd('Virtual dom update');
 }
 
-function workLoopSync(workInProgress: NanoFiber | null): void {
+function workLoopSync(workInProgress: Fiber | null): void {
   while (workInProgress !== null) {
     const unitOfWork = workInProgress;
     workInProgress = performUnitOfWork(workInProgress);
@@ -50,18 +47,18 @@ function workLoopSync(workInProgress: NanoFiber | null): void {
   }
 }
 
-function performUnitOfWork(unitOfWork: NanoFiber): NanoFiber | null {
+function performUnitOfWork(unitOfWork: Fiber): Fiber | null {
   const current = unitOfWork.alternate;
   const next = beginWork(current, unitOfWork);
   unitOfWork.memoizedProps = unitOfWork.pendingProps;
   return next;
 }
 
-function completeUnitOfWork(unitOfWork: NanoFiber): NanoFiber | null {
-  let completedWork: NanoFiber | null = unitOfWork;
+function completeUnitOfWork(unitOfWork: Fiber): Fiber | null {
+  let completedWork: Fiber | null = unitOfWork;
   while (completedWork !== null) {
-    const current: NanoFiber | null = completedWork.alternate;
-    const returnFiber: NanoFiber | null = completedWork.return;
+    const current: Fiber | null = completedWork.alternate;
+    const returnFiber: Fiber | null = completedWork.return;
 
     completeWork(current, completedWork);
 
@@ -76,20 +73,20 @@ function completeUnitOfWork(unitOfWork: NanoFiber): NanoFiber | null {
   return null;
 }
 
-function commitRoot(root: NanoFiberRoot): void {
-  const finishedWork = root.workInProgress as NanoFiber;
+function commitRoot(root: FiberRoot): void {
+  const finishedWork = root.workInProgress as Fiber;
   visitFibersDepthFirst(finishedWork, fiberBeforeMutation, null);
   visitFibersDepthFirst(
     finishedWork,
     commitDeletionEffects,
     commitMutationEffects,
   );
-  root.current = finishedWork as NanoFiber<NanoFiberRootProps>;
+  root.current = finishedWork as Fiber<NanoFiberRootProps>;
   root.workInProgress = null;
   visitFibersDepthFirst(finishedWork, null, fiberAfterMutation);
 }
 
-function fiberBeforeMutation(fiber: NanoFiber): void {
+function fiberBeforeMutation(fiber: Fiber): void {
   const current = fiber.alternate;
   const effectTag = fiber.effectTag;
 
@@ -105,7 +102,7 @@ function fiberBeforeMutation(fiber: NanoFiber): void {
   }
 }
 
-function commitDeletionEffects(fiber: NanoFiber): void {
+function commitDeletionEffects(fiber: Fiber): void {
   const deletions = fiber.deletions;
   if (deletions !== null) {
     for (const childToDelete of deletions) {
@@ -115,7 +112,7 @@ function commitDeletionEffects(fiber: NanoFiber): void {
   }
 }
 
-function commitMutationEffects(fiber: NanoFiber): void {
+function commitMutationEffects(fiber: Fiber): void {
   const current = fiber.alternate;
   const effectTag = fiber.effectTag;
 
@@ -136,7 +133,7 @@ function commitMutationEffects(fiber: NanoFiber): void {
   }
 }
 
-function fiberAfterMutation(fiber: NanoFiber): void {
+function fiberAfterMutation(fiber: Fiber): void {
   const effectTag = fiber.effectTag;
 
   if (isFlag(effectTag, NanoEffectTag.Effect)) {

@@ -5,6 +5,8 @@ export type PortalProps<Container = unknown> = PropsWithChildren<{
   container: Container;
 }>;
 
-export function Portal(props: PortalProps): PortalVNode {
+export function Portal<Container extends Element>(
+  props: PortalProps<Container>,
+): PortalVNode<Container> {
   return createPortalVNode(props, null);
 }

@@ -1,25 +1,23 @@
-import type { NanoElement } from '../vdom/element';
-import { NanoFragment, type NanoFragmentProps } from '../vdom/fragment';
-import {
-  type NanoChildrenProps,
-  type NanoKeyProps,
-  type NanoNode,
-} from '../vdom/type';
+import type { PropsWithKey } from '../api';
+import type { Empty, Primitive, PropsWithChildren } from '../core/renderable';
+import type { FragmentVNode, VNode } from '../core/vnode';
+import { Fragment as NanoFragment } from '../core/fragment';
 import { type IntrinsicElements as NanoIntrinsicElements } from './intrinsic/index';
+
+type NanoElement = VNode | Primitive | Empty;
 
 export { jsx, jsxs, jsxDEV } from './factory';
 
-export type Element = NanoNode;
+export type Element = NanoElement;
 export const Fragment: (
-  props: NanoKeyProps & NanoChildrenProps,
-) => NanoElement<NanoFragmentProps> = NanoFragment;
+  props: PropsWithKey<PropsWithChildren>,
+) => FragmentVNode = NanoFragment;
 export type IntrinsicElements = NanoIntrinsicElements;
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace JSX {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    type Element = NanoNode<any>;
+    type Element = NanoElement;
     type IntrinsicElements = NanoIntrinsicElements;
   }
 }

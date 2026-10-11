@@ -1,26 +1,26 @@
-import { NanoElementTag } from '../vdom/element';
-import { NanoFiber } from '../vdom/fiber';
+import { Fiber } from './fiber';
 import { runEffects, cleanupEffects } from '../vdom/effect';
 import { visitFibersDepthFirst } from '../vdom/traversal';
+import { VNodeKind } from '../core/vnode';
 
-export function commitBeforeMutation(current: NanoFiber | null): void {
+export function commitBeforeMutation(current: Fiber | null): void {
   if (current !== null) {
     runEffects(current);
   }
 }
 
-export function commitBeforeDeletion(current: NanoFiber): void {
+export function commitBeforeDeletion(current: Fiber): void {
   visitFibersDepthFirst(current, commitBeforeUnmount, null);
 }
 
-function commitBeforeUnmount(current: NanoFiber): void {
-  switch (current.tag) {
-    case NanoElementTag.FunctionComponent:
+function commitBeforeUnmount(current: Fiber): void {
+  switch (current.kind) {
+    case VNodeKind.Component:
       commitBeforeUnmountFunctionComponent(current);
       return;
   }
 }
 
-function commitBeforeUnmountFunctionComponent(current: NanoFiber): void {
+function commitBeforeUnmountFunctionComponent(current: Fiber): void {
   cleanupEffects(current);
 }

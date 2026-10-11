@@ -1,5 +1,5 @@
 import { type NanoEffectHookPayload, NanoHook, NanoHookTag } from './hook';
-import { NanoFiber } from './fiber';
+import { Fiber } from '../reconciler/fiber';
 import { isFunction, isValue } from '../shared/predicate';
 import { type ValueOf } from '../shared/type';
 import { isFlag } from '../shared/flags';
@@ -26,7 +26,7 @@ export const NanoEffectFlag = {
 export let passiveEffects: NanoEffectHookPayload[] = [];
 let passiveEffectHandle: number | null = null;
 
-export function runEffects(fiber: NanoFiber): void {
+export function runEffects(fiber: Fiber): void {
   for (
     let hook = fiber.memoizedState as NanoHook | null;
     hook !== null;
@@ -46,7 +46,7 @@ export function runEffects(fiber: NanoFiber): void {
   }
 }
 
-export function cleanupEffects(fiber: NanoFiber): void {
+export function cleanupEffects(fiber: Fiber): void {
   for (
     let hook = fiber.memoizedState as NanoHook | null;
     hook !== null;

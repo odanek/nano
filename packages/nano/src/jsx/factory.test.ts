@@ -1,12 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { NanoElement } from '../vdom/element';
-import { NanoRef } from '../vdom/ref';
 import { jsx } from './factory';
+import { createRef } from '../core/ref';
+import { VNodeImpl } from '../core/vnode';
+import { type Renderable } from '../core/renderable';
 
 describe('factory.ts', () => {
   describe('jsx', () => {
     it('creates host elements and separates refs from props', () => {
-      const ref = new NanoRef<HTMLButtonElement | null>(null);
+      const ref = createRef<HTMLButtonElement | null>(null);
 
       const element = jsx(
         'button',
@@ -14,7 +15,7 @@ describe('factory.ts', () => {
         'save',
       );
 
-      expect(element).toBeInstanceOf(NanoElement);
+      expect(element).toBeInstanceOf(VNodeImpl);
       expect(element.type).toBe('button');
       expect(element.key).toBe('save');
       expect(element.ref).toBe(ref);
@@ -22,7 +23,7 @@ describe('factory.ts', () => {
     });
 
     it('creates function-component elements with their props', () => {
-      const Button = (): NanoElement => jsx('button', { children: 'Save' });
+      const Button = (): Renderable => jsx('button', { children: 'Save' });
 
       const element = jsx(Button, { label: 'Save' });
 

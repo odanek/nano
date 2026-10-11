@@ -1,14 +1,7 @@
 import { connectBundle, disconnectBundle } from '../style/manager';
 import { type NanoStyleBundle, type NanoStyleSheet } from '../style/style';
-import {
-  compareContext,
-  getContextKey,
-  getContextName,
-  type NanoContext,
-  type NanoContextKey,
-} from './context';
-import { NanoFiber } from './fiber';
-import { NanoFiberRoot } from './fiber-root';
+import { Fiber } from '../reconciler/fiber';
+import { FiberRoot } from './fiber-root';
 import {
   type NanoEffectCreator,
   NanoHook,
@@ -22,18 +15,25 @@ import {
   type NanoStyleSheetHookPayload,
   type NanoHookTagValue,
 } from './hook';
-import { NanoRef } from './ref';
 import { findFiberRoot } from './traversal';
-import { type NanoChildren, type NanoComponent } from './type';
 import { NanoEffectFlag, NanoEffectTag, pushPassiveEffect } from './effect';
 import { objectEquals, objectHasOwnProperty } from '../shared/object';
 import { arrayEquals } from '../shared/array';
 import type { AnyFunction, PlainObject } from '../shared/type';
-import type { NanoEventDispatcher } from '../dom/dispatcher';
+import type { EventDispatcher } from '../dom/dispatcher';
+import type { Component, Renderable } from '../core/renderable';
+import {
+  compareContext,
+  getContextKey,
+  getContextName,
+  type Context,
+  type ContextKey,
+} from '../core/context';
+import { createRef, type Ref } from '../core/ref';
 
 type NanoFunctionComponentProps = PlainObject;
 
-let workInProgressFiber: NanoFiber | null = null;
+let workInProgressFiber: Fiber | null = null;
 let workInProgressHook: NanoHook | null = null;
 let currentHook: NanoHook | null = null;
 let hookDispatcher: NanoHookDispatcher | null = null;
@@ -64,13 +64,13 @@ const updateDispatcher: NanoHookDispatcher = {
   useEventDispatcher: mountEventDispatcher,
 };
 
-function scheduleUpdateOnFiber(fiber: NanoFiber): void {
+function scheduleUpdateOnFiber(fiber: Fiber): void {
   const rootFiber = findFiberRoot(fiber);
   if (!rootFiber) {
     return;
   }
 
-  const root = rootFiber.stateNode as NanoFiberRoot;
+  const root = rootFiber.stateNode as FiberRoot;
   if (
     !root.disposed &&
     (root.workInProgress === null || rootFiber === root.workInProgress)
@@ -80,13 +80,13 @@ function scheduleUpdateOnFiber(fiber: NanoFiber): void {
 }
 
 export function renderFunctionComponent(
-  current: NanoFiber | null,
-  workInProgress: NanoFiber,
-): NanoChildren {
+  current: Fiber | null,
+  workInProgress: Fiber,
+): Renderable {
   workInProgressFiber = workInProgress;
   hookDispatcher = current === null ? mountDispatcher : updateDispatcher;
 
-  const Component = workInProgress.type as NanoComponent;
+  const Component = workInProgress.type as Component;
   const props = workInProgress.pendingProps;
   const children = Component(props);
 
@@ -99,8 +99,8 @@ export function renderFunctionComponent(
 }
 
 export function updateFunctionComponent(
-  current: NanoFiber,
-  workInProgress: NanoFiber,
+  current: Fiber,
+  workInProgress: Fiber,
 ): boolean {
   const hasContextUpdate = !compareContext(current, workInProgress);
   if (hasContextUpdate) {
@@ -130,8 +130,8 @@ export function updateFunctionComponent(
 }
 
 export function runStyleEffects(
-  current: NanoFiber | null,
-  finishedWork: NanoFiber | null,
+  current: Fiber | null,
+  finishedWork: Fiber | null,
 ): void {
   let currentHook = (current?.memoizedState ?? null) as NanoHook | null;
   let finishedWorkHook = (finishedWork?.memoizedState ??
@@ -166,7 +166,7 @@ function mountWorkInProgressHook(tag: NanoHookTagValue): NanoHook {
   const hook = new NanoHook(tag);
 
   if (workInProgressHook === null) {
-    (workInProgressFiber as NanoFiber).memoizedState = hook;
+    (workInProgressFiber as Fiber).memoizedState = hook;
   } else {
     workInProgressHook.next = hook;
   }
@@ -177,7 +177,7 @@ function mountWorkInProgressHook(tag: NanoHookTagValue): NanoHook {
 
 function updateWorkInProgressHook(tag: NanoHookTagValue): NanoHook {
   if (currentHook === null) {
-    const current = (workInProgressFiber as NanoFiber).alternate as NanoFiber;
+    const current = (workInProgressFiber as Fiber).alternate as Fiber;
     currentHook = current.memoizedState as NanoHook;
   } else {
     currentHook = currentHook.next;
@@ -241,7 +241,7 @@ function createReducerPayload<T, A>(
     nextState: null,
     dirty: false,
     dispatch: (action: A): void => dispatchReducer(payload, reducer, action),
-    fiber: workInProgressFiber as NanoFiber,
+    fiber: workInProgressFiber as Fiber,
   };
   return payload;
 }
@@ -266,7 +266,7 @@ function createMemoPayload<T>(
   };
 }
 
-function addContextType(fiber: NanoFiber, key: NanoContextKey): void {
+function addContextType(fiber: Fiber, key: ContextKey): void {
   if (!fiber.contextTypes.includes(key)) {
     fiber.contextTypes = [...fiber.contextTypes, key];
   }
@@ -296,14 +296,14 @@ function mountLayoutEffect(
 ): void {
   const hook = mountWorkInProgressHook(NanoHookTag.Effect);
   hook.payload = createEffectPayload(create, deps, NanoEffectFlag.Create);
-  (workInProgressFiber as NanoFiber).effectTag |= NanoEffectTag.Effect;
+  (workInProgressFiber as Fiber).effectTag |= NanoEffectTag.Effect;
 }
 
-function mountContext<T>(context: NanoContext<T>): T {
+function mountContext<T>(context: Context<T>): T {
   mountWorkInProgressHook(NanoHookTag.Context);
   const key = getContextKey(context);
-  addContextType(workInProgressFiber as NanoFiber, key);
-  const fullContext = (workInProgressFiber as NanoFiber).fullContext;
+  addContextType(workInProgressFiber as Fiber, key);
+  const fullContext = (workInProgressFiber as Fiber).fullContext;
   if (!objectHasOwnProperty(fullContext, key)) {
     throw new Error(
       `Context value for context '${getContextName(context)}' not defined`,
@@ -318,7 +318,7 @@ function mountStyleSheet<S extends NanoStyleBundle>(
   const hook = mountWorkInProgressHook(NanoHookTag.Style);
   const payload = styleSheet;
   hook.payload = payload;
-  (workInProgressFiber as NanoFiber).effectTag |= NanoEffectTag.Style;
+  (workInProgressFiber as Fiber).effectTag |= NanoEffectTag.Style;
   return payload.classNames;
 }
 
@@ -332,9 +332,9 @@ function mountReducer<T, A>(
   return [initialState, payload.dispatch];
 }
 
-function mountRef<T>(initialValue: T): NanoRef<T> {
+function mountRef<T>(initialValue: T): Ref<T> {
   const hook = mountWorkInProgressHook(NanoHookTag.Ref);
-  const ref = new NanoRef(initialValue);
+  const ref = createRef(initialValue);
   hook.payload = ref;
   return ref;
 }
@@ -356,9 +356,9 @@ function mountMemo<T>(create: () => T, deps: readonly unknown[]): T {
   return payload.value;
 }
 
-function mountEventDispatcher(): NanoEventDispatcher {
-  const rootFiber = findFiberRoot(workInProgressFiber as NanoFiber);
-  const root = rootFiber.stateNode as NanoFiberRoot;
+function mountEventDispatcher(): EventDispatcher {
+  const rootFiber = findFiberRoot(workInProgressFiber as Fiber);
+  const root = rootFiber.stateNode as FiberRoot;
   return root.dispatcher;
 }
 
@@ -393,14 +393,14 @@ function updateLayoutEffect(
   const payload = hook.payload as NanoEffectHookPayload;
   if (!arrayEquals(payload.deps, deps)) {
     hook.payload = createEffectPayload(create, deps, NanoEffectFlag.Create);
-    (workInProgressFiber as NanoFiber).effectTag |= NanoEffectTag.Effect;
+    (workInProgressFiber as Fiber).effectTag |= NanoEffectTag.Effect;
   }
 }
 
-function updateContext<T>(context: NanoContext<T>): T {
+function updateContext<T>(context: Context<T>): T {
   updateWorkInProgressHook(NanoHookTag.Context);
   const key = getContextKey(context);
-  const fullContext = (workInProgressFiber as NanoFiber).fullContext;
+  const fullContext = (workInProgressFiber as Fiber).fullContext;
   if (!objectHasOwnProperty(fullContext, key)) {
     throw new Error('Context value not defined');
   }
@@ -415,7 +415,7 @@ function updateStyleSheet<S extends NanoStyleBundle>(
   if (payload !== styleSheet) {
     payload = styleSheet;
     hook.payload = payload;
-    (workInProgressFiber as NanoFiber).effectTag |= NanoEffectTag.Style;
+    (workInProgressFiber as Fiber).effectTag |= NanoEffectTag.Style;
   }
   return payload.classNames;
 }
@@ -433,14 +433,14 @@ function updateReducer<T, A>(
     payload.nextState = null;
     payload.dirty = false;
   }
-  payload.fiber = workInProgressFiber as NanoFiber;
+  payload.fiber = workInProgressFiber as Fiber;
   return [payload.memoizedState as T, payload.dispatch];
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function updateRef<T>(initialValue: T): NanoRef<T> {
+function updateRef<T>(initialValue: T): Ref<T> {
   const hook = updateWorkInProgressHook(NanoHookTag.Ref);
-  return hook.payload as NanoRef<T>;
+  return hook.payload as Ref<T>;
 }
 
 function updateCallback<T extends AnyFunction>(
@@ -490,7 +490,7 @@ export function useLayoutEffect(
   (hookDispatcher as NanoHookDispatcher).useLayoutEffect(create, deps);
 }
 
-export function useContext<T>(context: NanoContext<T>): T {
+export function useContext<T>(context: Context<T>): T {
   return (hookDispatcher as NanoHookDispatcher).useContext(context);
 }
 
@@ -510,7 +510,7 @@ export function useReducer<T, A>(
   );
 }
 
-export function useRef<T>(initialValue: T): NanoRef<T> {
+export function useRef<T>(initialValue: T): Ref<T> {
   return (hookDispatcher as NanoHookDispatcher).useRef(initialValue);
 }
 
@@ -525,6 +525,6 @@ export function useMemo<T>(create: () => T, deps: readonly unknown[]): T {
   return (hookDispatcher as NanoHookDispatcher).useMemo(create, deps);
 }
 
-export function useEventDispatcher(): NanoEventDispatcher {
+export function useEventDispatcher(): EventDispatcher {
   return (hookDispatcher as NanoHookDispatcher).useEventDispatcher();
 }

@@ -1,12 +1,12 @@
-export type NanoHostTextProps = string;
-export type NanoHostTextStateNode = Text;
+export type TextProps = string; // TODO TextVNode["props"] or vice versa
+export type TextStateNode = Text;
 
-export function createHostTextInstance(text: string): NanoHostTextStateNode {
+export function createTextInstance(text: string): TextStateNode {
   return document.createTextNode(text);
 }
 
-export function updateHostTextInstance(
-  node: NanoHostTextStateNode,
+export function updateTextInstance(
+  node: TextStateNode,
   text: string,
   previousText: string,
 ): void {
@@ -15,11 +15,11 @@ export function updateHostTextInstance(
   }
 }
 
-export function resetHostTextContent(node: Node): void {
-  setHostTextContent(node, '');
+export function resetTextContent(node: Node): void {
+  setTextContent(node, '');
 }
 
-export function setHostTextContent(node: Node, text: string): void {
+export function setTextContent(node: Node, text: string): void {
   if (text.length > 0) {
     const firstChild = node.firstChild;
     if (

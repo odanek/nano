@@ -1,5 +1,5 @@
+import type { PropsWithChildren, Renderable } from '../core/renderable';
 import type { ValueOf } from '../shared/type';
-import type { NanoChildrenProps, NanoNode } from '../vdom/type';
 
 export const NanoEventType = {
   // Pointer events
@@ -391,11 +391,11 @@ export class NanoWheelEvent<
   }
 }
 
-type NanoEventFilterProps = DomEventProps<Element> & NanoChildrenProps;
+type NanoEventFilterProps = PropsWithChildren<DomEventProps<Element>>;
 
 // TODO TS does not allow the return value to be NanoChildren
-export function NanoEventFilter(props: NanoEventFilterProps): NanoNode {
-  return (props.children ?? null) as NanoNode;
+export function NanoEventFilter(props: NanoEventFilterProps): Renderable {
+  return props.children ?? null;
 }
 
 export type DomCaptureEventProps<T extends EventTarget> = {

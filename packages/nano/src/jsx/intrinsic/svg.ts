@@ -1,11 +1,8 @@
+import type { PropsWithKey } from '../../core/key';
+import type { PropsWithRef } from '../../core/ref';
 import type { NanoDomClass, NanoDomStyle } from '../../dom';
-import type { NanoKeyProps, NanoRefProps } from '../../vdom/type';
 import type { AriaProps, AriaRole } from './aria';
-import type {
-  Booleanish,
-  CrossOrigin,
-  DomProps,
-} from './common';
+import type { Booleanish, CrossOrigin, DomProps } from './common';
 
 // Largely taken from https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/react/index.d.ts
 
@@ -297,9 +294,9 @@ export interface SvgProps<T extends EventTarget>
   zoomAndPan?: string | undefined;
 }
 
-export type NanoHostComponentSvgProps<T extends SVGElement> = NanoRefProps &
-  NanoKeyProps &
-  SvgProps<T>;
+export type NanoHostComponentSvgProps<T extends SVGElement> = PropsWithKey<
+  PropsWithRef<SvgProps<T>>
+>;
 
 export interface SvgIntrinsicElements {
   svg: NanoHostComponentSvgProps<SVGSVGElement>;

@@ -1,11 +1,11 @@
-import { NanoFiber } from '../vdom/fiber';
+import { Fiber } from './fiber';
 import { runEffects } from '../vdom/effect';
 
-export function commitAfterMutation(finishedWork: NanoFiber): void {
+export function commitAfterMutation(finishedWork: Fiber): void {
   runEffects(finishedWork);
 }
 
-export function commitAttachRef(finishedWork: NanoFiber): void {
+export function commitAttachRef(finishedWork: Fiber): void {
   const ref = finishedWork.ref;
   if (ref !== null) {
     ref.current = finishedWork.stateNode;

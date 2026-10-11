@@ -1,11 +1,4 @@
-import { NanoElement, type NanoElementKey, NanoElementTag } from '../vdom/element';
-import {
-  createFiberFromElement,
-  createWorkInProgress,
-  NanoFiber,
-} from '../vdom/fiber';
-import { type NanoNode } from '../vdom/type';
-import { type NanoFragmentProps } from '../vdom/fragment';
+import { createFiberFromVNode, createWorkInProgress, Fiber } from './fiber';
 import { NanoEffectTag } from '../vdom/effect';
 import {
   isArray,
@@ -14,17 +7,24 @@ import {
   isString,
   isValue,
 } from '../shared/predicate';
+import {
+  createFragmentVNode,
+  createTextVNode,
+  VNodeImpl,
+  VNodeKind,
+  type VNode,
+} from '../core/vnode';
+import type { Renderable } from '../core/renderable';
+import type { FragmentProps } from '../core/fragment';
+import type { Key } from '../core/key';
 
 type NanoReconciler = (
-  returnFiber: NanoFiber,
-  currentFirstChild: NanoFiber | null,
+  returnFiber: Fiber,
+  currentFirstChild: Fiber | null,
   element: unknown,
-) => NanoFiber<unknown> | null;
+) => Fiber<unknown> | null;
 
-export function cloneChildFibers(
-  current: NanoFiber,
-  workInProgress: NanoFiber,
-): void {
+export function cloneChildFibers(current: Fiber, workInProgress: Fiber): void {
   if (current.child === null) {
     return;
   }
@@ -50,12 +50,12 @@ export function cloneChildFibers(
 }
 
 function mapRemainingChildren(
-  returnFiber: NanoFiber,
-  currentFirstChild: NanoFiber,
-): Map<NanoElementKey, NanoFiber> {
+  returnFiber: Fiber,
+  currentFirstChild: Fiber,
+): Map<Key, Fiber> {
   const existingChildren = new Map();
 
-  let existingChild: NanoFiber | null = currentFirstChild;
+  let existingChild: Fiber | null = currentFirstChild;
   while (existingChild !== null) {
     if (existingChild.key !== null) {
       existingChildren.set(existingChild.key, existingChild);
@@ -68,13 +68,13 @@ function mapRemainingChildren(
 }
 
 function updateElement(
-  returnFiber: NanoFiber,
-  current: NanoFiber | null,
-  element: NanoElement,
-): NanoFiber {
+  returnFiber: Fiber,
+  current: Fiber | null,
+  element: VNode,
+): Fiber {
   if (
     current !== null &&
-    current.tag === element.tag &&
+    current.kind === element.kind &&
     current.type === element.type
   ) {
     // Update
@@ -83,46 +83,44 @@ function updateElement(
     existing.return = returnFiber;
     return existing;
   } else {
-    const created = createFiberFromElement(element); // Insert
+    const created = createFiberFromVNode(element); // Insert
     created.return = returnFiber;
     return created;
   }
 }
 
-function coerceElement(element: unknown): NanoElement {
-  if (element instanceof NanoElement) {
+function coerceElement(element: unknown): VNode {
+  if (element instanceof VNodeImpl) {
+    // TODO Do we need to expose VNodeImpl?
     return element;
   } else if (isString(element) || isNumber(element)) {
-    return NanoElement.text(element.toString()) as NanoElement<unknown>;
+    return createTextVNode(element.toString());
   } else if (isArray(element) || isIterable(element)) {
-    return NanoElement.fragment(
-      { children: element as NanoNode[] },
+    return createFragmentVNode(
+      { children: element as Iterable<Renderable> },
       null,
-    ) as NanoElement<unknown>;
+    );
   } else {
     throw new Error('Invalid virtual dom node: ' + element);
   }
 }
 
-function createChild(
-  returnFiber: NanoFiber,
-  element: unknown,
-): NanoFiber | null {
+function createChild(returnFiber: Fiber, element: unknown): Fiber | null {
   if (element === null || element === undefined) {
     return null;
   }
 
   const coercedElement = coerceElement(element);
-  const fiber = createFiberFromElement(coercedElement);
+  const fiber = createFiberFromVNode(coercedElement);
   fiber.return = returnFiber;
   return fiber;
 }
 
 function updateSlot(
-  returnFiber: NanoFiber,
-  oldFiber: NanoFiber | null,
+  returnFiber: Fiber,
+  oldFiber: Fiber | null,
   element: unknown,
-): NanoFiber | null {
+): Fiber | null {
   if (element === null || element === undefined) {
     return null;
   }
@@ -135,11 +133,11 @@ function updateSlot(
 }
 
 function updateFromMap(
-  existingChildren: Map<NanoElementKey, NanoFiber>,
-  returnFiber: NanoFiber,
+  existingChildren: Map<Key, Fiber>,
+  returnFiber: Fiber,
   newIdx: number,
   element: unknown,
-): NanoFiber | null {
+): Fiber | null {
   if (element === null || element === undefined) {
     return null;
   }
@@ -151,7 +149,7 @@ function updateFromMap(
 }
 
 function childReconciler(shouldTrackSideEffects: boolean): NanoReconciler {
-  function deleteChild(returnFiber: NanoFiber, childToDelete: NanoFiber): void {
+  function deleteChild(returnFiber: Fiber, childToDelete: Fiber): void {
     if (!shouldTrackSideEffects) {
       return;
     }
@@ -166,8 +164,8 @@ function childReconciler(shouldTrackSideEffects: boolean): NanoReconciler {
   }
 
   function deleteRemainingChildren(
-    returnFiber: NanoFiber,
-    currentFirstChild: NanoFiber | null,
+    returnFiber: Fiber,
+    currentFirstChild: Fiber | null,
   ): null {
     if (!shouldTrackSideEffects) {
       return null;
@@ -182,7 +180,7 @@ function childReconciler(shouldTrackSideEffects: boolean): NanoReconciler {
   }
 
   function placeChild(
-    newFiber: NanoFiber,
+    newFiber: Fiber,
     lastPlacedIndex: number,
     newIndex: number,
   ): number {
@@ -208,7 +206,7 @@ function childReconciler(shouldTrackSideEffects: boolean): NanoReconciler {
     }
   }
 
-  function placeSingleChild(newFiber: NanoFiber): NanoFiber {
+  function placeSingleChild(newFiber: Fiber): Fiber {
     if (shouldTrackSideEffects && newFiber.alternate === null) {
       newFiber.effectTag = NanoEffectTag.Placement;
     }
@@ -216,10 +214,10 @@ function childReconciler(shouldTrackSideEffects: boolean): NanoReconciler {
   }
 
   function reconcileChildren(
-    returnFiber: NanoFiber,
-    currentFirstChild: NanoFiber | null,
-    newChildrenIterable: Iterable<NanoNode>,
-  ): NanoFiber | null {
+    returnFiber: Fiber,
+    currentFirstChild: Fiber | null,
+    newChildrenIterable: Iterable<Renderable>,
+  ): Fiber | null {
     const iteratorFn = newChildrenIterable[Symbol.iterator];
     const newChildren = iteratorFn.call(newChildrenIterable);
     let resultingFirstChild = null;
@@ -325,16 +323,16 @@ function childReconciler(shouldTrackSideEffects: boolean): NanoReconciler {
   }
 
   function reconcileSingleElement(
-    returnFiber: NanoFiber,
-    currentFirstChild: NanoFiber | null,
-    element: NanoElement,
-  ): NanoFiber {
+    returnFiber: Fiber,
+    currentFirstChild: Fiber | null,
+    element: VNode,
+  ): Fiber {
     const key = element.key;
     let child = currentFirstChild;
     while (child !== null) {
       if (
         child.key !== key ||
-        child.tag !== element.tag ||
+        child.kind !== element.kind ||
         child.type !== element.type
       ) {
         deleteChild(returnFiber, child);
@@ -348,23 +346,23 @@ function childReconciler(shouldTrackSideEffects: boolean): NanoReconciler {
       child = child.sibling;
     }
 
-    const created = createFiberFromElement(element);
+    const created = createFiberFromVNode(element);
     created.return = returnFiber;
     return created;
   }
 
   function reconcileChildFibers(
-    returnFiber: NanoFiber,
-    currentFirstChild: NanoFiber | null,
+    returnFiber: Fiber,
+    currentFirstChild: Fiber | null,
     element: unknown,
-  ): NanoFiber | null {
+  ): Fiber | null {
     if (isValue(element)) {
       const coercedElement = coerceElement(element);
       if (
-        coercedElement.tag === NanoElementTag.Fragment &&
+        coercedElement.kind === VNodeKind.Fragment &&
         coercedElement.key === null
       ) {
-        const props = coercedElement.props as NanoFragmentProps;
+        const props = coercedElement.props as FragmentProps;
         return reconcileChildren(
           returnFiber,
           currentFirstChild,
@@ -380,8 +378,8 @@ function childReconciler(shouldTrackSideEffects: boolean): NanoReconciler {
         );
       }
     } else if (element === undefined) {
-      const parentTag = returnFiber.tag;
-      if (parentTag === NanoElementTag.FunctionComponent) {
+      const parentKind = returnFiber.kind;
+      if (parentKind === VNodeKind.Component) {
         throw new Error(
           'Nothing was returned from render. You may miss a return statement or, to render nothing, return null.',
         );

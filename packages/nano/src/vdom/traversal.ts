@@ -1,21 +1,21 @@
-import { NanoFiber } from './fiber';
-import { NanoFiberRoot } from './fiber-root';
-import { NanoElementTag } from './element';
+import { Fiber } from '../reconciler/fiber';
 import { NanoEffectTag } from './effect';
 import { isFlag } from '../shared/flags';
+import { VNodeKind } from '../core/vnode';
+import type { FiberRoot } from './fiber-root';
 
-type TraversalCallback = (fiber: NanoFiber) => void;
+type TraversalCallback = (fiber: Fiber) => void;
 
-export function findFiberRoot(fiber: NanoFiber): NanoFiber {
+export function findFiberRoot(fiber: Fiber): Fiber {
   let current = fiber;
-  while (current.tag !== NanoElementTag.HostRoot) {
-    current = current.return as NanoFiber;
+  while (current.kind !== VNodeKind.Root) {
+    current = current.return as Fiber;
   }
   return current;
 }
 
 export function visitFibersDepthFirst(
-  root: NanoFiber | null,
+  root: Fiber | null,
   beforeHandler: TraversalCallback | null,
   afterHandler: TraversalCallback | null,
 ): void {
@@ -50,14 +50,14 @@ export function visitFibersDepthFirst(
   }
 }
 
-export function getHostParentFiber(fiber: NanoFiber): NanoFiber {
+export function getHostParentFiber(fiber: Fiber): Fiber {
   let parent = fiber.return;
   while (parent !== null) {
-    const tag = parent.tag;
+    const kind = parent.kind;
     if (
-      tag === NanoElementTag.HostComponent ||
-      tag === NanoElementTag.HostRoot ||
-      tag === NanoElementTag.HostPortal
+      kind === VNodeKind.Element ||
+      kind === VNodeKind.Root ||
+      kind === VNodeKind.Portal
     ) {
       return parent;
     }
@@ -66,14 +66,14 @@ export function getHostParentFiber(fiber: NanoFiber): NanoFiber {
   throw new Error('Host component parent fiber not found');
 }
 
-export function getHostParentNode(parentFiber: NanoFiber): Element {
+export function getHostParentNode(parentFiber: Fiber): Element {
   const parentStateNode = parentFiber.stateNode;
-  switch (parentFiber.tag) {
-    case NanoElementTag.HostComponent:
+  switch (parentFiber.kind) {
+    case VNodeKind.Element:
       return parentStateNode as Element;
-    case NanoElementTag.HostRoot:
-      return (parentStateNode as NanoFiberRoot).container;
-    case NanoElementTag.HostPortal:
+    case VNodeKind.Root:
+      return (parentStateNode as FiberRoot).container;
+    case VNodeKind.Portal:
       return parentFiber.type as Element;
     default:
       throw new Error('Invalid host parent fiber');
@@ -81,8 +81,8 @@ export function getHostParentNode(parentFiber: NanoFiber): Element {
 }
 
 export function getPlacedHostSibling(
-  fiber: NanoFiber,
-  hostParent: NanoFiber,
+  fiber: Fiber,
+  hostParent: Fiber,
 ): Element | null {
   let node = fiber;
   let emerged = true;
@@ -98,10 +98,9 @@ export function getPlacedHostSibling(
         node = sibling;
       }
     } else {
-      const tag = node.tag;
+      const kind = node.kind;
       const isPlacement = isFlag(node.effectTag, NanoEffectTag.Placement);
-      const isHost =
-        tag === NanoElementTag.HostComponent || tag === NanoElementTag.HostText;
+      const isHost = kind === VNodeKind.Element || kind === VNodeKind.Text;
 
       if (isHost) {
         if (isPlacement) {
@@ -111,11 +110,7 @@ export function getPlacedHostSibling(
         }
       } else {
         const child = node.child;
-        if (
-          !isPlacement &&
-          child !== null &&
-          node.tag !== NanoElementTag.HostPortal
-        ) {
+        if (!isPlacement && child !== null && node.kind !== VNodeKind.Portal) {
           node = child;
         } else {
           emerged = true;
@@ -127,20 +122,20 @@ export function getPlacedHostSibling(
   return null;
 }
 
-export function getDecoratorRoot<T>(fiber: NanoFiber<T>): Element | null {
+export function getDecoratorRoot<T>(fiber: Fiber<T>): Element | null {
   let current = fiber.child;
   while (current !== null) {
     if (current.sibling !== null) {
       return null;
     }
 
-    switch (current.tag) {
-      case NanoElementTag.HostComponent:
+    switch (current.kind) {
+      case VNodeKind.Element:
         return current.stateNode as Element;
-      case NanoElementTag.HostDecorator:
-      case NanoElementTag.FunctionComponent:
-      case NanoElementTag.Fragment:
-      case NanoElementTag.Context:
+      case VNodeKind.Decorator:
+      case VNodeKind.Component:
+      case VNodeKind.Fragment:
+      case VNodeKind.Context:
         current = current.child;
         break;
       default:

@@ -1,12 +1,12 @@
-import { setHostTextContent } from './text';
-import { NanoFiber } from '../vdom/fiber';
+import { setTextContent } from './text';
+import { Fiber } from '../reconciler/fiber';
 import { type NanoDomClass, type NanoDomStyle } from './type';
-import { type NanoChildrenProps } from '../vdom/type';
 import { isNumber, isString } from '../shared/predicate';
 import { type PlainObject } from '../shared/type';
+import type { PropsWithChildren } from '../core/renderable';
 
-export type NanoHostComponentStateNode = HTMLElement | SVGElement;
-export type NanoHostComponentPropsDiff = Array<string | null>;
+export type ElementStateNode = HTMLElement | SVGElement;
+export type ElementPropsDiff = Array<string | null>;
 
 // TODO Determine this automatically based on whether we are inside svg or not
 const svgNamespace = 'http://www.w3.org/2000/svg';
@@ -42,9 +42,7 @@ const typeNamespace: Record<string, string> = Object.freeze({
 });
 
 // TODO Naming
-export function createHostComponentInstance(
-  fiber: NanoFiber,
-): NanoHostComponentStateNode {
+export function createElementInstance(fiber: Fiber): ElementStateNode {
   const props = fiber.pendingProps as PlainObject;
   const node = createElement(fiber.type as string);
   setInitialProperties(node, props);
@@ -52,9 +50,9 @@ export function createHostComponentInstance(
   return node;
 }
 
-export function updateHostComponentInstance(
+export function updateElementInstance(
   node: Element,
-  diff: NanoHostComponentPropsDiff,
+  diff: ElementPropsDiff,
 ): void {
   let i = 0;
   const length = diff.length;
@@ -66,7 +64,7 @@ export function updateHostComponentInstance(
       // @ts-expect-error TODO
       node.style[value] = diff[i++];
     } else if (key === SET_TEXT_CHILD) {
-      setHostTextContent(node, value as string);
+      setTextContent(node, value as string);
     } else if (key === 'value' && isInputElement(node)) {
       (node as HTMLInputElement).value = value ?? '';
     } else if (value === null) {
@@ -85,13 +83,13 @@ function isInputElement(node: Element): boolean {
   );
 }
 
-function createElement(type: string): NanoHostComponentStateNode {
+function createElement(type: string): ElementStateNode {
   const namespace = typeNamespace[type];
   const element =
     namespace !== undefined
       ? document.createElementNS(namespace, type)
       : document.createElement(type);
-  return element as NanoHostComponentStateNode;
+  return element as ElementStateNode;
 }
 
 export function setInitialProperties(node: Element, props: PlainObject): void {
@@ -125,32 +123,32 @@ export function setInitialProperties(node: Element, props: PlainObject): void {
 }
 
 function setInitialChildren(
-  node: NanoHostComponentStateNode,
-  props: NanoChildrenProps,
+  node: ElementStateNode,
+  props: PropsWithChildren,
 ): void {
   const children = props.children;
   if (isString(children) || isNumber(children)) {
-    setHostTextContent(node, children.toString());
+    setTextContent(node, children.toString());
   }
 }
 
 export function diffProperties(
-  current: NanoFiber,
-  workInProgress: NanoFiber,
-): NanoHostComponentPropsDiff | null {
+  current: Fiber,
+  workInProgress: Fiber,
+): ElementPropsDiff | null {
   const oldProps = current.memoizedProps as PlainObject;
   const newProps = workInProgress.pendingProps as PlainObject;
   if (oldProps === newProps) {
     return null;
   }
 
-  const diff: NanoHostComponentPropsDiff = [];
+  const diff: ElementPropsDiff = [];
   diffObjects(diff, oldProps, newProps);
   return diff.length === 0 ? null : diff;
 }
 
 function diffObjects(
-  diff: NanoHostComponentPropsDiff,
+  diff: ElementPropsDiff,
   left: PlainObject,
   right: PlainObject,
 ): void {
@@ -169,7 +167,7 @@ function diffObjects(
 }
 
 function diffPropertyChange(
-  diff: NanoHostComponentPropsDiff,
+  diff: ElementPropsDiff,
   key: string,
   oldValue: unknown,
   newValue: unknown,
@@ -202,7 +200,7 @@ function diffPropertyChange(
 }
 
 function diffStyle(
-  diff: NanoHostComponentPropsDiff,
+  diff: ElementPropsDiff,
   oldStyle: NanoDomStyle,
   newStyle: NanoDomStyle,
 ): void {

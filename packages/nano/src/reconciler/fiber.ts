@@ -1,46 +1,38 @@
-import {
-  NanoElement,
-  type NanoElementKey,
-  type NanoElementTagValue,
-  type NanoElementType,
-} from './element';
-import { NanoRef } from './ref';
-import { NanoFiberRoot } from './fiber-root';
-import { type NanoHostComponentStateNode } from '../dom/element'; // TODO
-import { type NanoHostTextStateNode } from '../dom/text'; // TODO
-import { type NanoContextKey } from './context';
-import { NanoEffectTag, type NanoEffectTagValue } from './effect';
+import { FiberRoot } from '../vdom/fiber-root';
+import { type ElementStateNode } from '../dom/element'; // TODO
+import { type TextStateNode } from '../dom/text'; // TODO
+import { NanoEffectTag, type NanoEffectTagValue } from '../vdom/effect';
 import { emptyObject } from '../shared/object';
 import { emptyArray } from '../shared/array';
+import type { Key } from '../core/key';
+import type { Ref } from '../core/ref';
+import type { VNode } from '../core/vnode';
+import type { ContextKey } from '../core/context';
 
 const fiberKey = Symbol('nano-fiber-key');
-export class NanoFiber<P = unknown> {
-  public tag: NanoElementTagValue;
-  public type: NanoElementType<P>;
-  public key: NanoElementKey;
-  public ref: NanoRef | null;
-  public stateNode:
-    | NanoHostComponentStateNode
-    | NanoHostTextStateNode
-    | NanoFiberRoot
-    | null;
-  public return: NanoFiber | null;
-  public child: NanoFiber | null;
-  public sibling: NanoFiber | null;
+
+export class Fiber<P = unknown> {
+  public kind: VNode['kind'];
+  public type: VNode['type'];
+  public key: Key | null;
+  public ref: Ref | null;
+  public stateNode: ElementStateNode | TextStateNode | FiberRoot | null;
+  public return: Fiber | null;
+  public child: Fiber | null;
+  public sibling: Fiber | null;
   public index: number;
   public pendingProps: P;
   public memoizedProps: P | null;
   public memoizedState: unknown;
-  public fullContext: Record<NanoContextKey, unknown>;
-  public contextTypes: readonly NanoContextKey[];
+  public fullContext: Record<ContextKey, unknown>;
+  public contextTypes: readonly ContextKey[];
   public updateQueue: Array<unknown> | null;
   public effectTag: NanoEffectTagValue;
-  public deletions: Array<NanoFiber> | null;
+  public deletions: Array<Fiber> | null;
+  public alternate: Fiber<P> | null;
 
-  public alternate: NanoFiber<P> | null;
-
-  constructor(tag: NanoElementTagValue, pendingProps: P, key: NanoElementKey) {
-    this.tag = tag;
+  constructor(kind: VNode['kind'], pendingProps: P, key: Key) {
+    this.kind = kind;
     this.type = null;
     this.key = key;
     this.ref = null;
@@ -67,21 +59,21 @@ export class NanoFiber<P = unknown> {
 }
 
 export function createFiber<P>(
-  tag: NanoElementTagValue,
+  kind: VNode['kind'],
   pendingProps: P,
-  key: NanoElementKey,
-): NanoFiber<P> {
-  return new NanoFiber(tag, pendingProps, key);
+  key: Key,
+): Fiber<P> {
+  return new Fiber(kind, pendingProps, key);
 }
 
 export function createWorkInProgress<P>(
-  current: NanoFiber<P>,
+  current: Fiber<P>,
   pendingProps: P,
-): NanoFiber<P> {
+): Fiber<P> {
   let workInProgress = current.alternate;
   // Double-buffering - reuse existing alternate fiber if already created
   if (workInProgress === null) {
-    workInProgress = createFiber(current.tag, pendingProps, current.key);
+    workInProgress = createFiber(current.kind, pendingProps, current.key);
     workInProgress.type = current.type;
     workInProgress.stateNode = current.stateNode;
     workInProgress.alternate = current;
@@ -107,16 +99,14 @@ export function createWorkInProgress<P>(
   return workInProgress;
 }
 
-export function createFiberFromElement<P>(
-  element: NanoElement<P>,
-): NanoFiber<P> {
-  const fiber = createFiber(element.tag, element.props, element.key);
+export function createFiberFromVNode<P>(element: VNode): Fiber<P> {
+  const fiber = createFiber(element.kind, element.props, element.key);
   fiber.type = element.type;
   fiber.ref = element.ref;
   return fiber;
 }
 
-export function markInstanceFiber<T>(node: Node, fiber: NanoFiber<T>): void {
+export function markInstanceFiber<T>(node: Node, fiber: Fiber<T>): void {
   // @ts-expect-error Conversion to any
   node[fiberKey] = fiber;
 }
@@ -126,7 +116,7 @@ export function unmarkInstanceFiber(node: Node): void {
   node[fiberKey] = null;
 }
 
-export function getInstanceFiber(node: Node): NanoFiber | null {
+export function getInstanceFiber(node: Node): Fiber | null {
   // @ts-expect-error Conversion to any
   return node[fiberKey] ?? null;
 }

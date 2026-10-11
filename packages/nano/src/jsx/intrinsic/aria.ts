@@ -1,4 +1,4 @@
-import type { Booleanish } from "./common";
+import type { Booleanish } from './common';
 
 export type AriaProps = {
   'aria-activedescendant'?: string | undefined;

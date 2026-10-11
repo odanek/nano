@@ -1,3 +1,5 @@
+- Remove the word Host and Nano from everywhere
+- Remove the vdom folder
 - Add unit tests
 - Address the problems found by Sol
 - Mouse events

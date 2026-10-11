@@ -1,25 +1,25 @@
 import { performSyncWorkOnRoot } from '../reconciler/work-loop.js';
-import { createFiber, NanoFiber } from './fiber.js';
-import { NanoEventDispatcher } from '../dom/dispatcher.js';
-import { type NanoNode } from './type.js';
-import { NanoElement, NanoElementTag } from './element.js';
+import { createFiber, Fiber } from '../reconciler/fiber.js';
+import { EventDispatcher } from '../dom/dispatcher.js';
+import { VNodeKind } from '../core/vnode.js';
+import type { Renderable } from '../core/renderable.js';
 
 export type NanoFiberRootProps = null;
 
 export type NanoFiberRootState = {
-  element: NanoElement;
+  element: Renderable;
 };
 
-export class NanoFiberRoot {
+export class FiberRoot {
   public readonly container: Element;
-  public current: NanoFiber<NanoFiberRootProps>;
-  public workInProgress: NanoFiber<NanoFiberRootProps> | null;
+  public current: Fiber<NanoFiberRootProps>;
+  public workInProgress: Fiber<NanoFiberRootProps> | null;
   public disposed: boolean;
-  public dispatcher: NanoEventDispatcher;
+  public dispatcher: EventDispatcher;
   private updateHandle: number | null;
 
   constructor(container: Element) {
-    const fiber = createFiber(NanoElementTag.HostRoot, null, null);
+    const fiber = createFiber(VNodeKind.Root, null, null);
     fiber.stateNode = this;
     fiber.memoizedState = {};
 
@@ -29,11 +29,11 @@ export class NanoFiberRoot {
     this.updateHandle = null;
     this.disposed = false;
 
-    this.dispatcher = new NanoEventDispatcher();
+    this.dispatcher = new EventDispatcher();
     this.dispatcher.connect(container);
   }
 
-  render(element: NanoNode): void {
+  render(element: Renderable): void {
     this.cancelUpdate();
 
     const update = { element };

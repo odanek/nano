@@ -1,31 +1,31 @@
 import { NanoEffectTag } from '../vdom/effect';
-import { NanoElementTag } from '../vdom/element';
-import { NanoFiber } from '../vdom/fiber';
+import { Fiber } from './fiber';
 import { diffProperties } from '../dom/element'; // TODO
+import { VNodeKind } from '../core/vnode';
 
 export function completeWork(
-  current: NanoFiber | null,
-  workInProgress: NanoFiber,
+  current: Fiber | null,
+  workInProgress: Fiber,
 ): void {
-  switch (workInProgress.tag) {
-    case NanoElementTag.HostComponent:
-      completeHostComponentWork(current, workInProgress);
+  switch (workInProgress.kind) {
+    case VNodeKind.Element:
+      completeElementWork(current, workInProgress);
       break;
-    case NanoElementTag.HostText:
-      completeHostTextWork(current, workInProgress);
+    case VNodeKind.Text:
+      completeTextWork(current, workInProgress);
       break;
-    case NanoElementTag.HostPortal:
-      completeHostPortalWork(current, workInProgress);
+    case VNodeKind.Portal:
+      completePortalWork(current, workInProgress);
       break;
-    case NanoElementTag.HostDecorator:
-      completeHostDecoratorWork(current, workInProgress);
+    case VNodeKind.Decorator:
+      completeDecoratorWork(current, workInProgress);
       break;
   }
 }
 
-function completeHostComponentWork(
-  current: NanoFiber | null,
-  workInProgress: NanoFiber,
+function completeElementWork(
+  current: Fiber | null,
+  workInProgress: Fiber,
 ): void {
   if (current !== null) {
     updateHostComponent(current, workInProgress);
@@ -34,10 +34,7 @@ function completeHostComponentWork(
   }
 }
 
-function completeHostTextWork(
-  current: NanoFiber | null,
-  workInProgress: NanoFiber,
-): void {
+function completeTextWork(current: Fiber | null, workInProgress: Fiber): void {
   if (current !== null) {
     const oldText = current.memoizedProps;
     const newText = workInProgress.pendingProps;
@@ -47,26 +44,23 @@ function completeHostTextWork(
   }
 }
 
-function completeHostPortalWork(
-  current: NanoFiber | null,
-  workInProgress: NanoFiber,
+function completePortalWork(
+  current: Fiber | null,
+  workInProgress: Fiber,
 ): void {
   if (current === null) {
     appendAllChildren(workInProgress.type as Element, workInProgress);
   }
 }
 
-function completeHostDecoratorWork(
-  current: NanoFiber | null,
-  workInProgress: NanoFiber,
+function completeDecoratorWork(
+  current: Fiber | null,
+  workInProgress: Fiber,
 ): void {
   workInProgress.effectTag |= NanoEffectTag.Update;
 }
 
-function updateHostComponent(
-  current: NanoFiber,
-  workInProgress: NanoFiber,
-): void {
+function updateHostComponent(current: Fiber, workInProgress: Fiber): void {
   const updatePayload = diffProperties(current, workInProgress);
   workInProgress.updateQueue = updatePayload;
   if (updatePayload) {
@@ -74,16 +68,13 @@ function updateHostComponent(
   }
 }
 
-function appendAllChildren(parent: Element, workInProgress: NanoFiber): void {
+function appendAllChildren(parent: Element, workInProgress: Fiber): void {
   let fiber = workInProgress.child;
   while (fiber !== null) {
-    const tag = fiber.tag;
-    if (
-      tag === NanoElementTag.HostComponent ||
-      tag === NanoElementTag.HostText
-    ) {
+    const kind = fiber.kind;
+    if (kind === VNodeKind.Element || kind === VNodeKind.Text) {
       parent.appendChild(fiber.stateNode as Node);
-    } else if (tag !== NanoElementTag.HostPortal && fiber.child !== null) {
+    } else if (kind !== VNodeKind.Portal && fiber.child !== null) {
       fiber = fiber.child;
       continue;
     }

@@ -1,16 +1,13 @@
+import type { PropsWithKey } from '../../core/key';
+import type { PropsWithRef } from '../../core/ref';
 import type {
   NanoDomClass,
   NanoDomStyle,
   NanoEvent,
   NanoEventHandler,
 } from '../../dom';
-import type { NanoKeyProps, NanoRefProps } from '../../vdom/type';
 import type { AriaProps, AriaRole } from './aria';
-import type {
-  Booleanish,
-  CrossOrigin,
-  DomProps,
-} from './common';
+import type { Booleanish, CrossOrigin, DomProps } from './common';
 
 // Largely taken from https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/react/index.d.ts
 
@@ -662,7 +659,7 @@ interface NanoHtmlWebViewProps extends HtmlProps<HTMLUnknownElement> {
 export type NanoHostComponentHtmlProps<
   P extends HtmlProps<E>,
   E extends HTMLElement,
-> = NanoRefProps & NanoKeyProps & P;
+> = PropsWithRef<PropsWithKey<P>>;
 
 export interface HtmlIntrinsicElements {
   a: NanoHostComponentHtmlProps<NanoHtmlAnchorProps, HTMLAnchorElement>;

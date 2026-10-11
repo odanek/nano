@@ -6,6 +6,7 @@ import type { PortalProps } from './portal';
 import type { Ref } from './ref';
 import type { Component } from './renderable';
 
+// TODO Rename to Tag?
 export const VNodeKind = {
   Root: 0,
   Element: 1,
@@ -26,7 +27,7 @@ export type VNode =
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   | ContextVNode<any>
   | FragmentVNode
-  | PortalVNode
+  | PortalVNode<Element>
   | DecoratorVNode;
 
 export interface RootVNode {
@@ -77,7 +78,7 @@ export interface FragmentVNode {
   readonly ref: null;
 }
 
-export interface PortalVNode<Container = unknown> {
+export interface PortalVNode<Container extends Element> {
   readonly kind: typeof VNodeKind.Portal;
   readonly type: Container;
   readonly key: Key | null;
@@ -93,7 +94,7 @@ export interface DecoratorVNode<D = unknown> {
   readonly props: DecoratorProps<D>;
 }
 
-class VNodeImpl<V extends VNode> {
+export class VNodeImpl<V extends VNode> {
   public kind: V['kind'];
   public type: V['type'];
   public key: V['key'];
@@ -169,7 +170,7 @@ export function createFragmentVNode(
   );
 }
 
-export function createPortalVNode<Container>(
+export function createPortalVNode<Container extends Element>(
   props: PortalProps<Container>,
   key: Key | null,
 ): VNodeImpl<PortalVNode<Container>> {

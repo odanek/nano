@@ -1,5 +1,5 @@
-import { getInstanceFiber, NanoFiber } from '../vdom/fiber';
-import { NanoElementTag } from '../vdom/element';
+import { getInstanceFiber, Fiber } from '../reconciler/fiber';
+import { VNodeKind } from '../core/vnode';
 import {
   NanoClipboardEvent,
   NanoEvent,
@@ -19,11 +19,12 @@ import {
 } from './event';
 import { capitalizeFirstLetter } from '../shared/string';
 
-type NanoEventTarget = DomEventProps<EventTarget>;
+// TODO Conflicts with NanoEventFilter
+type EventFilter = DomEventProps<EventTarget>;
 
-export class NanoEventDispatcher {
+export class EventDispatcher {
   private eventHandler: (event: Event) => void;
-  private filters: NanoEventTarget[];
+  private filters: EventFilter[];
 
   constructor() {
     this.eventHandler = this.handleEvent.bind(this);
@@ -47,12 +48,12 @@ export class NanoEventDispatcher {
     }
   }
 
-  public addFilter(filter: NanoEventTarget): () => void {
+  public addFilter(filter: EventFilter): () => void {
     this.filters.push(filter);
     return (): void => this.removeFilter(filter);
   }
 
-  public removeFilter(filter: NanoEventTarget): void {
+  public removeFilter(filter: EventFilter): void {
     const index = this.filters.indexOf(filter);
     if (index !== -1) {
       this.filters.splice(index, 1);
@@ -85,10 +86,10 @@ export class NanoEventDispatcher {
     }
   }
 
-  private getFiberChain(target: Node, bubbles: boolean): NanoEventTarget[] {
-    const chain: NanoEventTarget[] = [];
+  private getFiberChain(target: Node, bubbles: boolean): EventFilter[] {
+    const chain: EventFilter[] = [];
     let current: Node | null = target;
-    let fiber: NanoFiber | null = null;
+    let fiber: Fiber | null = null;
     while (current !== null && fiber === null) {
       fiber = getInstanceFiber(current);
       current = current.parentNode;
@@ -96,12 +97,12 @@ export class NanoEventDispatcher {
 
     while (fiber !== null) {
       if (
-        fiber.tag === NanoElementTag.HostComponent &&
+        fiber.kind === VNodeKind.Element &&
         (bubbles || fiber.stateNode === target)
       ) {
-        chain.push(fiber.memoizedProps as NanoEventTarget);
+        chain.push(fiber.memoizedProps as EventFilter);
       } else if (fiber.type === NanoEventFilter) {
-        chain.push(fiber.memoizedProps as NanoEventTarget);
+        chain.push(fiber.memoizedProps as EventFilter);
       }
       fiber = fiber.return;
     }
@@ -114,7 +115,7 @@ export class NanoEventDispatcher {
   }
 
   private runHandlerChain(
-    handlers: NanoEventTarget[],
+    handlers: EventFilter[],
     event: NanoEvent,
     captureHandlerName: NanoCaptureEventHandlerName,
     bubbleHandlerName: NanoBubbleEventHandlerName,
@@ -122,7 +123,7 @@ export class NanoEventDispatcher {
     const length = handlers.length;
 
     for (let i = length - 1; i >= 0 && !event.isPropagationStopped(); i--) {
-      const handler = handlers[i] as NanoEventTarget;
+      const handler = handlers[i] as EventFilter;
       const captureHandler = handler[captureHandlerName] as
         | NanoEventHandler<NanoEvent>
         | undefined;
@@ -130,7 +131,7 @@ export class NanoEventDispatcher {
     }
 
     for (let i = 0; i < length && !event.isPropagationStopped(); i++) {
-      const handler = handlers[i] as NanoEventTarget;
+      const handler = handlers[i] as EventFilter;
       const bubbleHandler = handler[bubbleHandlerName] as
         | NanoEventHandler<NanoEvent>
         | undefined;

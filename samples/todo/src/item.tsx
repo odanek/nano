@@ -2,7 +2,7 @@ import {
   classNames,
   createStyleSheet,
   css,
-  NanoKeyProps,
+  PropsWithKey,
   useContext,
   useStyleSheet,
 } from '@nano-ui/nano';
@@ -10,9 +10,9 @@ import { TodoItemState } from './reducer';
 import { DispatchContext } from './action';
 import { CheckBox } from './check-box';
 
-interface Props extends NanoKeyProps {
+type Props = PropsWithKey<{
   item: TodoItemState;
-}
+}>;
 
 export function TodoItem({ item }: Props): JSX.Element {
   const { done, label } = item;
