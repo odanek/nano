@@ -5,6 +5,8 @@ import {
   type Renderable,
   type PropsWithChildren,
 } from '../core/renderable';
+import { type Ref } from '../core/ref';
+import { type VNode } from '../core/vnode';
 
 export {
   type Renderable,
@@ -12,4 +14,6 @@ export {
   type Primitive,
   type Component,
   type PropsWithChildren,
+  type Ref,
+  type VNode,
 };
