@@ -94,6 +94,7 @@ export interface DecoratorVNode<D = unknown> {
   readonly props: DecoratorProps<D>;
 }
 
+// TODO Where to put the impl?
 export class VNodeImpl<V extends VNode> {
   public kind: V['kind'];
   public type: V['type'];

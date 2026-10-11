@@ -50,7 +50,7 @@ export function visitFibersDepthFirst(
   }
 }
 
-export function getHostParentFiber(fiber: Fiber): Fiber {
+export function getElementParentFiber(fiber: Fiber): Fiber {
   let parent = fiber.return;
   while (parent !== null) {
     const kind = parent.kind;
@@ -63,10 +63,10 @@ export function getHostParentFiber(fiber: Fiber): Fiber {
     }
     parent = parent.return;
   }
-  throw new Error('Host component parent fiber not found');
+  throw new Error('Could not find parent fiber of element kind');
 }
 
-export function getHostParentNode(parentFiber: Fiber): Element {
+export function getElementParentNode(parentFiber: Fiber): Element {
   const parentStateNode = parentFiber.stateNode;
   switch (parentFiber.kind) {
     case VNodeKind.Element:
@@ -76,18 +76,18 @@ export function getHostParentNode(parentFiber: Fiber): Element {
     case VNodeKind.Portal:
       return parentFiber.type as Element;
     default:
-      throw new Error('Invalid host parent fiber');
+      throw new Error('Could not find parent element - invalid fiber kind');
   }
 }
 
-export function getPlacedHostSibling(
+export function getPlacedElementSibling(
   fiber: Fiber,
-  hostParent: Fiber,
+  elementParent: Fiber,
 ): Element | null {
   let node = fiber;
   let emerged = true;
 
-  while (node !== hostParent) {
+  while (node !== elementParent) {
     if (emerged) {
       const sibling = node.sibling;
       if (sibling === null) {
@@ -100,9 +100,9 @@ export function getPlacedHostSibling(
     } else {
       const kind = node.kind;
       const isPlacement = isFlag(node.effectTag, EffectTag.Placement);
-      const isHost = kind === VNodeKind.Element || kind === VNodeKind.Text;
+      const isElement = kind === VNodeKind.Element || kind === VNodeKind.Text;
 
-      if (isHost) {
+      if (isElement) {
         if (isPlacement) {
           emerged = true;
         } else {

@@ -7,9 +7,9 @@ import {
 } from '../dom/text'; // TODO
 import {
   getDecoratorRoot,
-  getHostParentFiber,
-  getHostParentNode,
-  getPlacedHostSibling,
+  getElementParentFiber,
+  getElementParentNode,
+  getPlacedElementSibling,
 } from '../vdom/traversal';
 import {
   diffProperties,
@@ -39,15 +39,15 @@ export function commitDetachRef(current: Fiber | null): void {
 }
 
 export function commitPlacement(finishedWork: Fiber): void {
-  const parentFiber = getHostParentFiber(finishedWork);
-  const parentNode = getHostParentNode(parentFiber);
+  const parentFiber = getElementParentFiber(finishedWork);
+  const parentNode = getElementParentNode(parentFiber);
 
   if (isFlag(parentFiber.effectTag, EffectTag.ContentReset)) {
     resetTextContent(parentNode);
     parentFiber.effectTag &= ~EffectTag.ContentReset;
   }
 
-  const before = getPlacedHostSibling(finishedWork, parentFiber);
+  const before = getPlacedElementSibling(finishedWork, parentFiber);
   insertOrAppendPlacementNode(finishedWork, before, parentNode);
 
   finishedWork.effectTag &= ~EffectTag.Placement;

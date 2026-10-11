@@ -1,4 +1,4 @@
-import { type EffectHookPayload, NanoHook, NanoHookTag } from './hook';
+import { type EffectHookPayload, Hook, HookTag } from './hook';
 import { Fiber } from '../reconciler/fiber';
 import { isFunction, isValue } from '../shared/predicate';
 import { type ValueOf } from '../shared/type';
@@ -28,11 +28,11 @@ let passiveEffectHandle: number | null = null;
 
 export function runEffects(fiber: Fiber): void {
   for (
-    let hook = fiber.memoizedState as NanoHook | null;
+    let hook = fiber.memoizedState as Hook | null;
     hook !== null;
     hook = hook.next
   ) {
-    if (hook.tag === NanoHookTag.Effect) {
+    if (hook.tag === HookTag.Effect) {
       const effect = hook.payload as EffectHookPayload;
       const passive = isFlag(effect.flags, EffectFlag.Passive);
       if (!passive) {
@@ -48,11 +48,11 @@ export function runEffects(fiber: Fiber): void {
 
 export function cleanupEffects(fiber: Fiber): void {
   for (
-    let hook = fiber.memoizedState as NanoHook | null;
+    let hook = fiber.memoizedState as Hook | null;
     hook !== null;
     hook = hook.next
   ) {
-    if (hook.tag === NanoHookTag.Effect) {
+    if (hook.tag === HookTag.Effect) {
       const effect = hook.payload as EffectHookPayload;
       const passive = isFlag(effect.flags, EffectFlag.Passive);
       if (passive) {

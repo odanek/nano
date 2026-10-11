@@ -4,16 +4,16 @@ import { Fiber } from '../reconciler/fiber';
 import { FiberRoot } from './fiber-root';
 import {
   type NanoEffectCreator,
-  NanoHook,
+  Hook,
   type NanoHookDispatcher,
-  NanoHookTag,
+  HookTag,
   type NanoReducer,
   type EffectHookPayload,
   type NanoReducerHookPayload,
   type NanoCallbackHookPayload,
   type NanoMemoHookPayload,
   type NanoStyleSheetHookPayload,
-  type NanoHookTagValue,
+  type HookTagValue,
 } from '../hooks/hook';
 import { findFiberRoot } from './traversal';
 import { EffectFlag, EffectTag, pushPassiveEffect } from '../hooks/effect';
@@ -34,8 +34,8 @@ import { createRef, type Ref } from '../core/ref';
 type NanoFunctionComponentProps = PlainObject;
 
 let workInProgressFiber: Fiber | null = null;
-let workInProgressHook: NanoHook | null = null;
-let currentHook: NanoHook | null = null;
+let workInProgressHook: Hook | null = null;
+let currentHook: Hook | null = null;
 let hookDispatcher: NanoHookDispatcher | null = null;
 
 const mountDispatcher: NanoHookDispatcher = {
@@ -114,11 +114,11 @@ export function updateFunctionComponent(
   }
 
   for (
-    let hook = current.memoizedState as NanoHook | null;
+    let hook = current.memoizedState as Hook | null;
     hook !== null;
     hook = hook.next
   ) {
-    if (hook.tag === NanoHookTag.Reducer) {
+    if (hook.tag === HookTag.Reducer) {
       const payload = hook.payload as NanoReducerHookPayload;
       if (payload.dirty) {
         return true;
@@ -133,12 +133,11 @@ export function runStyleEffects(
   current: Fiber | null,
   finishedWork: Fiber | null,
 ): void {
-  let currentHook = (current?.memoizedState ?? null) as NanoHook | null;
-  let finishedWorkHook = (finishedWork?.memoizedState ??
-    null) as NanoHook | null;
+  let currentHook = (current?.memoizedState ?? null) as Hook | null;
+  let finishedWorkHook = (finishedWork?.memoizedState ?? null) as Hook | null;
 
   while (currentHook !== null || finishedWorkHook !== null) {
-    if (currentHook?.tag === NanoHookTag.Style) {
+    if (currentHook?.tag === HookTag.Style) {
       const payload =
         currentHook.payload as NanoStyleSheetHookPayload<NanoStyleBundle>;
       if (finishedWorkHook === null) {
@@ -151,7 +150,7 @@ export function runStyleEffects(
           connectBundle(finishedWorkPayload.bundle);
         }
       }
-    } else if (finishedWorkHook?.tag === NanoHookTag.Style) {
+    } else if (finishedWorkHook?.tag === HookTag.Style) {
       const payload =
         finishedWorkHook.payload as NanoStyleSheetHookPayload<NanoStyleBundle>;
       connectBundle(payload.bundle);
@@ -162,8 +161,8 @@ export function runStyleEffects(
   }
 }
 
-function mountWorkInProgressHook(tag: NanoHookTagValue): NanoHook {
-  const hook = new NanoHook(tag);
+function mountWorkInProgressHook(tag: HookTagValue): Hook {
+  const hook = new Hook(tag);
 
   if (workInProgressHook === null) {
     (workInProgressFiber as Fiber).memoizedState = hook;
@@ -175,10 +174,10 @@ function mountWorkInProgressHook(tag: NanoHookTagValue): NanoHook {
   return hook;
 }
 
-function updateWorkInProgressHook(tag: NanoHookTagValue): NanoHook {
+function updateWorkInProgressHook(tag: HookTagValue): Hook {
   if (currentHook === null) {
     const current = (workInProgressFiber as Fiber).alternate as Fiber;
-    currentHook = current.memoizedState as NanoHook;
+    currentHook = current.memoizedState as Hook;
   } else {
     currentHook = currentHook.next;
   }
@@ -280,7 +279,7 @@ function mountEffect(
   create: NanoEffectCreator,
   deps: readonly unknown[],
 ): void {
-  const hook = mountWorkInProgressHook(NanoHookTag.Effect);
+  const hook = mountWorkInProgressHook(HookTag.Effect);
   const payload = createEffectPayload(
     create,
     deps,
@@ -294,13 +293,13 @@ function mountLayoutEffect(
   create: NanoEffectCreator,
   deps: readonly unknown[],
 ): void {
-  const hook = mountWorkInProgressHook(NanoHookTag.Effect);
+  const hook = mountWorkInProgressHook(HookTag.Effect);
   hook.payload = createEffectPayload(create, deps, EffectFlag.Create);
   (workInProgressFiber as Fiber).effectTag |= EffectTag.Effect;
 }
 
 function mountContext<T>(context: Context<T>): T {
-  mountWorkInProgressHook(NanoHookTag.Context);
+  mountWorkInProgressHook(HookTag.Context);
   const key = getContextKey(context);
   addContextType(workInProgressFiber as Fiber, key);
   const fullContext = (workInProgressFiber as Fiber).fullContext;
@@ -315,7 +314,7 @@ function mountContext<T>(context: Context<T>): T {
 function mountStyleSheet<S extends NanoStyleBundle>(
   styleSheet: NanoStyleSheet<S>,
 ): Record<keyof S, string> {
-  const hook = mountWorkInProgressHook(NanoHookTag.Style);
+  const hook = mountWorkInProgressHook(HookTag.Style);
   const payload = styleSheet;
   hook.payload = payload;
   (workInProgressFiber as Fiber).effectTag |= EffectTag.Style;
@@ -326,14 +325,14 @@ function mountReducer<T, A>(
   reducer: NanoReducer<T, A>,
   initialState: T,
 ): [T, (action: A) => void] {
-  const hook = mountWorkInProgressHook(NanoHookTag.Reducer);
+  const hook = mountWorkInProgressHook(HookTag.Reducer);
   const payload = createReducerPayload(reducer, initialState);
   hook.payload = payload;
   return [initialState, payload.dispatch];
 }
 
 function mountRef<T>(initialValue: T): Ref<T> {
-  const hook = mountWorkInProgressHook(NanoHookTag.Ref);
+  const hook = mountWorkInProgressHook(HookTag.Ref);
   const ref = createRef(initialValue);
   hook.payload = ref;
   return ref;
@@ -343,14 +342,14 @@ function mountCallback<T extends AnyFunction>(
   callback: T,
   deps: readonly unknown[],
 ): T {
-  const hook = mountWorkInProgressHook(NanoHookTag.Callback);
+  const hook = mountWorkInProgressHook(HookTag.Callback);
   const payload = createCallbackPayload(callback, deps);
   hook.payload = payload;
   return payload.callback;
 }
 
 function mountMemo<T>(create: () => T, deps: readonly unknown[]): T {
-  const hook = mountWorkInProgressHook(NanoHookTag.Memo);
+  const hook = mountWorkInProgressHook(HookTag.Memo);
   const payload = createMemoPayload(create, deps);
   hook.payload = payload;
   return payload.value;
@@ -370,7 +369,7 @@ function updateEffect(
   create: NanoEffectCreator,
   deps: readonly unknown[],
 ): void {
-  const hook = updateWorkInProgressHook(NanoHookTag.Effect);
+  const hook = updateWorkInProgressHook(HookTag.Effect);
   const payload = hook.payload as EffectHookPayload;
   if (!arrayEquals(payload.deps, deps)) {
     payload.flags |= EffectFlag.Destroy;
@@ -389,7 +388,7 @@ function updateLayoutEffect(
   create: NanoEffectCreator,
   deps: readonly unknown[],
 ): void {
-  const hook = updateWorkInProgressHook(NanoHookTag.Effect);
+  const hook = updateWorkInProgressHook(HookTag.Effect);
   const payload = hook.payload as EffectHookPayload;
   if (!arrayEquals(payload.deps, deps)) {
     hook.payload = createEffectPayload(create, deps, EffectFlag.Create);
@@ -398,7 +397,7 @@ function updateLayoutEffect(
 }
 
 function updateContext<T>(context: Context<T>): T {
-  updateWorkInProgressHook(NanoHookTag.Context);
+  updateWorkInProgressHook(HookTag.Context);
   const key = getContextKey(context);
   const fullContext = (workInProgressFiber as Fiber).fullContext;
   if (!objectHasOwnProperty(fullContext, key)) {
@@ -410,7 +409,7 @@ function updateContext<T>(context: Context<T>): T {
 function updateStyleSheet<S extends NanoStyleBundle>(
   styleSheet: NanoStyleSheet<S>,
 ): Record<keyof S, string> {
-  const hook = updateWorkInProgressHook(NanoHookTag.Style);
+  const hook = updateWorkInProgressHook(HookTag.Style);
   let payload = hook.payload as NanoStyleSheetHookPayload<S>;
   if (payload !== styleSheet) {
     payload = styleSheet;
@@ -426,7 +425,7 @@ function updateReducer<T, A>(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   initialState: T,
 ): [T, (action: A) => void] {
-  const hook = updateWorkInProgressHook(NanoHookTag.Reducer);
+  const hook = updateWorkInProgressHook(HookTag.Reducer);
   const payload = hook.payload as NanoReducerHookPayload;
   if (payload.dirty) {
     payload.memoizedState = payload.nextState;
@@ -439,7 +438,7 @@ function updateReducer<T, A>(
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function updateRef<T>(initialValue: T): Ref<T> {
-  const hook = updateWorkInProgressHook(NanoHookTag.Ref);
+  const hook = updateWorkInProgressHook(HookTag.Ref);
   return hook.payload as Ref<T>;
 }
 
@@ -447,7 +446,7 @@ function updateCallback<T extends AnyFunction>(
   callback: T,
   deps: readonly unknown[],
 ): T {
-  const hook = updateWorkInProgressHook(NanoHookTag.Callback);
+  const hook = updateWorkInProgressHook(HookTag.Callback);
   const payload = hook.payload as NanoCallbackHookPayload<T>;
   if (!arrayEquals(payload.deps, deps)) {
     const updatedPayload = (hook.payload = createCallbackPayload(
@@ -461,7 +460,7 @@ function updateCallback<T extends AnyFunction>(
 }
 
 function updateMemo<T>(create: () => T, deps: readonly unknown[]): T {
-  const hook = updateWorkInProgressHook(NanoHookTag.Memo);
+  const hook = updateWorkInProgressHook(HookTag.Memo);
   const payload = hook.payload as NanoMemoHookPayload<T>;
   if (!arrayEquals(payload.deps, deps)) {
     const newPayload = createMemoPayload(create, deps);

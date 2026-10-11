@@ -5,19 +5,19 @@ import type { EventDispatcher } from '../dom/dispatcher';
 import type { Context } from '../core/context';
 import type { Ref } from '../core/ref';
 
-export class NanoHook<P = unknown> {
-  public tag: NanoHookTagValue;
-  public next: NanoHook | null;
+export class Hook<P = unknown> {
+  public tag: HookTagValue;
+  public next: Hook | null;
   public payload: P | null;
 
-  constructor(tag: NanoHookTagValue) {
+  constructor(tag: HookTagValue) {
     this.tag = tag;
     this.next = null;
     this.payload = null;
   }
 }
 
-export const NanoHookTag = {
+export const HookTag = {
   Effect: 1,
   Context: 2,
   Style: 3,
@@ -26,7 +26,7 @@ export const NanoHookTag = {
   Callback: 6,
   Memo: 7,
 };
-export type NanoHookTagValue = ValueOf<typeof NanoHookTag>;
+export type HookTagValue = ValueOf<typeof HookTag>;
 
 export type NanoReducer<T, A> = (state: T, action: A) => T;
 export type NanoEffectCleanup = () => void;
