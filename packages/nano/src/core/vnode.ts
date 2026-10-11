@@ -1,7 +1,10 @@
 import type { Context, ContextProps } from './context';
+import type { DecoratorProps } from './decorator';
+import type { FragmentProps } from './fragment';
 import type { Key } from './key';
+import type { PortalProps } from './portal';
 import type { Ref } from './ref';
-import type { Component, PropsWithChildren } from './renderable';
+import type { Component } from './renderable';
 
 export const VNodeKind = {
   Root: 0,
@@ -89,12 +92,6 @@ export interface DecoratorVNode<D = unknown> {
   readonly ref: null;
   readonly props: DecoratorProps<D>;
 }
-
-export type FragmentProps = PropsWithChildren;
-export type PortalProps<Container = unknown> = PropsWithChildren<{
-  container: Container;
-}>;
-export type DecoratorProps<D = unknown> = PropsWithChildren<D>;
 
 // TODO Where to put the impls?
 class VNodeImpl<V extends VNode> {
