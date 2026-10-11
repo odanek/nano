@@ -1,11 +1,11 @@
-import { createWorkInProgress, NanoFiber } from './fiber';
-import { NanoFiberRoot, type NanoFiberRootProps } from './fiber-root';
-import { beginWork } from './update/begin-work';
-import { completeWork } from './update/complete-work';
+import { createWorkInProgress, NanoFiber } from '../vdom/fiber';
+import { NanoFiberRoot, type NanoFiberRootProps } from '../vdom/fiber-root';
+import { beginWork } from './begin-work';
+import { completeWork } from './complete-work';
 import {
   commitBeforeDeletion,
   commitBeforeMutation,
-} from './update/before-mutation';
+} from './before-mutation';
 import {
   commitDeletion,
   commitDetachRef,
@@ -13,14 +13,14 @@ import {
   commitPlacement,
   commitResetTextContent,
   commitStyleMutation,
-} from './update/mutation';
-import { commitAfterMutation, commitAttachRef } from './update/after-mutation';
-import { visitFibersDepthFirst } from './traversal';
+} from './mutation';
+import { commitAfterMutation, commitAttachRef } from './after-mutation';
+import { visitFibersDepthFirst } from '../vdom/traversal';
 import {
   NanoEffectTag,
   runPassiveEffects,
   schedulePassiveEffects,
-} from './effect';
+} from '../vdom/effect';
 import { isFlag } from '../shared/flags';
 
 export function performSyncWorkOnRoot(root: NanoFiberRoot): void {

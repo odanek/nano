@@ -1,7 +1,7 @@
-import { NanoEffectTag } from '../effect';
-import { NanoElementTag } from '../element';
-import { NanoFiber } from '../fiber';
-import { diffProperties } from '../../dom/element'; // TODO
+import { NanoEffectTag } from '../vdom/effect';
+import { NanoElementTag } from '../vdom/element';
+import { NanoFiber } from '../vdom/fiber';
+import { diffProperties } from '../dom/element'; // TODO
 
 export function completeWork(
   current: NanoFiber | null,

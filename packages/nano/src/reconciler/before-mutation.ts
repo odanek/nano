@@ -1,7 +1,7 @@
-import { NanoElementTag } from '../element';
-import { NanoFiber } from '../fiber';
-import { runEffects, cleanupEffects } from '../effect';
-import { visitFibersDepthFirst } from '../traversal';
+import { NanoElementTag } from '../vdom/element';
+import { NanoFiber } from '../vdom/fiber';
+import { runEffects, cleanupEffects } from '../vdom/effect';
+import { visitFibersDepthFirst } from '../vdom/traversal';
 
 export function commitBeforeMutation(current: NanoFiber | null): void {
   if (current !== null) {

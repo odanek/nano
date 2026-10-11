@@ -1,29 +1,29 @@
-import { NanoFiber, unmarkInstanceFiber } from '../fiber';
+import { NanoFiber, unmarkInstanceFiber } from '../vdom/fiber';
 import {
   type NanoHostTextProps,
   type NanoHostTextStateNode,
   resetHostTextContent,
   updateHostTextInstance,
-} from '../../dom/text'; // TODO
+} from '../dom/text'; // TODO
 import {
   getDecoratorRoot,
   getHostParentFiber,
   getHostParentNode,
   getPlacedHostSibling,
-} from '../traversal';
+} from '../vdom/traversal';
 import {
   diffProperties,
   type NanoHostComponentPropsDiff,
   type NanoHostComponentStateNode,
   setInitialProperties,
   updateHostComponentInstance,
-} from '../../dom/element'; // TODO
-import { runStyleEffects } from '../function-component';
-import { NanoEffectTag } from '../effect';
-import { NanoElementTag } from '../element';
-import { type PlainObject } from '../../shared/type';
-import { isFlag } from '../../shared/flags';
-import { type NanoDecoratorProps } from '../../dom/decorator';
+} from '../dom/element'; // TODO
+import { runStyleEffects } from '../vdom/function-component';
+import { NanoEffectTag } from '../vdom/effect';
+import { NanoElementTag } from '../vdom/element';
+import { type PlainObject } from '../shared/type';
+import { isFlag } from '../shared/flags';
+import { type NanoDecoratorProps } from '../dom/decorator';
 
 export function commitResetTextContent(fiber: NanoFiber): void {
   resetHostTextContent(fiber.stateNode as NanoHostTextStateNode);

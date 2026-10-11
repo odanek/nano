@@ -1,5 +1,5 @@
-import { NanoFiber } from '../fiber';
-import { runEffects } from '../effect';
+import { NanoFiber } from '../vdom/fiber';
+import { runEffects } from '../vdom/effect';
 
 export function commitAfterMutation(finishedWork: NanoFiber): void {
   runEffects(finishedWork);

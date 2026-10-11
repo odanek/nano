@@ -1,19 +1,19 @@
-import { NanoElement, type NanoElementKey, NanoElementTag } from '../element';
+import { NanoElement, type NanoElementKey, NanoElementTag } from '../vdom/element';
 import {
   createFiberFromElement,
   createWorkInProgress,
   NanoFiber,
-} from '../fiber';
-import { type NanoNode } from '../type';
-import { type NanoFragmentProps } from '../fragment';
-import { NanoEffectTag } from '../effect';
+} from '../vdom/fiber';
+import { type NanoNode } from '../vdom/type';
+import { type NanoFragmentProps } from '../vdom/fragment';
+import { NanoEffectTag } from '../vdom/effect';
 import {
   isArray,
   isIterable,
   isNumber,
   isString,
   isValue,
-} from '../../shared/predicate';
+} from '../shared/predicate';
 
 type NanoReconciler = (
   returnFiber: NanoFiber,

@@ -1,8 +1,8 @@
-import { markInstanceFiber, NanoFiber } from '../fiber';
-import { createHostComponentInstance } from '../../dom/element'; // TODO
-import { createHostTextInstance } from '../../dom/text'; // TODO
-import { type NanoFiberRootState } from '../fiber-root';
-import { type NanoChildren, type NanoChildrenProps } from '../type';
+import { markInstanceFiber, NanoFiber } from '../vdom/fiber';
+import { createHostComponentInstance } from '../dom/element'; // TODO
+import { createHostTextInstance } from '../dom/text'; // TODO
+import { type NanoFiberRootState } from '../vdom/fiber-root';
+import { type NanoChildren, type NanoChildrenProps } from '../vdom/type';
 import {
   cloneChildFibers,
   mountChildFibers,
@@ -13,14 +13,14 @@ import {
   getContextKey,
   type NanoContext,
   type NanoContextProps,
-} from '../context';
+} from '../vdom/context';
 import {
   renderFunctionComponent,
   updateFunctionComponent,
-} from '../function-component';
-import { NanoElementTag } from '../element';
-import { NanoEffectTag } from '../effect';
-import { isNumber, isString } from '../../shared/predicate';
+} from '../vdom/function-component';
+import { NanoElementTag } from '../vdom/element';
+import { NanoEffectTag } from '../vdom/effect';
+import { isNumber, isString } from '../shared/predicate';
 
 export function beginWork(
   current: NanoFiber | null,
