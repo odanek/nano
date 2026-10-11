@@ -1,4 +1,4 @@
-import { NanoEffectTag } from '../vdom/effect';
+import { EffectTag } from '../hooks/effect';
 import { Fiber } from './fiber';
 import { diffProperties } from '../dom/element'; // TODO
 import { VNodeKind } from '../core/vnode';
@@ -39,7 +39,7 @@ function completeTextWork(current: Fiber | null, workInProgress: Fiber): void {
     const oldText = current.memoizedProps;
     const newText = workInProgress.pendingProps;
     if (oldText !== newText) {
-      workInProgress.effectTag |= NanoEffectTag.Update;
+      workInProgress.effectTag |= EffectTag.Update;
     }
   }
 }
@@ -57,14 +57,14 @@ function completeDecoratorWork(
   current: Fiber | null,
   workInProgress: Fiber,
 ): void {
-  workInProgress.effectTag |= NanoEffectTag.Update;
+  workInProgress.effectTag |= EffectTag.Update;
 }
 
 function updateHostComponent(current: Fiber, workInProgress: Fiber): void {
   const updatePayload = diffProperties(current, workInProgress);
   workInProgress.updateQueue = updatePayload;
   if (updatePayload) {
-    workInProgress.effectTag |= NanoEffectTag.Update;
+    workInProgress.effectTag |= EffectTag.Update;
   }
 }
 

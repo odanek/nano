@@ -11,7 +11,7 @@ import {
   renderFunctionComponent,
   updateFunctionComponent,
 } from '../vdom/function-component';
-import { NanoEffectTag } from '../vdom/effect';
+import { EffectTag } from '../hooks/effect';
 import { isNumber, isString } from '../shared/predicate';
 import {
   emptyContext,
@@ -122,7 +122,7 @@ function beginElement(
     prevProps !== null &&
     shouldSetTextContent(prevProps.children as Renderable)
   ) {
-    workInProgress.effectTag |= NanoEffectTag.ContentReset;
+    workInProgress.effectTag |= EffectTag.ContentReset;
   }
 
   markRef(current, workInProgress);
@@ -159,7 +159,7 @@ function markRef(current: Fiber | null, workInProgress: Fiber): void {
     (current === null && ref !== null) ||
     (current !== null && current.ref !== ref)
   ) {
-    workInProgress.effectTag |= NanoEffectTag.Ref;
+    workInProgress.effectTag |= EffectTag.Ref;
   }
 }
 

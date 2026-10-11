@@ -1,5 +1,5 @@
 import { Fiber } from './fiber';
-import { runEffects } from '../vdom/effect';
+import { runEffects } from '../hooks/effect';
 
 export function commitAfterMutation(finishedWork: Fiber): void {
   runEffects(finishedWork);

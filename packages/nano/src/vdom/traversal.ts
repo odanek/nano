@@ -1,5 +1,5 @@
 import { Fiber } from '../reconciler/fiber';
-import { NanoEffectTag } from './effect';
+import { EffectTag } from '../hooks/effect';
 import { isFlag } from '../shared/flags';
 import { VNodeKind } from '../core/vnode';
 import type { FiberRoot } from './fiber-root';
@@ -99,7 +99,7 @@ export function getPlacedHostSibling(
       }
     } else {
       const kind = node.kind;
-      const isPlacement = isFlag(node.effectTag, NanoEffectTag.Placement);
+      const isPlacement = isFlag(node.effectTag, EffectTag.Placement);
       const isHost = kind === VNodeKind.Element || kind === VNodeKind.Text;
 
       if (isHost) {

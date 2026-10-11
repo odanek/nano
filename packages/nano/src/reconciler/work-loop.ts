@@ -14,10 +14,10 @@ import {
 import { commitAfterMutation, commitAttachRef } from './after-mutation';
 import { visitFibersDepthFirst } from '../vdom/traversal';
 import {
-  NanoEffectTag,
+  EffectTag,
   runPassiveEffects,
   schedulePassiveEffects,
-} from '../vdom/effect';
+} from '../hooks/effect';
 import { isFlag } from '../shared/flags';
 
 export function performSyncWorkOnRoot(root: FiberRoot): void {
@@ -90,7 +90,7 @@ function fiberBeforeMutation(fiber: Fiber): void {
   const current = fiber.alternate;
   const effectTag = fiber.effectTag;
 
-  if (isFlag(effectTag, NanoEffectTag.Effect)) {
+  if (isFlag(effectTag, EffectTag.Effect)) {
     commitBeforeMutation(current);
   }
 
@@ -116,19 +116,19 @@ function commitMutationEffects(fiber: Fiber): void {
   const current = fiber.alternate;
   const effectTag = fiber.effectTag;
 
-  if (isFlag(effectTag, NanoEffectTag.ContentReset)) {
+  if (isFlag(effectTag, EffectTag.ContentReset)) {
     commitResetTextContent(fiber);
   }
-  if (isFlag(effectTag, NanoEffectTag.Ref)) {
+  if (isFlag(effectTag, EffectTag.Ref)) {
     commitDetachRef(current);
   }
-  if (isFlag(effectTag, NanoEffectTag.Placement)) {
+  if (isFlag(effectTag, EffectTag.Placement)) {
     commitPlacement(fiber);
   }
-  if (isFlag(effectTag, NanoEffectTag.Style)) {
+  if (isFlag(effectTag, EffectTag.Style)) {
     commitStyleMutation(current, fiber);
   }
-  if (isFlag(effectTag, NanoEffectTag.Update)) {
+  if (isFlag(effectTag, EffectTag.Update)) {
     commitMutation(current, fiber);
   }
 }
@@ -136,11 +136,11 @@ function commitMutationEffects(fiber: Fiber): void {
 function fiberAfterMutation(fiber: Fiber): void {
   const effectTag = fiber.effectTag;
 
-  if (isFlag(effectTag, NanoEffectTag.Effect)) {
+  if (isFlag(effectTag, EffectTag.Effect)) {
     commitAfterMutation(fiber);
   }
 
-  if (isFlag(effectTag, NanoEffectTag.Ref)) {
+  if (isFlag(effectTag, EffectTag.Ref)) {
     commitAttachRef(fiber);
   }
 }

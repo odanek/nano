@@ -8,15 +8,15 @@ import {
   type NanoHookDispatcher,
   NanoHookTag,
   type NanoReducer,
-  type NanoEffectHookPayload,
+  type EffectHookPayload,
   type NanoReducerHookPayload,
   type NanoCallbackHookPayload,
   type NanoMemoHookPayload,
   type NanoStyleSheetHookPayload,
   type NanoHookTagValue,
-} from './hook';
+} from '../hooks/hook';
 import { findFiberRoot } from './traversal';
-import { NanoEffectFlag, NanoEffectTag, pushPassiveEffect } from './effect';
+import { EffectFlag, EffectTag, pushPassiveEffect } from '../hooks/effect';
 import { objectEquals, objectHasOwnProperty } from '../shared/object';
 import { arrayEquals } from '../shared/array';
 import type { AnyFunction, PlainObject } from '../shared/type';
@@ -223,7 +223,7 @@ function createEffectPayload(
   create: NanoEffectCreator,
   deps: readonly unknown[],
   flags: number,
-): NanoEffectHookPayload {
+): EffectHookPayload {
   return {
     create,
     destroy: undefined,
@@ -284,7 +284,7 @@ function mountEffect(
   const payload = createEffectPayload(
     create,
     deps,
-    NanoEffectFlag.Create | NanoEffectFlag.Passive,
+    EffectFlag.Create | EffectFlag.Passive,
   );
   hook.payload = payload;
   pushPassiveEffect(payload);
@@ -295,8 +295,8 @@ function mountLayoutEffect(
   deps: readonly unknown[],
 ): void {
   const hook = mountWorkInProgressHook(NanoHookTag.Effect);
-  hook.payload = createEffectPayload(create, deps, NanoEffectFlag.Create);
-  (workInProgressFiber as Fiber).effectTag |= NanoEffectTag.Effect;
+  hook.payload = createEffectPayload(create, deps, EffectFlag.Create);
+  (workInProgressFiber as Fiber).effectTag |= EffectTag.Effect;
 }
 
 function mountContext<T>(context: Context<T>): T {
@@ -318,7 +318,7 @@ function mountStyleSheet<S extends NanoStyleBundle>(
   const hook = mountWorkInProgressHook(NanoHookTag.Style);
   const payload = styleSheet;
   hook.payload = payload;
-  (workInProgressFiber as Fiber).effectTag |= NanoEffectTag.Style;
+  (workInProgressFiber as Fiber).effectTag |= EffectTag.Style;
   return payload.classNames;
 }
 
@@ -371,14 +371,14 @@ function updateEffect(
   deps: readonly unknown[],
 ): void {
   const hook = updateWorkInProgressHook(NanoHookTag.Effect);
-  const payload = hook.payload as NanoEffectHookPayload;
+  const payload = hook.payload as EffectHookPayload;
   if (!arrayEquals(payload.deps, deps)) {
-    payload.flags |= NanoEffectFlag.Destroy;
+    payload.flags |= EffectFlag.Destroy;
     pushPassiveEffect(payload);
     const updatedPayload = createEffectPayload(
       create,
       deps,
-      NanoEffectFlag.Create | NanoEffectFlag.Passive,
+      EffectFlag.Create | EffectFlag.Passive,
     );
     hook.payload = updatedPayload;
     pushPassiveEffect(updatedPayload);
@@ -390,10 +390,10 @@ function updateLayoutEffect(
   deps: readonly unknown[],
 ): void {
   const hook = updateWorkInProgressHook(NanoHookTag.Effect);
-  const payload = hook.payload as NanoEffectHookPayload;
+  const payload = hook.payload as EffectHookPayload;
   if (!arrayEquals(payload.deps, deps)) {
-    hook.payload = createEffectPayload(create, deps, NanoEffectFlag.Create);
-    (workInProgressFiber as Fiber).effectTag |= NanoEffectTag.Effect;
+    hook.payload = createEffectPayload(create, deps, EffectFlag.Create);
+    (workInProgressFiber as Fiber).effectTag |= EffectTag.Effect;
   }
 }
 
@@ -415,7 +415,7 @@ function updateStyleSheet<S extends NanoStyleBundle>(
   if (payload !== styleSheet) {
     payload = styleSheet;
     hook.payload = payload;
-    (workInProgressFiber as Fiber).effectTag |= NanoEffectTag.Style;
+    (workInProgressFiber as Fiber).effectTag |= EffectTag.Style;
   }
   return payload.classNames;
 }

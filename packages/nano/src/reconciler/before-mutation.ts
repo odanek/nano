@@ -1,5 +1,5 @@
 import { Fiber } from './fiber';
-import { runEffects, cleanupEffects } from '../vdom/effect';
+import { runEffects, cleanupEffects } from '../hooks/effect';
 import { visitFibersDepthFirst } from '../vdom/traversal';
 import { VNodeKind } from '../core/vnode';
 

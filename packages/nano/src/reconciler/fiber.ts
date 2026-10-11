@@ -1,7 +1,7 @@
 import { FiberRoot } from '../vdom/fiber-root';
 import { type ElementStateNode } from '../dom/element'; // TODO
 import { type TextStateNode } from '../dom/text'; // TODO
-import { NanoEffectTag, type NanoEffectTagValue } from '../vdom/effect';
+import { EffectTag, type EffectTagValue } from '../hooks/effect';
 import { emptyObject } from '../shared/object';
 import { emptyArray } from '../shared/array';
 import type { Key } from '../core/key';
@@ -27,7 +27,7 @@ export class Fiber<P = unknown> {
   public fullContext: Record<ContextKey, unknown>;
   public contextTypes: readonly ContextKey[];
   public updateQueue: Array<unknown> | null;
-  public effectTag: NanoEffectTagValue;
+  public effectTag: EffectTagValue;
   public deletions: Array<Fiber> | null;
   public alternate: Fiber<P> | null;
 
@@ -51,7 +51,7 @@ export class Fiber<P = unknown> {
     this.contextTypes = emptyArray;
 
     this.updateQueue = null;
-    this.effectTag = NanoEffectTag.None;
+    this.effectTag = EffectTag.None;
     this.deletions = null;
 
     this.alternate = null;
@@ -92,7 +92,7 @@ export function createWorkInProgress<P>(
 
     workInProgress.fullContext = emptyObject;
 
-    workInProgress.effectTag = NanoEffectTag.None;
+    workInProgress.effectTag = EffectTag.None;
     workInProgress.deletions = [];
   }
 

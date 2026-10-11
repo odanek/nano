@@ -1,10 +1,10 @@
-import { type NanoEffectHookPayload, NanoHook, NanoHookTag } from './hook';
+import { type EffectHookPayload, NanoHook, NanoHookTag } from './hook';
 import { Fiber } from '../reconciler/fiber';
 import { isFunction, isValue } from '../shared/predicate';
 import { type ValueOf } from '../shared/type';
 import { isFlag } from '../shared/flags';
 
-export const NanoEffectTag = {
+export const EffectTag = {
   None: 0x00,
   Placement: 0x01,
   Update: 0x02,
@@ -14,16 +14,16 @@ export const NanoEffectTag = {
   ContentReset: 0x20,
   Ref: 0x40,
 };
-export type NanoEffectTagValue = ValueOf<typeof NanoEffectTag>;
+export type EffectTagValue = ValueOf<typeof EffectTag>;
 
-export const NanoEffectFlag = {
+export const EffectFlag = {
   None: 0x00,
   Create: 0x01,
   Destroy: 0x02,
   Passive: 0x04,
 };
 
-export let passiveEffects: NanoEffectHookPayload[] = [];
+export let passiveEffects: EffectHookPayload[] = [];
 let passiveEffectHandle: number | null = null;
 
 export function runEffects(fiber: Fiber): void {
@@ -33,12 +33,12 @@ export function runEffects(fiber: Fiber): void {
     hook = hook.next
   ) {
     if (hook.tag === NanoHookTag.Effect) {
-      const effect = hook.payload as NanoEffectHookPayload;
-      const passive = isFlag(effect.flags, NanoEffectFlag.Passive);
+      const effect = hook.payload as EffectHookPayload;
+      const passive = isFlag(effect.flags, EffectFlag.Passive);
       if (!passive) {
-        if (isFlag(effect.flags, NanoEffectFlag.Create)) {
+        if (isFlag(effect.flags, EffectFlag.Create)) {
           createEffect(effect);
-        } else if (isFlag(effect.flags, NanoEffectFlag.Destroy)) {
+        } else if (isFlag(effect.flags, EffectFlag.Destroy)) {
           destroyEffect(effect);
         }
       }
@@ -53,10 +53,10 @@ export function cleanupEffects(fiber: Fiber): void {
     hook = hook.next
   ) {
     if (hook.tag === NanoHookTag.Effect) {
-      const effect = hook.payload as NanoEffectHookPayload;
-      const passive = isFlag(effect.flags, NanoEffectFlag.Passive);
+      const effect = hook.payload as EffectHookPayload;
+      const passive = isFlag(effect.flags, EffectFlag.Passive);
       if (passive) {
-        effect.flags |= NanoEffectFlag.Destroy;
+        effect.flags |= EffectFlag.Destroy;
         passiveEffects.push(effect);
       } else {
         destroyEffect(effect);
@@ -65,7 +65,7 @@ export function cleanupEffects(fiber: Fiber): void {
   }
 }
 
-export function pushPassiveEffect(effect: NanoEffectHookPayload): void {
+export function pushPassiveEffect(effect: EffectHookPayload): void {
   passiveEffects.push(effect);
 }
 
@@ -90,16 +90,16 @@ export function runPassiveEffects(): void {
   passiveEffects = [];
 
   for (const effect of effects) {
-    if (isFlag(effect.flags, NanoEffectFlag.Create)) {
+    if (isFlag(effect.flags, EffectFlag.Create)) {
       createEffect(effect);
-    } else if (isFlag(effect.flags, NanoEffectFlag.Destroy)) {
+    } else if (isFlag(effect.flags, EffectFlag.Destroy)) {
       destroyEffect(effect);
     }
   }
 }
 
-function createEffect(effect: NanoEffectHookPayload): void {
-  effect.flags &= ~NanoEffectFlag.Create;
+function createEffect(effect: EffectHookPayload): void {
+  effect.flags &= ~EffectFlag.Create;
   const destroy = effect.create();
   effect.destroy = destroy;
   if (isValue(destroy) && !isFunction(destroy)) {
@@ -109,7 +109,7 @@ function createEffect(effect: NanoEffectHookPayload): void {
   }
 }
 
-function destroyEffect(effect: NanoEffectHookPayload): void {
-  effect.flags &= ~NanoEffectFlag.Destroy;
+function destroyEffect(effect: EffectHookPayload): void {
+  effect.flags &= ~EffectFlag.Destroy;
   effect.destroy?.();
 }

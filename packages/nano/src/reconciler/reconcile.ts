@@ -1,5 +1,5 @@
 import { createFiberFromVNode, createWorkInProgress, Fiber } from './fiber';
-import { NanoEffectTag } from '../vdom/effect';
+import { EffectTag } from '../hooks/effect';
 import {
   isArray,
   isIterable,
@@ -157,7 +157,7 @@ function childReconciler(shouldTrackSideEffects: boolean): NanoReconciler {
     const deletions = returnFiber.deletions;
     if (deletions === null) {
       returnFiber.deletions = [childToDelete];
-      returnFiber.effectTag |= NanoEffectTag.Deletion;
+      returnFiber.effectTag |= EffectTag.Deletion;
     } else {
       deletions.push(childToDelete);
     }
@@ -194,21 +194,21 @@ function childReconciler(shouldTrackSideEffects: boolean): NanoReconciler {
       const oldIndex = current.index;
       if (oldIndex < lastPlacedIndex) {
         // Move
-        newFiber.effectTag = NanoEffectTag.Placement;
+        newFiber.effectTag = EffectTag.Placement;
         return lastPlacedIndex;
       } else {
         return oldIndex;
       }
     } else {
       // Insertion
-      newFiber.effectTag = NanoEffectTag.Placement;
+      newFiber.effectTag = EffectTag.Placement;
       return lastPlacedIndex;
     }
   }
 
   function placeSingleChild(newFiber: Fiber): Fiber {
     if (shouldTrackSideEffects && newFiber.alternate === null) {
-      newFiber.effectTag = NanoEffectTag.Placement;
+      newFiber.effectTag = EffectTag.Placement;
     }
     return newFiber;
   }

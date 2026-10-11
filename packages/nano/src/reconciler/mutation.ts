@@ -19,7 +19,7 @@ import {
   updateElementInstance,
 } from '../dom/element'; // TODO
 import { runStyleEffects } from '../vdom/function-component';
-import { NanoEffectTag } from '../vdom/effect';
+import { EffectTag } from '../hooks/effect';
 import { type PlainObject } from '../shared/type';
 import { isFlag } from '../shared/flags';
 import { type DecoratorProps } from '../core/decorator';
@@ -42,15 +42,15 @@ export function commitPlacement(finishedWork: Fiber): void {
   const parentFiber = getHostParentFiber(finishedWork);
   const parentNode = getHostParentNode(parentFiber);
 
-  if (isFlag(parentFiber.effectTag, NanoEffectTag.ContentReset)) {
+  if (isFlag(parentFiber.effectTag, EffectTag.ContentReset)) {
     resetTextContent(parentNode);
-    parentFiber.effectTag &= ~NanoEffectTag.ContentReset;
+    parentFiber.effectTag &= ~EffectTag.ContentReset;
   }
 
   const before = getPlacedHostSibling(finishedWork, parentFiber);
   insertOrAppendPlacementNode(finishedWork, before, parentNode);
 
-  finishedWork.effectTag &= ~NanoEffectTag.Placement;
+  finishedWork.effectTag &= ~EffectTag.Placement;
 }
 
 function insertOrAppendPlacementNode(

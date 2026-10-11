@@ -66,7 +66,7 @@ export type NanoHookDispatcher = {
   useEventDispatcher: NanoEventDispatcherHook;
 };
 
-export type NanoEffectHookPayload = {
+export type EffectHookPayload = {
   create: NanoEffectCreator;
   destroy: NanoEffectCleanup | void;
   flags: number;
