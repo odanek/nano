@@ -54,7 +54,7 @@ export interface TextVNode {
   readonly props: string;
 }
 
-export interface ComponentVNode<P = unknown> {
+export interface ComponentVNode<P> {
   readonly kind: typeof VNodeKind.Component;
   readonly type: Component<P>;
   readonly key: Key | null;
@@ -62,7 +62,7 @@ export interface ComponentVNode<P = unknown> {
   readonly props: P;
 }
 
-export interface ContextVNode<T = unknown> {
+export interface ContextVNode<T> {
   readonly kind: typeof VNodeKind.Context;
   readonly type: Context<T>;
   readonly props: ContextProps<T>;
