@@ -3,7 +3,7 @@ import { Fiber } from '../reconciler/fiber';
 import { type NanoDomClass, type NanoDomStyle } from './type';
 import { isNumber, isString } from '../shared/predicate';
 import { type PlainObject } from '../shared/type';
-import type { PropsWithChildren } from '../core/renderable';
+import type { PropsWithChildren } from '../api/renderable';
 
 export type ElementStateNode = HTMLElement | SVGElement;
 export type ElementPropsDiff = Array<string | null>;

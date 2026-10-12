@@ -1,15 +1,14 @@
 import { isFunction, isString } from '../shared/predicate';
 import { emptyObject } from '../shared/object';
-import type { Component } from '../core/renderable';
-import type { Key } from '../core/key';
+import type { Component } from '../api/renderable';
+import type { Key } from '../api/key';
 import {
-  createComponentVNode,
-  createElementVNode,
   type ComponentVNode,
   type ElementVNode,
   type VNode,
-} from '../core/vnode';
-import type { PropsWithRef } from '../core/ref';
+} from '../api/vnode';
+import { createComponentVNode, createElementVNode } from '../core/vnode';
+import type { PropsWithRef } from '../api/ref';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type ElementType = Component<any> | string;

@@ -1,12 +1,8 @@
-import type { Fiber } from '../reconciler/fiber'; // TODO This file should not depend on reconciler
-import type { PropsWithKey } from './key';
-import type { PropsWithChildren } from './renderable';
-import { createContextVNode, type ContextVNode } from './vnode';
+import type { Context, ContextProps } from '../api/context';
+import type { Fiber } from '../reconciler/fiber';
+import type { ContextVNode } from '../api/vnode';
+import { createContextVNode } from '../core/vnode';
 
-export type Context<T = unknown> = (props: ContextProps<T>) => ContextVNode<T>;
-export type ContextProps<T = unknown> = PropsWithKey<
-  PropsWithChildren<{ value: T }>
->;
 export type ContextKey = number;
 
 let id = 1;

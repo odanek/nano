@@ -1,5 +1,5 @@
-import type { PropsWithKey } from '../../core/key';
-import type { PropsWithRef } from '../../core/ref';
+import type { PropsWithKey } from '../../api/key';
+import type { PropsWithRef } from '../../api/ref';
 import type { NanoDomClass, NanoDomStyle } from '../../dom';
 import type { AriaProps, AriaRole } from './aria';
 import type { Booleanish, CrossOrigin, DomProps } from './common';

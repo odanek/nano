@@ -13,14 +13,10 @@ import {
 } from '../vdom/function-component';
 import { EffectTag } from '../hooks/effect';
 import { isNumber, isString } from '../shared/predicate';
-import {
-  emptyContext,
-  getContextKey,
-  type Context,
-  type ContextProps,
-} from '../core/context';
-import { VNodeKind } from '../core/vnode';
-import type { PropsWithChildren, Renderable } from '../core/renderable';
+import { type Context, type ContextProps } from '../api/context';
+import { emptyContext, getContextKey } from '../core/context';
+import { VNodeKind } from '../api/vnode';
+import type { PropsWithChildren, Renderable } from '../api/renderable';
 
 export function beginWork(
   current: Fiber | null,

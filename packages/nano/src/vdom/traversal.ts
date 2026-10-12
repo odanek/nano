@@ -1,7 +1,7 @@
 import { Fiber } from '../reconciler/fiber';
 import { EffectTag } from '../hooks/effect';
 import { isFlag } from '../shared/flags';
-import { VNodeKind } from '../core/vnode';
+import { VNodeKind } from '../api/vnode';
 import type { FiberRoot } from './fiber-root';
 
 type TraversalCallback = (fiber: Fiber) => void;

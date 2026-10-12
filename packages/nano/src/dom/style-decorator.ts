@@ -1,5 +1,6 @@
-import type { DecoratorProps } from '../core/decorator';
-import { createDecoratorVNode, type DecoratorVNode } from '../core/vnode';
+import type { DecoratorProps } from '../api/decorator';
+import { type DecoratorVNode } from '../api/vnode';
+import { createDecoratorVNode } from '../core/vnode';
 import { type NanoDomStyle } from './type';
 
 export type StyleDecoratorProps = DecoratorProps<{

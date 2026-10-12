@@ -1,4 +1,4 @@
-import type { PropsWithChildren } from '../../core/renderable';
+import type { PropsWithChildren } from '../../api/renderable';
 import type { DomEventProps } from '../../dom';
 
 export type Booleanish = boolean | 'true' | 'false';

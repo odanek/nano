@@ -21,15 +21,16 @@ import { objectEquals, objectHasOwnProperty } from '../shared/object';
 import { arrayEquals } from '../shared/array';
 import type { AnyFunction, PlainObject } from '../shared/type';
 import type { EventDispatcher } from '../dom/dispatcher';
-import type { Component, Renderable } from '../core/renderable';
+import type { Component, Renderable } from '../api/renderable';
+import { type Context } from '../api/context';
 import {
   compareContext,
   getContextKey,
   getContextName,
-  type Context,
   type ContextKey,
 } from '../core/context';
-import { createRef, type Ref } from '../core/ref';
+import { type Ref } from '../api/ref';
+import { createRef } from '../core/ref';
 
 type NanoFunctionComponentProps = PlainObject;
 

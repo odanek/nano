@@ -1,8 +1,8 @@
 import { performSyncWorkOnRoot } from '../reconciler/work-loop.js';
 import { createFiber, Fiber } from '../reconciler/fiber.js';
 import { EventDispatcher } from '../dom/dispatcher.js';
-import { VNodeKind } from '../core/vnode.js';
-import type { Renderable } from '../core/renderable.js';
+import { VNodeKind } from '../api/vnode.js';
+import type { Renderable } from '../api/renderable.js';
 
 export type NanoFiberRootProps = null;
 

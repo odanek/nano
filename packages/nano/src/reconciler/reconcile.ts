@@ -7,16 +7,11 @@ import {
   isString,
   isValue,
 } from '../shared/predicate';
-import {
-  createFragmentVNode,
-  createTextVNode,
-  VNodeImpl,
-  VNodeKind,
-  type VNode,
-} from '../core/vnode';
-import type { Renderable } from '../core/renderable';
-import type { FragmentProps } from '../core/fragment';
-import type { Key } from '../core/key';
+import { VNodeKind, type VNode } from '../api/vnode';
+import { createFragmentVNode, createTextVNode, VNodeImpl } from '../core/vnode';
+import type { Renderable } from '../api/renderable';
+import type { FragmentProps } from '../api/fragment';
+import type { Key } from '../api/key';
 
 type NanoReconciler = (
   returnFiber: Fiber,

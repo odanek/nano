@@ -22,8 +22,8 @@ import { runStyleEffects } from '../vdom/function-component';
 import { EffectTag } from '../hooks/effect';
 import { type PlainObject } from '../shared/type';
 import { isFlag } from '../shared/flags';
-import { type DecoratorProps } from '../core/decorator';
-import { VNodeKind } from '../core/vnode';
+import { type DecoratorProps } from '../api/decorator';
+import { VNodeKind } from '../api/vnode';
 
 export function commitResetTextContent(fiber: Fiber): void {
   resetTextContent(fiber.stateNode as TextStateNode);

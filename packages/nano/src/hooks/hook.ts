@@ -2,8 +2,8 @@ import { type NanoStyleBundle, type NanoStyleSheet } from '../style/style';
 import { Fiber } from '../reconciler/fiber';
 import { type AnyFunction, type ValueOf } from '../shared/type';
 import type { EventDispatcher } from '../dom/dispatcher';
-import type { Context } from '../core/context';
-import type { Ref } from '../core/ref';
+import type { Context } from '../api/context';
+import type { Ref } from '../api/ref';
 
 export class Hook<P = unknown> {
   public tag: HookTagValue;

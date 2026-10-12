@@ -4,9 +4,9 @@ import { type TextStateNode } from '../dom/text'; // TODO
 import { EffectTag, type EffectTagValue } from '../hooks/effect';
 import { emptyObject } from '../shared/object';
 import { emptyArray } from '../shared/array';
-import type { Key } from '../core/key';
-import type { Ref } from '../core/ref';
-import type { VNode } from '../core/vnode';
+import type { Key } from '../api/key';
+import type { Ref } from '../api/ref';
+import type { VNode } from '../api/vnode';
 import type { ContextKey } from '../core/context';
 
 const fiberKey = Symbol('nano-fiber-key');

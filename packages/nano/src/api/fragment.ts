@@ -1,6 +1,7 @@
 import type { PropsWithKey } from './key';
 import type { PropsWithChildren, Renderable } from './renderable';
-import { createFragmentVNode, type FragmentVNode } from './vnode';
+import type { FragmentVNode } from './vnode';
+import { createFragmentVNode } from '../core/vnode';
 import { emptyArray } from '../shared/array';
 import { isIterable, isValue } from '../shared/predicate';
 
@@ -8,6 +9,7 @@ export type FragmentProps = PropsWithKey<{
   children: Iterable<Renderable>;
 }>;
 
+// Move to core?
 export function Fragment({
   children,
   key,

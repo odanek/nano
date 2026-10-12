@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { jsx } from './factory';
 import { createRef } from '../core/ref';
 import { VNodeImpl } from '../core/vnode';
-import { type Renderable } from '../core/renderable';
+import { type Renderable } from '../api/renderable';
 
 describe('factory.ts', () => {
   describe('jsx', () => {

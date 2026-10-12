@@ -1,4 +1,4 @@
-import type { Renderable } from '../core/renderable';
+import type { Renderable } from '../api/renderable';
 import { FiberRoot } from './fiber-root';
 
 export function render(element: Renderable, container: HTMLElement): FiberRoot {

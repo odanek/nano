@@ -1,7 +1,7 @@
 import type { PropsWithKey } from '../api';
-import type { Empty, Primitive, PropsWithChildren } from '../core/renderable';
-import type { FragmentVNode, VNode } from '../core/vnode';
-import { Fragment as NanoFragment } from '../core/fragment';
+import type { Empty, Primitive, PropsWithChildren } from '../api/renderable';
+import type { FragmentVNode, VNode } from '../api/vnode';
+import { Fragment as NanoFragment } from '../api/fragment';
 import { type IntrinsicElements as NanoIntrinsicElements } from './intrinsic/index';
 
 type NanoElement = VNode | Primitive | Empty;

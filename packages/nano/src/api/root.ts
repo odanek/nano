@@ -1,5 +1,6 @@
-import type { Renderable } from '../core/renderable';
+import type { Renderable } from './renderable';
 
+// TODO
 export interface Root {
   render(node: Renderable): void;
   unmount(): void;

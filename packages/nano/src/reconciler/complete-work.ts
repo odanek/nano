@@ -1,7 +1,7 @@
 import { EffectTag } from '../hooks/effect';
 import { Fiber } from './fiber';
 import { diffProperties } from '../dom/element'; // TODO
-import { VNodeKind } from '../core/vnode';
+import { VNodeKind } from '../api/vnode';
 
 export function completeWork(
   current: Fiber | null,

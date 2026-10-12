@@ -1,4 +1,4 @@
-import type { PropsWithChildren, Renderable } from '../core/renderable';
+import type { PropsWithChildren, Renderable } from '../api/renderable';
 import type { ValueOf } from '../shared/type';
 
 export const NanoEventType = {

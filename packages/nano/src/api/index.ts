@@ -4,14 +4,15 @@ import {
   type Primitive,
   type Renderable,
   type PropsWithChildren,
-} from '../core/renderable';
-import { type Ref, type PropsWithRef } from '../core/ref';
-import { type Key, type PropsWithKey } from '../core/key';
-import { createContext, type Context } from '../core/context';
-import { Fragment } from '../core/fragment';
-import { Portal } from '../core/portal';
-import { type VNode } from '../core/vnode';
+} from './renderable';
+import { type Ref, type PropsWithRef } from './ref';
+import { type Key, type PropsWithKey } from './key';
+import { type Context } from './context';
+import { Fragment } from './fragment';
+import { Portal } from './portal';
+import { type VNode } from './vnode';
 
+import { createContext } from '../core/context';
 import { render } from '../vdom/render';
 
 import { type HtmlProps } from '../jsx/intrinsic/html';

@@ -1,5 +1,5 @@
 import { getInstanceFiber, Fiber } from '../reconciler/fiber';
-import { VNodeKind } from '../core/vnode';
+import { VNodeKind } from '../api/vnode';
 import {
   NanoClipboardEvent,
   NanoEvent,

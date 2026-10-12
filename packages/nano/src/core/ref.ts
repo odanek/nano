@@ -1,12 +1,5 @@
-export interface Ref<T = unknown> {
-  current: T;
-}
+import type { Ref } from '../api/ref';
 
-export type PropsWithRef<P = unknown> = P & {
-  ref?: Ref | undefined;
-};
-
-// TODO Where to put the impl?
 class RefImpl<T = unknown> implements Ref<T> {
   public current: T;
 

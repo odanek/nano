@@ -1,5 +1,6 @@
 import type { PropsWithChildren } from './renderable';
-import { createPortalVNode, type PortalVNode } from './vnode';
+import type { PortalVNode } from './vnode';
+import { createPortalVNode } from '../core/vnode';
 
 export type PortalProps<Container = unknown> = PropsWithChildren<{
   container: Container;

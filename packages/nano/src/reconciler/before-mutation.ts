@@ -1,7 +1,7 @@
 import { Fiber } from './fiber';
 import { runEffects, cleanupEffects } from '../hooks/effect';
 import { visitFibersDepthFirst } from '../vdom/traversal';
-import { VNodeKind } from '../core/vnode';
+import { VNodeKind } from '../api/vnode';
 
 export function commitBeforeMutation(current: Fiber | null): void {
   if (current !== null) {
