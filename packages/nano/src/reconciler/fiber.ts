@@ -1,4 +1,4 @@
-import { FiberRoot } from '../vdom/fiber-root';
+import { FiberRoot } from '../core/root';
 import { type ElementStateNode } from '../dom/element'; // TODO
 import { type TextStateNode } from '../dom/text'; // TODO
 import { EffectTag, type EffectTagValue } from '../hooks/effect';

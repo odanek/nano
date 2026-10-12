@@ -1,7 +1,7 @@
 import { connectBundle, disconnectBundle } from '../style/manager';
 import { type NanoStyleBundle, type NanoStyleSheet } from '../style/style';
 import { Fiber } from '../reconciler/fiber';
-import { FiberRoot } from './fiber-root';
+import { FiberRoot } from './root';
 import {
   type NanoEffectCreator,
   Hook,
@@ -28,9 +28,9 @@ import {
   getContextKey,
   getContextName,
   type ContextKey,
-} from '../core/context';
+} from './context';
 import { type Ref } from '../api/ref';
-import { createRef } from '../core/ref';
+import { createRef } from './ref';
 
 type NanoFunctionComponentProps = PlainObject;
 

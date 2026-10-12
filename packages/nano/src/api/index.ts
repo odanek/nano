@@ -13,7 +13,7 @@ import { Portal } from './portal';
 import { type VNode } from './vnode';
 
 import { createContext } from '../core/context';
-import { render } from '../vdom/render';
+import { render } from '../core/render';
 
 import { type HtmlProps } from '../jsx/intrinsic/html';
 import { classNames } from '../dom/element';
@@ -44,7 +44,7 @@ import {
   useState,
   useStyleSheet,
   useEventDispatcher,
-} from '../vdom/function-component';
+} from '../core/component';
 
 import {
   css,

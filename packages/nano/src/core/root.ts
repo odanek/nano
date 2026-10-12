@@ -10,6 +10,7 @@ export type NanoFiberRootState = {
   element: Renderable;
 };
 
+// Rename to RootImpl
 export class FiberRoot {
   public readonly container: Element;
   public current: Fiber<NanoFiberRootProps>;

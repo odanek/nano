@@ -32,7 +32,7 @@ export type NanoReducer<T, A> = (state: T, action: A) => T;
 export type NanoEffectCleanup = () => void;
 export type NanoEffectCreator = () => NanoEffectCleanup | void;
 
-// Move hook types to core
+// Move hook types to api
 export type NanoStateHook = <T>(initialState: T) => [T, (value: T) => void];
 export type NanoEffectHook = (
   create: NanoEffectCreator,

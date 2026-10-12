@@ -1,5 +1,5 @@
 import { createWorkInProgress, Fiber } from './fiber';
-import { FiberRoot, type NanoFiberRootProps } from '../vdom/fiber-root';
+import { FiberRoot, type NanoFiberRootProps } from '../core/root';
 import { beginWork } from './begin-work';
 import { completeWork } from './complete-work';
 import { commitBeforeDeletion, commitBeforeMutation } from './before-mutation';
@@ -12,7 +12,7 @@ import {
   commitStyleMutation,
 } from './mutation';
 import { commitAfterMutation, commitAttachRef } from './after-mutation';
-import { visitFibersDepthFirst } from '../vdom/traversal';
+import { visitFibersDepthFirst } from '../core/traversal';
 import {
   EffectTag,
   runPassiveEffects,

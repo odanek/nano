@@ -6,6 +6,7 @@ export type PortalProps<Container = unknown> = PropsWithChildren<{
   container: Container;
 }>;
 
+// Move to core?
 export function Portal<Container extends Element>(
   props: PortalProps<Container>,
 ): PortalVNode<Container> {

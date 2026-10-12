@@ -10,7 +10,7 @@ import {
   getElementParentFiber,
   getElementParentNode,
   getPlacedElementSibling,
-} from '../vdom/traversal';
+} from '../core/traversal';
 import {
   diffProperties,
   type ElementPropsDiff,
@@ -18,7 +18,7 @@ import {
   setInitialProperties,
   updateElementInstance,
 } from '../dom/element'; // TODO
-import { runStyleEffects } from '../vdom/function-component';
+import { runStyleEffects } from '../core/component';
 import { EffectTag } from '../hooks/effect';
 import { type PlainObject } from '../shared/type';
 import { isFlag } from '../shared/flags';

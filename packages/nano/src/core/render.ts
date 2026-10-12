@@ -1,5 +1,5 @@
 import type { Renderable } from '../api/renderable';
-import { FiberRoot } from './fiber-root';
+import { FiberRoot } from './root';
 
 export function render(element: Renderable, container: HTMLElement): FiberRoot {
   const root = new FiberRoot(container);

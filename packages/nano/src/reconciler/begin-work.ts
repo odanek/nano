@@ -1,7 +1,7 @@
 import { markInstanceFiber, Fiber } from './fiber';
 import { createElementInstance } from '../dom/element'; // TODO
 import { createTextInstance } from '../dom/text'; // TODO
-import { type NanoFiberRootState } from '../vdom/fiber-root';
+import { type NanoFiberRootState } from '../core/root';
 import {
   cloneChildFibers,
   mountChildFibers,
@@ -10,7 +10,7 @@ import {
 import {
   renderFunctionComponent,
   updateFunctionComponent,
-} from '../vdom/function-component';
+} from '../core/component';
 import { EffectTag } from '../hooks/effect';
 import { isNumber, isString } from '../shared/predicate';
 import { type Context, type ContextProps } from '../api/context';
