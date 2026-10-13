@@ -3,19 +3,19 @@ import { createFiber, Fiber } from '../reconciler/fiber.js';
 import { EventDispatcher } from '../dom/dispatcher.js';
 import { VNodeKind } from '../api/vnode.js';
 import type { Renderable } from '../api/renderable.js';
+import type { Root } from '../api/root.js';
 
-export type NanoFiberRootProps = null;
+export type RootProps = null;
 
-export type NanoFiberRootState = {
+export type RootState = {
   element: Renderable;
 };
 
-// Rename to RootImpl
-export class FiberRoot {
+export class RootImpl implements Root {
   public readonly container: Element;
-  public current: Fiber<NanoFiberRootProps>;
-  public workInProgress: Fiber<NanoFiberRootProps> | null;
-  public disposed: boolean;
+  public current: Fiber<RootProps>;
+  public workInProgress: Fiber<RootProps> | null;
+  public mounted: boolean;
   public dispatcher: EventDispatcher;
   private updateHandle: number | null;
 
@@ -28,7 +28,7 @@ export class FiberRoot {
     this.current = fiber;
     this.workInProgress = null;
     this.updateHandle = null;
-    this.disposed = false;
+    this.mounted = true;
 
     this.dispatcher = new EventDispatcher();
     this.dispatcher.connect(container);
@@ -63,11 +63,11 @@ export class FiberRoot {
     }
   }
 
-  dispose(): void {
+  unmount(): void {
     this.dispatcher.disconnect(this.container);
     this.render(null);
     this.cancelUpdate();
-    this.disposed = true;
+    this.mounted = true;
   }
 
   private cancelUpdate(): void {

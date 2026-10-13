@@ -2,7 +2,7 @@ import { Fiber } from '../reconciler/fiber';
 import { EffectTag } from '../hooks/effect';
 import { isFlag } from '../shared/flags';
 import { VNodeKind } from '../api/vnode';
-import type { FiberRoot } from './root';
+import type { RootImpl } from './root';
 
 type TraversalCallback = (fiber: Fiber) => void;
 
@@ -72,7 +72,7 @@ export function getElementParentNode(parentFiber: Fiber): Element {
     case VNodeKind.Element:
       return parentStateNode as Element;
     case VNodeKind.Root:
-      return (parentStateNode as FiberRoot).container;
+      return (parentStateNode as RootImpl).container;
     case VNodeKind.Portal:
       return parentFiber.type as Element;
     default:

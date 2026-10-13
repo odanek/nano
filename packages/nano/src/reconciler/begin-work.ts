@@ -1,7 +1,7 @@
 import { markInstanceFiber, Fiber } from './fiber';
 import { createElementInstance } from '../dom/element'; // TODO
 import { createTextInstance } from '../dom/text'; // TODO
-import { type NanoFiberRootState } from '../core/root';
+import { type RootState } from '../core/root';
 import {
   cloneChildFibers,
   mountChildFibers,
@@ -78,13 +78,13 @@ function beginComponent(
 }
 
 function beginRoot(current: Fiber, workInProgress: Fiber): Fiber | null {
-  const prevState = current.memoizedState as NanoFiberRootState;
+  const prevState = current.memoizedState as RootState;
   const prevChildren = prevState?.element ?? null;
 
   const updateQueue = current.updateQueue;
   const nextState = (
     updateQueue === null ? current.memoizedState : updateQueue[0]
-  ) as NanoFiberRootState;
+  ) as RootState;
   workInProgress.memoizedState = nextState;
   workInProgress.updateQueue = null;
 

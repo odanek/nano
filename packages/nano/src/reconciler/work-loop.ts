@@ -1,5 +1,5 @@
 import { createWorkInProgress, Fiber } from './fiber';
-import { FiberRoot, type NanoFiberRootProps } from '../core/root';
+import { RootImpl, type RootProps } from '../core/root';
 import { beginWork } from './begin-work';
 import { completeWork } from './complete-work';
 import { commitBeforeDeletion, commitBeforeMutation } from './before-mutation';
@@ -20,7 +20,7 @@ import {
 } from '../hooks/effect';
 import { isFlag } from '../shared/flags';
 
-export function performSyncWorkOnRoot(root: FiberRoot): void {
+export function performSyncWorkOnRoot(root: RootImpl): void {
   // console.time('Virtual dom update');
 
   runPassiveEffects();
@@ -73,7 +73,7 @@ function completeUnitOfWork(unitOfWork: Fiber): Fiber | null {
   return null;
 }
 
-function commitRoot(root: FiberRoot): void {
+function commitRoot(root: RootImpl): void {
   const finishedWork = root.workInProgress as Fiber;
   visitFibersDepthFirst(finishedWork, fiberBeforeMutation, null);
   visitFibersDepthFirst(
@@ -81,7 +81,7 @@ function commitRoot(root: FiberRoot): void {
     commitDeletionEffects,
     commitMutationEffects,
   );
-  root.current = finishedWork as Fiber<NanoFiberRootProps>;
+  root.current = finishedWork as Fiber<RootProps>;
   root.workInProgress = null;
   visitFibersDepthFirst(finishedWork, null, fiberAfterMutation);
 }

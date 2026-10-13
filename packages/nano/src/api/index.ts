@@ -46,16 +46,9 @@ import {
   useEventDispatcher,
 } from '../core/component';
 
-import {
-  type Style,
-  type StyleSheet,
-} from './style';
+import { type Style, type StyleSheet } from './style';
 
-import {
-  css,
-  keyframes,
-  createStyleSheet,
-} from '../style/style';
+import { css, keyframes, createStyleSheet } from '../style/style';
 
 import * as JSX from '../jsx/runtime';
 import type { EventDispatcher } from '../dom/dispatcher';

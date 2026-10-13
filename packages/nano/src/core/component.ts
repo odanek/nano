@@ -1,7 +1,7 @@
 import { connectBundle, disconnectBundle } from '../style/manager';
 import { type StyleBundle, type StyleSheet } from '../api/style';
 import { Fiber } from '../reconciler/fiber';
-import { FiberRoot } from './root';
+import { RootImpl } from './root';
 import type { EffectCreator, Reducer } from '../api/hook';
 import {
   Hook,
@@ -70,9 +70,9 @@ function scheduleUpdateOnFiber(fiber: Fiber): void {
     return;
   }
 
-  const root = rootFiber.stateNode as FiberRoot;
+  const root = rootFiber.stateNode as RootImpl;
   if (
-    !root.disposed &&
+    root.mounted &&
     (root.workInProgress === null || rootFiber === root.workInProgress)
   ) {
     root.scheduleUpdate();
@@ -138,8 +138,7 @@ export function runStyleEffects(
 
   while (currentHook !== null || finishedWorkHook !== null) {
     if (currentHook?.tag === HookTag.Style) {
-      const payload =
-        currentHook.payload as StyleSheetHookPayload<StyleBundle>;
+      const payload = currentHook.payload as StyleSheetHookPayload<StyleBundle>;
       if (finishedWorkHook === null) {
         disconnectBundle(payload.bundle);
       } else {
@@ -275,10 +274,7 @@ function mountState<T>(initialState: T): [T, (value: T) => void] {
   return mountReducer(stateReducer, initialState);
 }
 
-function mountEffect(
-  create: EffectCreator,
-  deps: readonly unknown[],
-): void {
+function mountEffect(create: EffectCreator, deps: readonly unknown[]): void {
   const hook = mountWorkInProgressHook(HookTag.Effect);
   const payload = createEffectPayload(
     create,
@@ -357,7 +353,7 @@ function mountMemo<T>(create: () => T, deps: readonly unknown[]): T {
 
 function mountEventDispatcher(): EventDispatcher {
   const rootFiber = findFiberRoot(workInProgressFiber as Fiber);
-  const root = rootFiber.stateNode as FiberRoot;
+  const root = rootFiber.stateNode as RootImpl;
   return root.dispatcher;
 }
 
@@ -365,10 +361,7 @@ function updateState<T>(initialState: T): [T, (value: T) => void] {
   return updateReducer(stateReducer, initialState);
 }
 
-function updateEffect(
-  create: EffectCreator,
-  deps: readonly unknown[],
-): void {
+function updateEffect(create: EffectCreator, deps: readonly unknown[]): void {
   const hook = updateWorkInProgressHook(HookTag.Effect);
   const payload = hook.payload as EffectHookPayload;
   if (!arrayEquals(payload.deps, deps)) {
@@ -503,10 +496,7 @@ export function useReducer<T, A>(
   reducer: Reducer<T, A>,
   initialState: T,
 ): [T, (action: A) => void] {
-  return (hookDispatcher as HookDispatcher).useReducer(
-    reducer,
-    initialState,
-  );
+  return (hookDispatcher as HookDispatcher).useReducer(reducer, initialState);
 }
 
 export function useRef<T>(initialValue: T): Ref<T> {

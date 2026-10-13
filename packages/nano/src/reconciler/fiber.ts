@@ -1,4 +1,4 @@
-import { FiberRoot } from '../core/root';
+import { RootImpl } from '../core/root';
 import { type ElementStateNode } from '../dom/element'; // TODO
 import { type TextStateNode } from '../dom/text'; // TODO
 import { EffectTag, type EffectTagValue } from '../hooks/effect';
@@ -16,7 +16,7 @@ export class Fiber<P = unknown> {
   public type: VNode['type'];
   public key: Key | null;
   public ref: Ref | null;
-  public stateNode: ElementStateNode | TextStateNode | FiberRoot | null;
+  public stateNode: ElementStateNode | TextStateNode | RootImpl | null;
   public return: Fiber | null;
   public child: Fiber | null;
   public sibling: Fiber | null;
