@@ -1,6 +1,6 @@
 import { EffectTag } from '../hooks/effect';
 import { Fiber } from './fiber';
-import { diffProperties } from '../dom/element'; // TODO
+import { diffProperties } from '../dom/element';
 import { VNodeKind } from '../api/vnode';
 
 export function completeWork(

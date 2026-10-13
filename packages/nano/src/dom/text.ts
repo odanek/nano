@@ -1,4 +1,4 @@
-export type TextProps = string; // TODO TextVNode["props"] or vice versa
+export type TextProps = string;
 export type TextStateNode = Text;
 
 export function createTextInstance(text: string): TextStateNode {

@@ -392,7 +392,6 @@ export class NanoWheelEvent<
 
 type NanoEventFilterProps = PropsWithChildren<DomEventProps<Element>>;
 
-// TODO TS does not allow the return value to be NanoChildren
 export function NanoEventFilter(props: NanoEventFilterProps): Renderable {
   return props.children ?? null;
 }

@@ -18,7 +18,6 @@ export function createContext<T>(name: string): Context<T> {
   return ContextFunc;
 }
 
-// TODO Where to put this?
 export function compareContext(current: Fiber, workInProgress: Fiber): boolean {
   const types = workInProgress.contextTypes;
   const oldContext = current.fullContext;

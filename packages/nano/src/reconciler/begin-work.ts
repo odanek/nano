@@ -1,6 +1,6 @@
 import { markInstanceFiber, Fiber } from './fiber';
-import { createElementInstance } from '../dom/element'; // TODO
-import { createTextInstance } from '../dom/text'; // TODO
+import { createElementInstance } from '../dom/element';
+import { createTextInstance } from '../dom/text';
 import { type RootState } from '../core/root';
 import {
   cloneChildFibers,

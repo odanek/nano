@@ -41,7 +41,6 @@ const typeNamespace: Record<string, string> = Object.freeze({
   view: svgNamespace,
 });
 
-// TODO Naming
 export function createElementInstance(fiber: Fiber): ElementStateNode {
   const props = fiber.pendingProps as PlainObject;
   const node = createElement(fiber.type as string);

@@ -86,7 +86,6 @@ function updateElement(
 
 function coerceElement(element: unknown): VNode {
   if (element instanceof VNodeImpl) {
-    // TODO Do we need to expose VNodeImpl?
     return element;
   } else if (isString(element) || isNumber(element)) {
     return createTextVNode(element.toString());

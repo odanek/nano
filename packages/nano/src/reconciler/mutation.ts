@@ -4,7 +4,7 @@ import {
   type TextStateNode,
   resetTextContent,
   updateTextInstance,
-} from '../dom/text'; // TODO
+} from '../dom/text';
 import {
   getDecoratorRoot,
   getElementParentFiber,
@@ -17,7 +17,7 @@ import {
   type ElementStateNode,
   setInitialProperties,
   updateElementInstance,
-} from '../dom/element'; // TODO
+} from '../dom/element';
 import { runStyleEffects } from '../hooks/effect';
 import { EffectTag } from '../hooks/effect';
 import { type PlainObject } from '../shared/type';
