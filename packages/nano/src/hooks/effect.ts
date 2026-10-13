@@ -1,8 +1,11 @@
-import { type EffectHookPayload, Hook, HookTag } from './hook';
+import { Hook, HookTag } from './hook';
 import { Fiber } from '../reconciler/fiber';
 import { isFunction, isValue } from '../shared/predicate';
 import { type ValueOf } from '../shared/type';
 import { isFlag } from '../shared/flags';
+import type { EffectHookPayload, StyleSheetHookPayload } from './payload';
+import { connectBundle, disconnectBundle } from '../style/manager';
+import type { StyleBundle } from '../api/style';
 
 export const EffectTag = {
   None: 0x00,
@@ -112,4 +115,35 @@ function createEffect(effect: EffectHookPayload): void {
 function destroyEffect(effect: EffectHookPayload): void {
   effect.flags &= ~EffectFlag.Destroy;
   effect.destroy?.();
+}
+
+export function runStyleEffects(
+  current: Fiber | null,
+  finishedWork: Fiber | null,
+): void {
+  let currentHook = (current?.memoizedState ?? null) as Hook | null;
+  let finishedWorkHook = (finishedWork?.memoizedState ?? null) as Hook | null;
+
+  while (currentHook !== null || finishedWorkHook !== null) {
+    if (currentHook?.tag === HookTag.Style) {
+      const payload = currentHook.payload as StyleSheetHookPayload<StyleBundle>;
+      if (finishedWorkHook === null) {
+        disconnectBundle(payload.bundle);
+      } else {
+        const finishedWorkPayload =
+          finishedWorkHook.payload as StyleSheetHookPayload<StyleBundle>;
+        if (finishedWorkPayload.bundle !== payload.bundle) {
+          disconnectBundle(payload.bundle);
+          connectBundle(finishedWorkPayload.bundle);
+        }
+      }
+    } else if (finishedWorkHook?.tag === HookTag.Style) {
+      const payload =
+        finishedWorkHook.payload as StyleSheetHookPayload<StyleBundle>;
+      connectBundle(payload.bundle);
+    }
+
+    currentHook = currentHook?.next ?? null;
+    finishedWorkHook = finishedWorkHook?.next ?? null;
+  }
 }

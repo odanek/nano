@@ -18,7 +18,7 @@ import {
   setInitialProperties,
   updateElementInstance,
 } from '../dom/element'; // TODO
-import { runStyleEffects } from '../core/component';
+import { runStyleEffects } from '../hooks/effect';
 import { EffectTag } from '../hooks/effect';
 import { type PlainObject } from '../shared/type';
 import { isFlag } from '../shared/flags';

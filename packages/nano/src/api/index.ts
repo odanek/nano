@@ -44,7 +44,7 @@ import {
   useState,
   useStyleSheet,
   useEventDispatcher,
-} from '../core/component';
+} from '../hooks/hook';
 
 import { type Style, type StyleSheet } from './style';
 
