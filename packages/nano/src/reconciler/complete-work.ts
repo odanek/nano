@@ -28,7 +28,7 @@ function completeElementWork(
   workInProgress: Fiber,
 ): void {
   if (current !== null) {
-    updateHostComponent(current, workInProgress);
+    updateElement(current, workInProgress);
   } else {
     appendAllChildren(workInProgress.stateNode as Element, workInProgress);
   }
@@ -60,7 +60,7 @@ function completeDecoratorWork(
   workInProgress.effectTag |= EffectTag.Update;
 }
 
-function updateHostComponent(current: Fiber, workInProgress: Fiber): void {
+function updateElement(current: Fiber, workInProgress: Fiber): void {
   const updatePayload = diffProperties(current, workInProgress);
   workInProgress.updateQueue = updatePayload;
   if (updatePayload) {

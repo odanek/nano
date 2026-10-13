@@ -109,7 +109,7 @@ type HTMLAttributeAnchorTarget =
   | '_top'
   | (string & {});
 
-export interface NanoHtmlAnchorProps extends HtmlProps<HTMLAnchorElement> {
+export interface HtmlAnchorProps extends HtmlProps<HTMLAnchorElement> {
   download?: unknown;
   href?: string | undefined;
   hrefLang?: string | undefined;
@@ -120,7 +120,7 @@ export interface NanoHtmlAnchorProps extends HtmlProps<HTMLAnchorElement> {
   referrerPolicy?: HTMLAttributeReferrerPolicy | undefined;
 }
 
-interface NanoHtmlAreaProps extends HtmlProps<HTMLAreaElement> {
+interface HtmlAreaProps extends HtmlProps<HTMLAreaElement> {
   alt?: string | undefined;
   coords?: string | undefined;
   download?: unknown;
@@ -133,18 +133,18 @@ interface NanoHtmlAreaProps extends HtmlProps<HTMLAreaElement> {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-interface NanoHtmlAudioProps extends NanoHtmlMediaProps<HTMLAudioElement> {}
+interface HtmlAudioProps extends HtmlMediaProps<HTMLAudioElement> {}
 
-interface NanoHtmlBaseProps extends HtmlProps<HTMLBaseElement> {
+interface HtmlBaseProps extends HtmlProps<HTMLBaseElement> {
   href?: string | undefined;
   target?: string | undefined;
 }
 
-interface NanoHtmlBlockquoteProps extends HtmlProps<HTMLQuoteElement> {
+interface HtmlBlockquoteProps extends HtmlProps<HTMLQuoteElement> {
   cite?: string | undefined;
 }
 
-interface NanoHtmlButtonProps extends HtmlProps<HTMLButtonElement> {
+interface HtmlButtonProps extends HtmlProps<HTMLButtonElement> {
   disabled?: boolean | undefined;
   form?: string | undefined;
   formAction?: string | undefined;
@@ -157,37 +157,37 @@ interface NanoHtmlButtonProps extends HtmlProps<HTMLButtonElement> {
   value?: string | readonly string[] | number | undefined;
 }
 
-interface NanoHtmlCanvasProps extends HtmlProps<HTMLCanvasElement> {
+interface HtmlCanvasProps extends HtmlProps<HTMLCanvasElement> {
   height?: number | string | undefined;
   width?: number | string | undefined;
 }
 
-interface NanoHtmlColProps extends HtmlProps<HTMLTableColElement> {
+interface HtmlColProps extends HtmlProps<HTMLTableColElement> {
   span?: number | undefined;
   width?: number | string | undefined;
 }
 
-interface NanoHtmlColgroupProps extends HtmlProps<HTMLTableColElement> {
+interface HtmlColgroupProps extends HtmlProps<HTMLTableColElement> {
   span?: number | undefined;
 }
 
-interface NanoHtmlDataProps extends HtmlProps<HTMLDataElement> {
+interface HtmlDataProps extends HtmlProps<HTMLDataElement> {
   value?: string | readonly string[] | number | undefined;
 }
 
-interface NanoHtmlDelProps extends HtmlProps<HTMLModElement> {
+interface HtmlDelProps extends HtmlProps<HTMLModElement> {
   cite?: string | undefined;
   dateTime?: string | undefined;
 }
 
-interface NanoHtmlDetailsProps extends HtmlProps<HTMLDetailsElement> {
+interface HtmlDetailsProps extends HtmlProps<HTMLDetailsElement> {
   open?: boolean | undefined;
   name?: string | undefined;
   onToggle?: EventHandler<NanoEvent<HTMLDetailsElement>> | undefined;
   onCaptureToggle?: EventHandler<NanoEvent<HTMLDetailsElement>> | undefined;
 }
 
-interface NanoHtmlDialogProps extends HtmlProps<HTMLDialogElement> {
+interface HtmlDialogProps extends HtmlProps<HTMLDialogElement> {
   open?: boolean | undefined;
   onCancel?: EventHandler<NanoEvent<HTMLDialogElement>> | undefined;
   onCaptureCancel?: EventHandler<NanoEvent<HTMLDialogElement>> | undefined;
@@ -195,20 +195,20 @@ interface NanoHtmlDialogProps extends HtmlProps<HTMLDialogElement> {
   onCaptureClose?: EventHandler<NanoEvent<HTMLDialogElement>> | undefined;
 }
 
-interface NanoHtmlEmbedProps extends HtmlProps<HTMLEmbedElement> {
+interface HtmlEmbedProps extends HtmlProps<HTMLEmbedElement> {
   height?: number | string | undefined;
   src?: string | undefined;
   type?: string | undefined;
   width?: number | string | undefined;
 }
 
-interface NanoHtmlFieldsetProps extends HtmlProps<HTMLFieldSetElement> {
+interface HtmlFieldsetProps extends HtmlProps<HTMLFieldSetElement> {
   disabled?: boolean | undefined;
   form?: string | undefined;
   name?: string | undefined;
 }
 
-interface NanoHtmlFormProps extends HtmlProps<HTMLFormElement> {
+interface HtmlFormProps extends HtmlProps<HTMLFormElement> {
   acceptCharset?: string | undefined;
   action?: string | undefined;
   autoComplete?: string | undefined;
@@ -219,11 +219,11 @@ interface NanoHtmlFormProps extends HtmlProps<HTMLFormElement> {
   target?: string | undefined;
 }
 
-interface NanoHtmlHtmlProps extends HtmlProps<HTMLHtmlElement> {
+interface HtmlHtmlProps extends HtmlProps<HTMLHtmlElement> {
   manifest?: string | undefined;
 }
 
-interface NanoHtmlIframeProps extends HtmlProps<HTMLIFrameElement> {
+interface HtmlIframeProps extends HtmlProps<HTMLIFrameElement> {
   allow?: string | undefined;
   allowFullScreen?: boolean | undefined;
   allowTransparency?: boolean | undefined;
@@ -246,7 +246,7 @@ interface NanoHtmlIframeProps extends HtmlProps<HTMLIFrameElement> {
   width?: number | string | undefined;
 }
 
-interface NanoHtmlImgProps extends HtmlProps<HTMLImageElement> {
+interface HtmlImgProps extends HtmlProps<HTMLImageElement> {
   alt?: string | undefined;
   crossOrigin?: CrossOrigin;
   decoding?: 'async' | 'auto' | 'sync' | undefined;
@@ -261,7 +261,7 @@ interface NanoHtmlImgProps extends HtmlProps<HTMLImageElement> {
   width?: number | string | undefined;
 }
 
-type NanoHtmlInputTypeAttribute =
+type HtmlInputTypeAttribute =
   | 'button'
   | 'checkbox'
   | 'color'
@@ -346,12 +346,12 @@ type AutoFillSection = `section-${string}`;
 type AutoFill =
   | AutoFillBase
   | `${OptionalPrefixToken<AutoFillSection>}${OptionalPrefixToken<AutoFillAddressKind>}${AutoFillField}${OptionalPostfixToken<AutoFillCredentialField>}`;
-type NanoHtmlInputAutoCompleteAttribute = AutoFill | (string & {});
+type HtmlInputAutoCompleteAttribute = AutoFill | (string & {});
 
-interface NanoHtmlInputProps extends HtmlProps<HTMLInputElement> {
+interface HtmlInputProps extends HtmlProps<HTMLInputElement> {
   accept?: string | undefined;
   alt?: string | undefined;
-  autoComplete?: NanoHtmlInputAutoCompleteAttribute | undefined;
+  autoComplete?: HtmlInputAutoCompleteAttribute | undefined;
   capture?: boolean | 'user' | 'environment' | undefined;
   checked?: boolean | undefined;
   disabled?: boolean | undefined;
@@ -376,19 +376,19 @@ interface NanoHtmlInputProps extends HtmlProps<HTMLInputElement> {
   size?: number | undefined;
   src?: string | undefined;
   step?: number | string | undefined;
-  type?: NanoHtmlInputTypeAttribute | undefined;
+  type?: HtmlInputTypeAttribute | undefined;
   value?: string | readonly string[] | number | undefined;
   width?: number | string | undefined;
   onChange?: EventHandler<NanoEvent<HTMLInputElement>> | undefined;
   onCaptureChange?: EventHandler<NanoEvent<HTMLInputElement>> | undefined;
 }
 
-interface NanoHtmlInsProps extends HtmlProps<HTMLModElement> {
+interface HtmlInsProps extends HtmlProps<HTMLModElement> {
   cite?: string | undefined;
   dateTime?: string | undefined;
 }
 
-interface NanoHtmlKeygenProps extends HtmlProps<HTMLUnknownElement> {
+interface HtmlKeygenProps extends HtmlProps<HTMLUnknownElement> {
   challenge?: string | undefined;
   disabled?: boolean | undefined;
   form?: string | undefined;
@@ -397,16 +397,16 @@ interface NanoHtmlKeygenProps extends HtmlProps<HTMLUnknownElement> {
   name?: string | undefined;
 }
 
-interface NanoHtmlLabelProps extends HtmlProps<HTMLLabelElement> {
+interface HtmlLabelProps extends HtmlProps<HTMLLabelElement> {
   form?: string | undefined;
   htmlFor?: string | undefined;
 }
 
-interface NanoHtmlLiProps extends HtmlProps<HTMLLIElement> {
+interface HtmlLiProps extends HtmlProps<HTMLLIElement> {
   value?: string | readonly string[] | number | undefined;
 }
 
-interface NanoHtmlLinkProps extends HtmlProps<HTMLLinkElement> {
+interface HtmlLinkProps extends HtmlProps<HTMLLinkElement> {
   as?: string | undefined;
   crossOrigin?: CrossOrigin;
   fetchPriority?: 'high' | 'low' | 'auto';
@@ -422,15 +422,15 @@ interface NanoHtmlLinkProps extends HtmlProps<HTMLLinkElement> {
   charSet?: string | undefined;
 }
 
-interface NanoHtmlMapProps extends HtmlProps<HTMLMapElement> {
+interface HtmlMapProps extends HtmlProps<HTMLMapElement> {
   name?: string | undefined;
 }
 
-interface NanoHtmlMenuProps extends HtmlProps<HTMLMenuElement> {
+interface HtmlMenuProps extends HtmlProps<HTMLMenuElement> {
   type?: string | undefined;
 }
 
-interface NanoHtmlMediaProps<T extends HTMLMediaElement> extends HtmlProps<T> {
+interface HtmlMediaProps<T extends HTMLMediaElement> extends HtmlProps<T> {
   autoPlay?: boolean | undefined;
   controls?: boolean | undefined;
   controlsList?: string | undefined;
@@ -443,7 +443,7 @@ interface NanoHtmlMediaProps<T extends HTMLMediaElement> extends HtmlProps<T> {
   src?: string | undefined;
 }
 
-interface NanoHtmlMetaProps extends HtmlProps<HTMLMetaElement> {
+interface HtmlMetaProps extends HtmlProps<HTMLMetaElement> {
   charSet?: string | undefined;
   content?: string | undefined;
   httpEquiv?: string | undefined;
@@ -451,7 +451,7 @@ interface NanoHtmlMetaProps extends HtmlProps<HTMLMetaElement> {
   name?: string | undefined;
 }
 
-interface NanoHtmlMeterProps extends HtmlProps<HTMLMeterElement> {
+interface HtmlMeterProps extends HtmlProps<HTMLMeterElement> {
   form?: string | undefined;
   high?: number | undefined;
   low?: number | undefined;
@@ -461,7 +461,7 @@ interface NanoHtmlMeterProps extends HtmlProps<HTMLMeterElement> {
   value?: string | readonly string[] | number | undefined;
 }
 
-interface NanoHtmlObjectProps extends HtmlProps<HTMLObjectElement> {
+interface HtmlObjectProps extends HtmlProps<HTMLObjectElement> {
   classID?: string | undefined;
   data?: string | undefined;
   form?: string | undefined;
@@ -473,49 +473,49 @@ interface NanoHtmlObjectProps extends HtmlProps<HTMLObjectElement> {
   wmode?: string | undefined;
 }
 
-interface NanoHtmlOlProps extends HtmlProps<HTMLOListElement> {
+interface HtmlOlProps extends HtmlProps<HTMLOListElement> {
   reversed?: boolean | undefined;
   start?: number | undefined;
   type?: '1' | 'a' | 'A' | 'i' | 'I' | undefined;
 }
 
-interface NanoHtmlOptgroupProps extends HtmlProps<HTMLOptGroupElement> {
+interface HtmlOptgroupProps extends HtmlProps<HTMLOptGroupElement> {
   disabled?: boolean | undefined;
   label?: string | undefined;
 }
 
-interface NanoHtmlOptionProps extends HtmlProps<HTMLOptionElement> {
+interface HtmlOptionProps extends HtmlProps<HTMLOptionElement> {
   disabled?: boolean | undefined;
   label?: string | undefined;
   selected?: boolean | undefined;
   value?: string | readonly string[] | number | undefined;
 }
 
-interface NanoHtmlOutputProps extends HtmlProps<HTMLOutputElement> {
+interface HtmlOutputProps extends HtmlProps<HTMLOutputElement> {
   form?: string | undefined;
   htmlFor?: string | undefined;
   name?: string | undefined;
 }
 
-interface NanoHtmlParamProps extends HtmlProps<HTMLParamElement> {
+interface HtmlParamProps extends HtmlProps<HTMLParamElement> {
   name?: string | undefined;
   value?: string | readonly string[] | number | undefined;
 }
 
-interface NanoHtmlProgressProps extends HtmlProps<HTMLProgressElement> {
+interface HtmlProgressProps extends HtmlProps<HTMLProgressElement> {
   max?: number | string | undefined;
   value?: string | readonly string[] | number | undefined;
 }
 
-interface NanoHtmlQuoteProps extends HtmlProps<HTMLQuoteElement> {
+interface HtmlQuoteProps extends HtmlProps<HTMLQuoteElement> {
   cite?: string | undefined;
 }
 
-interface NanoHtmlSlotProps extends HtmlProps<HTMLSlotElement> {
+interface HtmlSlotProps extends HtmlProps<HTMLSlotElement> {
   name?: string | undefined;
 }
 
-interface NanoHtmlScriptProps extends HtmlProps<HTMLScriptElement> {
+interface HtmlScriptProps extends HtmlProps<HTMLScriptElement> {
   async?: boolean | undefined;
   /** @deprecated */
   charSet?: string | undefined;
@@ -528,7 +528,7 @@ interface NanoHtmlScriptProps extends HtmlProps<HTMLScriptElement> {
   type?: string | undefined;
 }
 
-interface NanoHtmlSelectProps extends HtmlProps<HTMLSelectElement> {
+interface HtmlSelectProps extends HtmlProps<HTMLSelectElement> {
   autoComplete?: string | undefined;
   disabled?: boolean | undefined;
   form?: string | undefined;
@@ -541,7 +541,7 @@ interface NanoHtmlSelectProps extends HtmlProps<HTMLSelectElement> {
   onCaptureChange?: EventHandler<NanoEvent<HTMLSelectElement>> | undefined;
 }
 
-interface NanoHtmlSourceProps extends HtmlProps<HTMLSourceElement> {
+interface HtmlSourceProps extends HtmlProps<HTMLSourceElement> {
   height?: number | string | undefined;
   media?: string | undefined;
   sizes?: string | undefined;
@@ -551,13 +551,13 @@ interface NanoHtmlSourceProps extends HtmlProps<HTMLSourceElement> {
   width?: number | string | undefined;
 }
 
-interface NanoHtmlStyleProps extends HtmlProps<HTMLStyleElement> {
+interface HtmlStyleProps extends HtmlProps<HTMLStyleElement> {
   media?: string | undefined;
   scoped?: boolean | undefined;
   type?: string | undefined;
 }
 
-interface NanoHtmlTableProps extends HtmlProps<HTMLTableElement> {
+interface HtmlTableProps extends HtmlProps<HTMLTableElement> {
   align?: 'left' | 'center' | 'right' | undefined;
   bgcolor?: string | undefined;
   border?: number | undefined;
@@ -569,7 +569,7 @@ interface NanoHtmlTableProps extends HtmlProps<HTMLTableElement> {
   width?: number | string | undefined;
 }
 
-interface NanoHtmlTextareaProps extends HtmlProps<HTMLTextAreaElement> {
+interface HtmlTextareaProps extends HtmlProps<HTMLTextAreaElement> {
   autoComplete?: string | undefined;
   cols?: number | undefined;
   dirName?: string | undefined;
@@ -588,7 +588,7 @@ interface NanoHtmlTextareaProps extends HtmlProps<HTMLTextAreaElement> {
   onCaptureChange?: EventHandler<NanoEvent<HTMLTextAreaElement>> | undefined;
 }
 
-interface NanoHtmlTdProps extends HtmlProps<HTMLTableCellElement> {
+interface HtmlTdProps extends HtmlProps<HTMLTableCellElement> {
   align?: 'left' | 'center' | 'right' | 'justify' | 'char' | undefined;
   colSpan?: number | undefined;
   headers?: string | undefined;
@@ -600,7 +600,7 @@ interface NanoHtmlTdProps extends HtmlProps<HTMLTableCellElement> {
   valign?: 'top' | 'middle' | 'bottom' | 'baseline' | undefined;
 }
 
-interface NanoHtmlThProps extends HtmlProps<HTMLTableCellElement> {
+interface HtmlThProps extends HtmlProps<HTMLTableCellElement> {
   align?: 'left' | 'center' | 'right' | 'justify' | 'char' | undefined;
   colSpan?: number | undefined;
   headers?: string | undefined;
@@ -609,11 +609,11 @@ interface NanoHtmlThProps extends HtmlProps<HTMLTableCellElement> {
   abbr?: string | undefined;
 }
 
-interface NanoHtmlTimeProps extends HtmlProps<HTMLTimeElement> {
+interface HtmlTimeProps extends HtmlProps<HTMLTimeElement> {
   dateTime?: string | undefined;
 }
 
-interface NanoHtmlTrackProps extends HtmlProps<HTMLTrackElement> {
+interface HtmlTrackProps extends HtmlProps<HTMLTrackElement> {
   default?: boolean | undefined;
   kind?: string | undefined;
   label?: string | undefined;
@@ -621,7 +621,7 @@ interface NanoHtmlTrackProps extends HtmlProps<HTMLTrackElement> {
   srcLang?: string | undefined;
 }
 
-interface NanoHtmlVideoProps extends NanoHtmlMediaProps<HTMLVideoElement> {
+interface HtmlVideoProps extends HtmlMediaProps<HTMLVideoElement> {
   height?: number | string | undefined;
   playsInline?: boolean | undefined;
   poster?: string | undefined;
@@ -630,7 +630,7 @@ interface NanoHtmlVideoProps extends NanoHtmlMediaProps<HTMLVideoElement> {
   disableRemotePlayback?: boolean | undefined;
 }
 
-interface NanoHtmlWebViewProps extends HtmlProps<HTMLUnknownElement> {
+interface HtmlWebViewProps extends HtmlProps<HTMLUnknownElement> {
   allowFullScreen?: boolean | undefined;
   allowpopups?: boolean | undefined;
   autosize?: boolean | undefined;
@@ -649,191 +649,137 @@ interface NanoHtmlWebViewProps extends HtmlProps<HTMLUnknownElement> {
   webpreferences?: string | undefined;
 }
 
-export type NanoHostComponentHtmlProps<
+export type JsxHtmlProps<
   P extends HtmlProps<E>,
   E extends HTMLElement,
 > = PropsWithRef<PropsWithKey<P>>;
 
 export interface HtmlIntrinsicElements {
-  a: NanoHostComponentHtmlProps<NanoHtmlAnchorProps, HTMLAnchorElement>;
-  abbr: NanoHostComponentHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
-  address: NanoHostComponentHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
-  area: NanoHostComponentHtmlProps<NanoHtmlAreaProps, HTMLAreaElement>;
-  article: NanoHostComponentHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
-  aside: NanoHostComponentHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
-  audio: NanoHostComponentHtmlProps<NanoHtmlAudioProps, HTMLAudioElement>;
-  b: NanoHostComponentHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
-  base: NanoHostComponentHtmlProps<NanoHtmlBaseProps, HTMLBaseElement>;
-  bdi: NanoHostComponentHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
-  bdo: NanoHostComponentHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
-  big: NanoHostComponentHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
-  blockquote: NanoHostComponentHtmlProps<
-    NanoHtmlBlockquoteProps,
-    HTMLQuoteElement
-  >;
-  body: NanoHostComponentHtmlProps<HtmlProps<HTMLBodyElement>, HTMLBodyElement>;
-  br: NanoHostComponentHtmlProps<HtmlProps<HTMLBRElement>, HTMLBRElement>;
-  button: NanoHostComponentHtmlProps<NanoHtmlButtonProps, HTMLButtonElement>;
-  canvas: NanoHostComponentHtmlProps<NanoHtmlCanvasProps, HTMLCanvasElement>;
-  caption: NanoHostComponentHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
-  center: NanoHostComponentHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
-  cite: NanoHostComponentHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
-  code: NanoHostComponentHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
-  col: NanoHostComponentHtmlProps<NanoHtmlColProps, HTMLTableColElement>;
-  colgroup: NanoHostComponentHtmlProps<
-    NanoHtmlColgroupProps,
-    HTMLTableColElement
-  >;
-  data: NanoHostComponentHtmlProps<NanoHtmlDataProps, HTMLDataElement>;
-  datalist: NanoHostComponentHtmlProps<
-    HtmlProps<HTMLDataListElement>,
-    HTMLDataListElement
-  >;
-  dd: NanoHostComponentHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
-  del: NanoHostComponentHtmlProps<NanoHtmlDelProps, HTMLModElement>;
-  details: NanoHostComponentHtmlProps<NanoHtmlDetailsProps, HTMLDetailsElement>;
-  dfn: NanoHostComponentHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
-  dialog: NanoHostComponentHtmlProps<NanoHtmlDialogProps, HTMLDialogElement>;
-  div: NanoHostComponentHtmlProps<HtmlProps<HTMLDivElement>, HTMLDivElement>;
-  dl: NanoHostComponentHtmlProps<HtmlProps<HTMLDListElement>, HTMLDListElement>;
-  dt: NanoHostComponentHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
-  em: NanoHostComponentHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
-  embed: NanoHostComponentHtmlProps<NanoHtmlEmbedProps, HTMLEmbedElement>;
-  fieldset: NanoHostComponentHtmlProps<
-    NanoHtmlFieldsetProps,
-    HTMLFieldSetElement
-  >;
-  figcaption: NanoHostComponentHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
-  figure: NanoHostComponentHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
-  footer: NanoHostComponentHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
-  form: NanoHostComponentHtmlProps<NanoHtmlFormProps, HTMLFormElement>;
-  h1: NanoHostComponentHtmlProps<
-    HtmlProps<HTMLHeadingElement>,
-    HTMLHeadingElement
-  >;
-  h2: NanoHostComponentHtmlProps<
-    HtmlProps<HTMLHeadingElement>,
-    HTMLHeadingElement
-  >;
-  h3: NanoHostComponentHtmlProps<
-    HtmlProps<HTMLHeadingElement>,
-    HTMLHeadingElement
-  >;
-  h4: NanoHostComponentHtmlProps<
-    HtmlProps<HTMLHeadingElement>,
-    HTMLHeadingElement
-  >;
-  h5: NanoHostComponentHtmlProps<
-    HtmlProps<HTMLHeadingElement>,
-    HTMLHeadingElement
-  >;
-  h6: NanoHostComponentHtmlProps<
-    HtmlProps<HTMLHeadingElement>,
-    HTMLHeadingElement
-  >;
-  head: NanoHostComponentHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
-  header: NanoHostComponentHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
-  hgroup: NanoHostComponentHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
-  hr: NanoHostComponentHtmlProps<HtmlProps<HTMLHRElement>, HTMLHRElement>;
-  html: NanoHostComponentHtmlProps<NanoHtmlHtmlProps, HTMLHtmlElement>;
-  i: NanoHostComponentHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
-  iframe: NanoHostComponentHtmlProps<NanoHtmlIframeProps, HTMLIFrameElement>;
-  img: NanoHostComponentHtmlProps<NanoHtmlImgProps, HTMLImageElement>;
-  input: NanoHostComponentHtmlProps<NanoHtmlInputProps, HTMLInputElement>;
-  ins: NanoHostComponentHtmlProps<NanoHtmlInsProps, HTMLModElement>;
-  kbd: NanoHostComponentHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
-  keygen: NanoHostComponentHtmlProps<NanoHtmlKeygenProps, HTMLElement>;
-  label: NanoHostComponentHtmlProps<NanoHtmlLabelProps, HTMLLabelElement>;
-  legend: NanoHostComponentHtmlProps<
-    HtmlProps<HTMLLegendElement>,
-    HTMLLegendElement
-  >;
-  li: NanoHostComponentHtmlProps<NanoHtmlLiProps, HTMLLIElement>;
-  link: NanoHostComponentHtmlProps<NanoHtmlLinkProps, HTMLLinkElement>;
-  main: NanoHostComponentHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
-  map: NanoHostComponentHtmlProps<NanoHtmlMapProps, HTMLMapElement>;
-  mark: NanoHostComponentHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
-  menu: NanoHostComponentHtmlProps<NanoHtmlMenuProps, HTMLMenuElement>;
-  menuitem: NanoHostComponentHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
-  meta: NanoHostComponentHtmlProps<NanoHtmlMetaProps, HTMLMetaElement>;
-  meter: NanoHostComponentHtmlProps<NanoHtmlMeterProps, HTMLMeterElement>;
-  nav: NanoHostComponentHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
-  noscript: NanoHostComponentHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
-  object: NanoHostComponentHtmlProps<NanoHtmlObjectProps, HTMLObjectElement>;
-  ol: NanoHostComponentHtmlProps<NanoHtmlOlProps, HTMLOListElement>;
-  optgroup: NanoHostComponentHtmlProps<
-    NanoHtmlOptgroupProps,
-    HTMLOptGroupElement
-  >;
-  option: NanoHostComponentHtmlProps<NanoHtmlOptionProps, HTMLOptionElement>;
-  output: NanoHostComponentHtmlProps<NanoHtmlOutputProps, HTMLOutputElement>;
-  p: NanoHostComponentHtmlProps<
-    HtmlProps<HTMLParagraphElement>,
-    HTMLParagraphElement
-  >;
-  param: NanoHostComponentHtmlProps<NanoHtmlParamProps, HTMLParamElement>;
-  picture: NanoHostComponentHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
-  pre: NanoHostComponentHtmlProps<HtmlProps<HTMLPreElement>, HTMLPreElement>;
-  progress: NanoHostComponentHtmlProps<
-    NanoHtmlProgressProps,
-    HTMLProgressElement
-  >;
-  q: NanoHostComponentHtmlProps<NanoHtmlQuoteProps, HTMLQuoteElement>;
-  rp: NanoHostComponentHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
-  rt: NanoHostComponentHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
-  ruby: NanoHostComponentHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
-  s: NanoHostComponentHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
-  samp: NanoHostComponentHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
-  search: NanoHostComponentHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
-  slot: NanoHostComponentHtmlProps<NanoHtmlSlotProps, HTMLSlotElement>;
-  script: NanoHostComponentHtmlProps<NanoHtmlScriptProps, HTMLScriptElement>;
-  section: NanoHostComponentHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
-  select: NanoHostComponentHtmlProps<NanoHtmlSelectProps, HTMLSelectElement>;
-  small: NanoHostComponentHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
-  source: NanoHostComponentHtmlProps<NanoHtmlSourceProps, HTMLSourceElement>;
-  span: NanoHostComponentHtmlProps<HtmlProps<HTMLSpanElement>, HTMLSpanElement>;
-  strong: NanoHostComponentHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
-  style: NanoHostComponentHtmlProps<NanoHtmlStyleProps, HTMLStyleElement>;
-  sub: NanoHostComponentHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
-  summary: NanoHostComponentHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
-  sup: NanoHostComponentHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
-  table: NanoHostComponentHtmlProps<NanoHtmlTableProps, HTMLTableElement>;
-  template: NanoHostComponentHtmlProps<
-    HtmlProps<HTMLTemplateElement>,
-    HTMLTemplateElement
-  >;
-  tbody: NanoHostComponentHtmlProps<
+  a: JsxHtmlProps<HtmlAnchorProps, HTMLAnchorElement>;
+  abbr: JsxHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
+  address: JsxHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
+  area: JsxHtmlProps<HtmlAreaProps, HTMLAreaElement>;
+  article: JsxHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
+  aside: JsxHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
+  audio: JsxHtmlProps<HtmlAudioProps, HTMLAudioElement>;
+  b: JsxHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
+  base: JsxHtmlProps<HtmlBaseProps, HTMLBaseElement>;
+  bdi: JsxHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
+  bdo: JsxHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
+  big: JsxHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
+  blockquote: JsxHtmlProps<HtmlBlockquoteProps, HTMLQuoteElement>;
+  body: JsxHtmlProps<HtmlProps<HTMLBodyElement>, HTMLBodyElement>;
+  br: JsxHtmlProps<HtmlProps<HTMLBRElement>, HTMLBRElement>;
+  button: JsxHtmlProps<HtmlButtonProps, HTMLButtonElement>;
+  canvas: JsxHtmlProps<HtmlCanvasProps, HTMLCanvasElement>;
+  caption: JsxHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
+  center: JsxHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
+  cite: JsxHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
+  code: JsxHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
+  col: JsxHtmlProps<HtmlColProps, HTMLTableColElement>;
+  colgroup: JsxHtmlProps<HtmlColgroupProps, HTMLTableColElement>;
+  data: JsxHtmlProps<HtmlDataProps, HTMLDataElement>;
+  datalist: JsxHtmlProps<HtmlProps<HTMLDataListElement>, HTMLDataListElement>;
+  dd: JsxHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
+  del: JsxHtmlProps<HtmlDelProps, HTMLModElement>;
+  details: JsxHtmlProps<HtmlDetailsProps, HTMLDetailsElement>;
+  dfn: JsxHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
+  dialog: JsxHtmlProps<HtmlDialogProps, HTMLDialogElement>;
+  div: JsxHtmlProps<HtmlProps<HTMLDivElement>, HTMLDivElement>;
+  dl: JsxHtmlProps<HtmlProps<HTMLDListElement>, HTMLDListElement>;
+  dt: JsxHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
+  em: JsxHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
+  embed: JsxHtmlProps<HtmlEmbedProps, HTMLEmbedElement>;
+  fieldset: JsxHtmlProps<HtmlFieldsetProps, HTMLFieldSetElement>;
+  figcaption: JsxHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
+  figure: JsxHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
+  footer: JsxHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
+  form: JsxHtmlProps<HtmlFormProps, HTMLFormElement>;
+  h1: JsxHtmlProps<HtmlProps<HTMLHeadingElement>, HTMLHeadingElement>;
+  h2: JsxHtmlProps<HtmlProps<HTMLHeadingElement>, HTMLHeadingElement>;
+  h3: JsxHtmlProps<HtmlProps<HTMLHeadingElement>, HTMLHeadingElement>;
+  h4: JsxHtmlProps<HtmlProps<HTMLHeadingElement>, HTMLHeadingElement>;
+  h5: JsxHtmlProps<HtmlProps<HTMLHeadingElement>, HTMLHeadingElement>;
+  h6: JsxHtmlProps<HtmlProps<HTMLHeadingElement>, HTMLHeadingElement>;
+  head: JsxHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
+  header: JsxHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
+  hgroup: JsxHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
+  hr: JsxHtmlProps<HtmlProps<HTMLHRElement>, HTMLHRElement>;
+  html: JsxHtmlProps<HtmlHtmlProps, HTMLHtmlElement>;
+  i: JsxHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
+  iframe: JsxHtmlProps<HtmlIframeProps, HTMLIFrameElement>;
+  img: JsxHtmlProps<HtmlImgProps, HTMLImageElement>;
+  input: JsxHtmlProps<HtmlInputProps, HTMLInputElement>;
+  ins: JsxHtmlProps<HtmlInsProps, HTMLModElement>;
+  kbd: JsxHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
+  keygen: JsxHtmlProps<HtmlKeygenProps, HTMLElement>;
+  label: JsxHtmlProps<HtmlLabelProps, HTMLLabelElement>;
+  legend: JsxHtmlProps<HtmlProps<HTMLLegendElement>, HTMLLegendElement>;
+  li: JsxHtmlProps<HtmlLiProps, HTMLLIElement>;
+  link: JsxHtmlProps<HtmlLinkProps, HTMLLinkElement>;
+  main: JsxHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
+  map: JsxHtmlProps<HtmlMapProps, HTMLMapElement>;
+  mark: JsxHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
+  menu: JsxHtmlProps<HtmlMenuProps, HTMLMenuElement>;
+  menuitem: JsxHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
+  meta: JsxHtmlProps<HtmlMetaProps, HTMLMetaElement>;
+  meter: JsxHtmlProps<HtmlMeterProps, HTMLMeterElement>;
+  nav: JsxHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
+  noscript: JsxHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
+  object: JsxHtmlProps<HtmlObjectProps, HTMLObjectElement>;
+  ol: JsxHtmlProps<HtmlOlProps, HTMLOListElement>;
+  optgroup: JsxHtmlProps<HtmlOptgroupProps, HTMLOptGroupElement>;
+  option: JsxHtmlProps<HtmlOptionProps, HTMLOptionElement>;
+  output: JsxHtmlProps<HtmlOutputProps, HTMLOutputElement>;
+  p: JsxHtmlProps<HtmlProps<HTMLParagraphElement>, HTMLParagraphElement>;
+  param: JsxHtmlProps<HtmlParamProps, HTMLParamElement>;
+  picture: JsxHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
+  pre: JsxHtmlProps<HtmlProps<HTMLPreElement>, HTMLPreElement>;
+  progress: JsxHtmlProps<HtmlProgressProps, HTMLProgressElement>;
+  q: JsxHtmlProps<HtmlQuoteProps, HTMLQuoteElement>;
+  rp: JsxHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
+  rt: JsxHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
+  ruby: JsxHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
+  s: JsxHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
+  samp: JsxHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
+  search: JsxHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
+  slot: JsxHtmlProps<HtmlSlotProps, HTMLSlotElement>;
+  script: JsxHtmlProps<HtmlScriptProps, HTMLScriptElement>;
+  section: JsxHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
+  select: JsxHtmlProps<HtmlSelectProps, HTMLSelectElement>;
+  small: JsxHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
+  source: JsxHtmlProps<HtmlSourceProps, HTMLSourceElement>;
+  span: JsxHtmlProps<HtmlProps<HTMLSpanElement>, HTMLSpanElement>;
+  strong: JsxHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
+  style: JsxHtmlProps<HtmlStyleProps, HTMLStyleElement>;
+  sub: JsxHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
+  summary: JsxHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
+  sup: JsxHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
+  table: JsxHtmlProps<HtmlTableProps, HTMLTableElement>;
+  template: JsxHtmlProps<HtmlProps<HTMLTemplateElement>, HTMLTemplateElement>;
+  tbody: JsxHtmlProps<
     HtmlProps<HTMLTableSectionElement>,
     HTMLTableSectionElement
   >;
-  td: NanoHostComponentHtmlProps<NanoHtmlTdProps, HTMLTableCellElement>;
-  textarea: NanoHostComponentHtmlProps<
-    NanoHtmlTextareaProps,
-    HTMLTextAreaElement
-  >;
-  tfoot: NanoHostComponentHtmlProps<
+  td: JsxHtmlProps<HtmlTdProps, HTMLTableCellElement>;
+  textarea: JsxHtmlProps<HtmlTextareaProps, HTMLTextAreaElement>;
+  tfoot: JsxHtmlProps<
     HtmlProps<HTMLTableSectionElement>,
     HTMLTableSectionElement
   >;
-  th: NanoHostComponentHtmlProps<NanoHtmlThProps, HTMLTableCellElement>;
-  thead: NanoHostComponentHtmlProps<
+  th: JsxHtmlProps<HtmlThProps, HTMLTableCellElement>;
+  thead: JsxHtmlProps<
     HtmlProps<HTMLTableSectionElement>,
     HTMLTableSectionElement
   >;
-  time: NanoHostComponentHtmlProps<NanoHtmlTimeProps, HTMLTimeElement>;
-  title: NanoHostComponentHtmlProps<
-    HtmlProps<HTMLTitleElement>,
-    HTMLTitleElement
-  >;
-  tr: NanoHostComponentHtmlProps<
-    HtmlProps<HTMLTableRowElement>,
-    HTMLTableRowElement
-  >;
-  track: NanoHostComponentHtmlProps<NanoHtmlTrackProps, HTMLTrackElement>;
-  u: NanoHostComponentHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
-  ul: NanoHostComponentHtmlProps<HtmlProps<HTMLUListElement>, HTMLUListElement>;
-  var: NanoHostComponentHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
-  video: NanoHostComponentHtmlProps<NanoHtmlVideoProps, HTMLVideoElement>;
-  wbr: NanoHostComponentHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
-  webview: NanoHostComponentHtmlProps<NanoHtmlWebViewProps, HTMLElement>;
+  time: JsxHtmlProps<HtmlTimeProps, HTMLTimeElement>;
+  title: JsxHtmlProps<HtmlProps<HTMLTitleElement>, HTMLTitleElement>;
+  tr: JsxHtmlProps<HtmlProps<HTMLTableRowElement>, HTMLTableRowElement>;
+  track: JsxHtmlProps<HtmlTrackProps, HTMLTrackElement>;
+  u: JsxHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
+  ul: JsxHtmlProps<HtmlProps<HTMLUListElement>, HTMLUListElement>;
+  var: JsxHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
+  video: JsxHtmlProps<HtmlVideoProps, HTMLVideoElement>;
+  wbr: JsxHtmlProps<HtmlProps<HTMLElement>, HTMLElement>;
+  webview: JsxHtmlProps<HtmlWebViewProps, HTMLElement>;
 }

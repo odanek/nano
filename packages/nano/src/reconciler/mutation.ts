@@ -60,7 +60,7 @@ function insertOrAppendPlacementNode(
 ): void {
   const kind = fiber.kind;
   if (kind === VNodeKind.Element || kind === VNodeKind.Text) {
-    placeHostComponent(fiber, before, parent);
+    placeElement(fiber, before, parent);
   } else if (kind !== VNodeKind.Portal) {
     let child = fiber.child;
     while (child !== null) {
@@ -70,11 +70,7 @@ function insertOrAppendPlacementNode(
   }
 }
 
-function placeHostComponent(
-  fiber: Fiber,
-  before: Node | null,
-  parent: Node,
-): void {
+function placeElement(fiber: Fiber, before: Node | null, parent: Node): void {
   const stateNode = fiber.stateNode as Node;
   parent.insertBefore(stateNode, before);
 }
@@ -92,16 +88,16 @@ export function commitMutation(
 ): void {
   switch (finishedWork.kind) {
     case VNodeKind.Element:
-      commitHostComponentMutation(current, finishedWork);
+      commitElementMutation(current, finishedWork);
       return;
     case VNodeKind.Text:
-      commitHostTextMutation(
+      commitTextMutation(
         current as Fiber<TextProps>,
         finishedWork as Fiber<TextProps>,
       );
       return;
     case VNodeKind.Decorator:
-      commitHostDecoratorMutation(
+      commitDecoratorMutation(
         current as Fiber<DecoratorProps>,
         finishedWork as Fiber<DecoratorProps>,
       );
@@ -109,7 +105,7 @@ export function commitMutation(
   }
 }
 
-function commitHostComponentMutation(
+function commitElementMutation(
   current: Fiber | null,
   finishedWork: Fiber,
 ): void {
@@ -122,7 +118,7 @@ function commitHostComponentMutation(
   }
 }
 
-function commitHostTextMutation(
+function commitTextMutation(
   current: Fiber<TextProps>,
   finishedWork: Fiber<TextProps>,
 ): void {
@@ -132,7 +128,7 @@ function commitHostTextMutation(
   updateTextInstance(textInstance, newText, oldText);
 }
 
-function commitHostDecoratorMutation(
+function commitDecoratorMutation(
   current: Fiber<DecoratorProps>,
   finishedWork: Fiber<DecoratorProps>,
 ): void {
@@ -150,7 +146,7 @@ function commitHostDecoratorMutation(
 }
 
 export function commitDeletion(current: Fiber): void {
-  unmountHostComponents(current, true);
+  unmountElements(current, true);
 
   const alternate = current.alternate;
   commitDetachFiber(current);
@@ -159,7 +155,7 @@ export function commitDeletion(current: Fiber): void {
   }
 }
 
-function unmountHostComponents(current: Fiber, detach: boolean): void {
+function unmountElements(current: Fiber, detach: boolean): void {
   commitUnmount(current, detach);
 
   const isElement = current.kind === VNodeKind.Element;
@@ -167,7 +163,7 @@ function unmountHostComponents(current: Fiber, detach: boolean): void {
   const detachChildren = isPortal || (detach && !isElement);
 
   for (let fiber = current.child; fiber !== null; fiber = fiber.sibling) {
-    unmountHostComponents(fiber, detachChildren);
+    unmountElements(fiber, detachChildren);
   }
 }
 
@@ -177,10 +173,10 @@ function commitUnmount(current: Fiber, removeNode: boolean): void {
       commitUnmountFunctionComponent(current);
       return;
     case VNodeKind.Element:
-      commitUnmountHostComponent(current, removeNode);
+      commitUnmountElement(current, removeNode);
       return;
     case VNodeKind.Text:
-      commitUnmountHostText(current, removeNode);
+      commitUnmountText(current, removeNode);
       return;
   }
 }
@@ -189,7 +185,7 @@ function commitUnmountFunctionComponent(current: Fiber): void {
   runStyleEffects(current, null);
 }
 
-function commitUnmountHostComponent(current: Fiber, removeNode: boolean): void {
+function commitUnmountElement(current: Fiber, removeNode: boolean): void {
   const node = current.stateNode as Element;
   unmarkInstanceFiber(node);
   commitDetachRef(current);
@@ -198,7 +194,7 @@ function commitUnmountHostComponent(current: Fiber, removeNode: boolean): void {
   }
 }
 
-function commitUnmountHostText(current: Fiber, removeNode: boolean): void {
+function commitUnmountText(current: Fiber, removeNode: boolean): void {
   const node = current.stateNode as TextStateNode;
   unmarkInstanceFiber(node);
   if (removeNode) {

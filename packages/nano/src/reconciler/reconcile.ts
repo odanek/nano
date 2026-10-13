@@ -13,7 +13,7 @@ import type { Renderable } from '../api/renderable';
 import type { FragmentProps } from '../api/fragment';
 import type { Key } from '../api/key';
 
-type NanoReconciler = (
+type Reconciler = (
   returnFiber: Fiber,
   currentFirstChild: Fiber | null,
   element: unknown,
@@ -143,7 +143,7 @@ function updateFromMap(
   return updateElement(returnFiber, matchedFiber, coercedElement);
 }
 
-function childReconciler(shouldTrackSideEffects: boolean): NanoReconciler {
+function childReconciler(shouldTrackSideEffects: boolean): Reconciler {
   function deleteChild(returnFiber: Fiber, childToDelete: Fiber): void {
     if (!shouldTrackSideEffects) {
       return;
@@ -390,5 +390,5 @@ function childReconciler(shouldTrackSideEffects: boolean): NanoReconciler {
   return reconcileChildFibers;
 }
 
-export const reconcileChildFibers: NanoReconciler = childReconciler(true);
-export const mountChildFibers: NanoReconciler = childReconciler(false);
+export const reconcileChildFibers: Reconciler = childReconciler(true);
+export const mountChildFibers: Reconciler = childReconciler(false);

@@ -1,4 +1,4 @@
-- Remove the word Host and Nano from everywhere
+- Remove the Nano prefix from types
 - Add unit tests
 - Address the problems found by Sol
 - Mouse events
