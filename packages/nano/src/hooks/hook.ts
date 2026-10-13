@@ -1,9 +1,19 @@
-import { type NanoStyleBundle, type NanoStyleSheet } from '../style/style';
+import type {
+  CallbackHook,
+  ContextHook,
+  EffectCleanup,
+  EffectCreator,
+  EffectHook,
+  EventDispatcherHook,
+  MemoHook,
+  ReducerHook,
+  RefHook,
+  StateHook,
+  StyleSheetHook,
+} from '../api/hook';
+import { type StyleBundle, type StyleSheet } from '../api/style';
 import { Fiber } from '../reconciler/fiber';
 import { type AnyFunction, type ValueOf } from '../shared/type';
-import type { EventDispatcher } from '../dom/dispatcher';
-import type { Context } from '../api/context';
-import type { Ref } from '../api/ref';
 
 export class Hook<P = unknown> {
   public tag: HookTagValue;
@@ -28,53 +38,27 @@ export const HookTag = {
 };
 export type HookTagValue = ValueOf<typeof HookTag>;
 
-export type NanoReducer<T, A> = (state: T, action: A) => T;
-export type NanoEffectCleanup = () => void;
-export type NanoEffectCreator = () => NanoEffectCleanup | void;
-
-// Move hook types to api
-export type NanoStateHook = <T>(initialState: T) => [T, (value: T) => void];
-export type NanoEffectHook = (
-  create: NanoEffectCreator,
-  deps: readonly unknown[],
-) => void;
-export type NanoContextHook = <T>(context: Context<T>) => T;
-export type NanoStyleSheetHook = <S extends NanoStyleBundle>(
-  styleSheet: NanoStyleSheet<S>,
-) => Record<keyof S, string>;
-export type NanoReducerHook = <T, A>(
-  reducer: NanoReducer<T, A>,
-  initialState: T,
-) => [T, (action: A) => void];
-export type NanoRefHook = <T>(initialValue: T) => Ref<T>;
-export type NanoCallbackHook = <T extends AnyFunction>(
-  callback: T,
-  deps: readonly unknown[],
-) => T;
-export type NanoMemoHook = <T>(create: () => T, deps: readonly unknown[]) => T;
-export type NanoEventDispatcherHook = () => EventDispatcher;
-
-export type NanoHookDispatcher = {
-  useState: NanoStateHook;
-  useEffect: NanoEffectHook;
-  useLayoutEffect: NanoEffectHook;
-  useContext: NanoContextHook;
-  useStyleSheet: NanoStyleSheetHook;
-  useReducer: NanoReducerHook;
-  useRef: NanoRefHook;
-  useCallback: NanoCallbackHook;
-  useMemo: NanoMemoHook;
-  useEventDispatcher: NanoEventDispatcherHook;
+export type HookDispatcher = {
+  useState: StateHook;
+  useEffect: EffectHook;
+  useLayoutEffect: EffectHook;
+  useContext: ContextHook;
+  useStyleSheet: StyleSheetHook;
+  useReducer: ReducerHook;
+  useRef: RefHook;
+  useCallback: CallbackHook;
+  useMemo: MemoHook;
+  useEventDispatcher: EventDispatcherHook;
 };
 
 export type EffectHookPayload = {
-  create: NanoEffectCreator;
-  destroy: NanoEffectCleanup | void;
+  create: EffectCreator;
+  destroy: EffectCleanup | void;
   flags: number;
   deps: readonly unknown[];
 };
 
-export type NanoReducerHookPayload<T = unknown, A = unknown> = {
+export type ReducerHookPayload<T = unknown, A = unknown> = {
   memoizedState: T;
   nextState: T | null;
   dirty: boolean;
@@ -82,15 +66,14 @@ export type NanoReducerHookPayload<T = unknown, A = unknown> = {
   fiber: Fiber;
 };
 
-export type NanoCallbackHookPayload<T extends AnyFunction> = {
+export type CallbackHookPayload<T extends AnyFunction> = {
   callback: T;
   deps: readonly unknown[];
 };
 
-export type NanoMemoHookPayload<T> = {
+export type MemoHookPayload<T> = {
   value: T;
   deps: readonly unknown[];
 };
 
-export type NanoStyleSheetHookPayload<S extends NanoStyleBundle> =
-  NanoStyleSheet<S>;
+export type StyleSheetHookPayload<S extends StyleBundle> = StyleSheet<S>;

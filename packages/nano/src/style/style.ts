@@ -1,19 +1,11 @@
+import type { Style, StyleBundle, StyleId, StyleSheet } from '../api/style';
 import { isFunction } from '../shared/predicate';
 
-export type NanoStyleId = string;
-export type NanoStyleBundle = {
-  [key: string]: NanoStyle;
-};
-export interface NanoStyleSheet<B extends NanoStyleBundle> {
-  bundle: B;
-  classNames: Record<keyof B, string>;
-}
-
-export class NanoStyle {
-  public id: NanoStyleId;
+export class StyleImpl implements Style {
+  public id: StyleId;
   public rule: string;
 
-  constructor(id: NanoStyleId, rule: string) {
+  constructor(id: StyleId, rule: string) {
     this.id = id;
     this.rule = rule;
   }
@@ -24,28 +16,28 @@ export class NanoStyle {
 }
 
 let lastId = 0;
-function nextId(): NanoStyleId {
+function nextId(): StyleId {
   return 's' + ++lastId;
 }
 
 export function css(
   strings: TemplateStringsArray,
   ...values: unknown[]
-): NanoStyle {
+): Style {
   const id = nextId();
   const definition = join(strings, values);
   const rule = `.${id} {${definition}}`;
-  return new NanoStyle(id, rule);
+  return new StyleImpl(id, rule);
 }
 
 export function keyframes(
   strings: TemplateStringsArray,
   ...values: unknown[]
-): NanoStyle {
+): Style {
   const id = nextId();
   const definition = join(strings, values);
   const rule = `@keyframes ${id} {${definition}}`;
-  return new NanoStyle(id, rule);
+  return new StyleImpl(id, rule);
 }
 
 function join(strings: TemplateStringsArray, values: unknown[]): string {
@@ -57,15 +49,15 @@ function join(strings: TemplateStringsArray, values: unknown[]): string {
       throw new Error('Style value contains null or undefined');
     }
     const valueString =
-      value instanceof NanoStyle ? '.' + value.id : value.toString();
+      value instanceof StyleImpl ? '.' + value.id : value.toString();
     parts.push(valueString, strings[i + 1]);
   }
   return parts.join('');
 }
 
-export function createStyleSheet<B extends NanoStyleBundle>(
+export function createStyleSheet<B extends StyleBundle>(
   bundle: B | (() => B),
-): NanoStyleSheet<B> {
+): StyleSheet<B> {
   if (isFunction(bundle)) {
     bundle = bundle();
   }

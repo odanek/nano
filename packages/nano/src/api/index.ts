@@ -47,11 +47,14 @@ import {
 } from '../core/component';
 
 import {
+  type Style,
+  type StyleSheet,
+} from './style';
+
+import {
   css,
   keyframes,
   createStyleSheet,
-  NanoStyle,
-  type NanoStyleSheet,
 } from '../style/style';
 
 import * as JSX from '../jsx/runtime';
@@ -107,8 +110,8 @@ export {
   css,
   keyframes,
   createStyleSheet,
-  NanoStyle,
-  type NanoStyleSheet,
+  type Style,
+  type StyleSheet,
   // JSX
   JSX,
 };

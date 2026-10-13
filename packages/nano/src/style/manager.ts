@@ -1,14 +1,14 @@
-import { NanoStyle, type NanoStyleBundle } from './style.js';
+import type { Style, StyleBundle } from '../api/style';
 
 type RefCountMap<T> = Map<T, number>;
 
-const activeStyles: RefCountMap<NanoStyle> = new Map();
-const activeBundles: RefCountMap<NanoStyleBundle> = new Map();
+const activeStyles: RefCountMap<Style> = new Map();
+const activeBundles: RefCountMap<StyleBundle> = new Map();
 const cleanupTimeout: number = 2000;
 let totalRuleCount = 0;
 let cleanupHandle: number | null = null;
 
-export function connectBundle(bundle: NanoStyleBundle): void {
+export function connectBundle(bundle: StyleBundle): void {
   if (retain(activeBundles, bundle)) {
     const styleSheet = getStyleSheet();
     for (const style of Object.values(bundle)) {
@@ -17,7 +17,7 @@ export function connectBundle(bundle: NanoStyleBundle): void {
   }
 }
 
-export function disconnectBundle(bundle: NanoStyleBundle): void {
+export function disconnectBundle(bundle: StyleBundle): void {
   if (release(activeBundles, bundle)) {
     scheduleCleanup();
   }
@@ -43,7 +43,7 @@ function cleanup(): void {
 }
 
 function cleanupBundles(): void {
-  const cleanedBundles = new Set<NanoStyleBundle>();
+  const cleanedBundles = new Set<StyleBundle>();
   for (const [bundle, referenceCount] of activeBundles.entries()) {
     if (referenceCount === 0 && !cleanedBundles.has(bundle)) {
       cleanupBundle(bundle, cleanedBundles);
@@ -56,8 +56,8 @@ function cleanupBundles(): void {
 }
 
 function cleanupBundle(
-  bundle: NanoStyleBundle,
-  cleanedBundles: Set<NanoStyleBundle>,
+  bundle: StyleBundle,
+  cleanedBundles: Set<StyleBundle>,
 ): void {
   cleanedBundles.add(bundle);
   for (const style of Object.values(bundle)) {
@@ -106,7 +106,7 @@ function release<T>(map: RefCountMap<T>, object: T): boolean {
   return referenceCount === 0;
 }
 
-function connectStyle(styleSheet: HTMLStyleElement, style: NanoStyle): void {
+function connectStyle(styleSheet: HTMLStyleElement, style: Style): void {
   if (retain(activeStyles, style)) {
     if (activeStyles.size === 1) {
       document.head.appendChild(styleSheet);
@@ -117,7 +117,7 @@ function connectStyle(styleSheet: HTMLStyleElement, style: NanoStyle): void {
   }
 }
 
-function disconnectStyle(style: NanoStyle, cleanup: boolean): void {
+function disconnectStyle(style: Style, cleanup: boolean): void {
   if (release(activeStyles, style) && cleanup !== false) {
     scheduleCleanup();
   }

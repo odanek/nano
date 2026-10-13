@@ -1,18 +1,17 @@
 import { connectBundle, disconnectBundle } from '../style/manager';
-import { type NanoStyleBundle, type NanoStyleSheet } from '../style/style';
+import { type StyleBundle, type StyleSheet } from '../api/style';
 import { Fiber } from '../reconciler/fiber';
 import { FiberRoot } from './root';
+import type { EffectCreator, Reducer } from '../api/hook';
 import {
-  type NanoEffectCreator,
   Hook,
-  type NanoHookDispatcher,
+  type HookDispatcher,
   HookTag,
-  type NanoReducer,
   type EffectHookPayload,
-  type NanoReducerHookPayload,
-  type NanoCallbackHookPayload,
-  type NanoMemoHookPayload,
-  type NanoStyleSheetHookPayload,
+  type ReducerHookPayload,
+  type CallbackHookPayload,
+  type MemoHookPayload,
+  type StyleSheetHookPayload,
   type HookTagValue,
 } from '../hooks/hook';
 import { findFiberRoot } from './traversal';
@@ -37,9 +36,9 @@ type NanoFunctionComponentProps = PlainObject;
 let workInProgressFiber: Fiber | null = null;
 let workInProgressHook: Hook | null = null;
 let currentHook: Hook | null = null;
-let hookDispatcher: NanoHookDispatcher | null = null;
+let hookDispatcher: HookDispatcher | null = null;
 
-const mountDispatcher: NanoHookDispatcher = {
+const mountDispatcher: HookDispatcher = {
   useState: mountState,
   useEffect: mountEffect,
   useLayoutEffect: mountLayoutEffect,
@@ -52,7 +51,7 @@ const mountDispatcher: NanoHookDispatcher = {
   useEventDispatcher: mountEventDispatcher,
 };
 
-const updateDispatcher: NanoHookDispatcher = {
+const updateDispatcher: HookDispatcher = {
   useState: updateState,
   useEffect: updateEffect,
   useLayoutEffect: updateLayoutEffect,
@@ -120,7 +119,7 @@ export function updateFunctionComponent(
     hook = hook.next
   ) {
     if (hook.tag === HookTag.Reducer) {
-      const payload = hook.payload as NanoReducerHookPayload;
+      const payload = hook.payload as ReducerHookPayload;
       if (payload.dirty) {
         return true;
       }
@@ -140,12 +139,12 @@ export function runStyleEffects(
   while (currentHook !== null || finishedWorkHook !== null) {
     if (currentHook?.tag === HookTag.Style) {
       const payload =
-        currentHook.payload as NanoStyleSheetHookPayload<NanoStyleBundle>;
+        currentHook.payload as StyleSheetHookPayload<StyleBundle>;
       if (finishedWorkHook === null) {
         disconnectBundle(payload.bundle);
       } else {
         const finishedWorkPayload =
-          finishedWorkHook.payload as NanoStyleSheetHookPayload<NanoStyleBundle>;
+          finishedWorkHook.payload as StyleSheetHookPayload<StyleBundle>;
         if (finishedWorkPayload.bundle !== payload.bundle) {
           disconnectBundle(payload.bundle);
           connectBundle(finishedWorkPayload.bundle);
@@ -153,7 +152,7 @@ export function runStyleEffects(
       }
     } else if (finishedWorkHook?.tag === HookTag.Style) {
       const payload =
-        finishedWorkHook.payload as NanoStyleSheetHookPayload<NanoStyleBundle>;
+        finishedWorkHook.payload as StyleSheetHookPayload<StyleBundle>;
       connectBundle(payload.bundle);
     }
 
@@ -201,8 +200,8 @@ function stateReducer<T>(currentState: T, value: T): T {
 }
 
 function dispatchReducer<T, A>(
-  payload: NanoReducerHookPayload<T, A>,
-  reducer: NanoReducer<T, A>,
+  payload: ReducerHookPayload<T, A>,
+  reducer: Reducer<T, A>,
   action: A,
 ): void {
   const memoizedState = payload.memoizedState;
@@ -220,7 +219,7 @@ function dispatchReducer<T, A>(
 }
 
 function createEffectPayload(
-  create: NanoEffectCreator,
+  create: EffectCreator,
   deps: readonly unknown[],
   flags: number,
 ): EffectHookPayload {
@@ -233,9 +232,9 @@ function createEffectPayload(
 }
 
 function createReducerPayload<T, A>(
-  reducer: NanoReducer<T, A>,
+  reducer: Reducer<T, A>,
   initialState: T,
-): NanoReducerHookPayload<T, A> {
+): ReducerHookPayload<T, A> {
   const payload = {
     memoizedState: initialState,
     nextState: null,
@@ -249,7 +248,7 @@ function createReducerPayload<T, A>(
 function createCallbackPayload<T extends AnyFunction>(
   callback: T,
   deps: readonly unknown[],
-): NanoCallbackHookPayload<T> {
+): CallbackHookPayload<T> {
   return {
     callback,
     deps,
@@ -259,7 +258,7 @@ function createCallbackPayload<T extends AnyFunction>(
 function createMemoPayload<T>(
   create: () => T,
   deps: readonly unknown[],
-): NanoMemoHookPayload<T> {
+): MemoHookPayload<T> {
   return {
     value: create(),
     deps,
@@ -277,7 +276,7 @@ function mountState<T>(initialState: T): [T, (value: T) => void] {
 }
 
 function mountEffect(
-  create: NanoEffectCreator,
+  create: EffectCreator,
   deps: readonly unknown[],
 ): void {
   const hook = mountWorkInProgressHook(HookTag.Effect);
@@ -291,7 +290,7 @@ function mountEffect(
 }
 
 function mountLayoutEffect(
-  create: NanoEffectCreator,
+  create: EffectCreator,
   deps: readonly unknown[],
 ): void {
   const hook = mountWorkInProgressHook(HookTag.Effect);
@@ -312,8 +311,8 @@ function mountContext<T>(context: Context<T>): T {
   return fullContext[key] as T;
 }
 
-function mountStyleSheet<S extends NanoStyleBundle>(
-  styleSheet: NanoStyleSheet<S>,
+function mountStyleSheet<S extends StyleBundle>(
+  styleSheet: StyleSheet<S>,
 ): Record<keyof S, string> {
   const hook = mountWorkInProgressHook(HookTag.Style);
   const payload = styleSheet;
@@ -323,7 +322,7 @@ function mountStyleSheet<S extends NanoStyleBundle>(
 }
 
 function mountReducer<T, A>(
-  reducer: NanoReducer<T, A>,
+  reducer: Reducer<T, A>,
   initialState: T,
 ): [T, (action: A) => void] {
   const hook = mountWorkInProgressHook(HookTag.Reducer);
@@ -367,7 +366,7 @@ function updateState<T>(initialState: T): [T, (value: T) => void] {
 }
 
 function updateEffect(
-  create: NanoEffectCreator,
+  create: EffectCreator,
   deps: readonly unknown[],
 ): void {
   const hook = updateWorkInProgressHook(HookTag.Effect);
@@ -386,7 +385,7 @@ function updateEffect(
 }
 
 function updateLayoutEffect(
-  create: NanoEffectCreator,
+  create: EffectCreator,
   deps: readonly unknown[],
 ): void {
   const hook = updateWorkInProgressHook(HookTag.Effect);
@@ -407,11 +406,11 @@ function updateContext<T>(context: Context<T>): T {
   return fullContext[key] as T;
 }
 
-function updateStyleSheet<S extends NanoStyleBundle>(
-  styleSheet: NanoStyleSheet<S>,
+function updateStyleSheet<S extends StyleBundle>(
+  styleSheet: StyleSheet<S>,
 ): Record<keyof S, string> {
   const hook = updateWorkInProgressHook(HookTag.Style);
-  let payload = hook.payload as NanoStyleSheetHookPayload<S>;
+  let payload = hook.payload as StyleSheetHookPayload<S>;
   if (payload !== styleSheet) {
     payload = styleSheet;
     hook.payload = payload;
@@ -422,12 +421,12 @@ function updateStyleSheet<S extends NanoStyleBundle>(
 
 function updateReducer<T, A>(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  reducer: NanoReducer<T, A>,
+  reducer: Reducer<T, A>,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   initialState: T,
 ): [T, (action: A) => void] {
   const hook = updateWorkInProgressHook(HookTag.Reducer);
-  const payload = hook.payload as NanoReducerHookPayload;
+  const payload = hook.payload as ReducerHookPayload;
   if (payload.dirty) {
     payload.memoizedState = payload.nextState;
     payload.nextState = null;
@@ -448,7 +447,7 @@ function updateCallback<T extends AnyFunction>(
   deps: readonly unknown[],
 ): T {
   const hook = updateWorkInProgressHook(HookTag.Callback);
-  const payload = hook.payload as NanoCallbackHookPayload<T>;
+  const payload = hook.payload as CallbackHookPayload<T>;
   if (!arrayEquals(payload.deps, deps)) {
     const updatedPayload = (hook.payload = createCallbackPayload(
       callback,
@@ -462,7 +461,7 @@ function updateCallback<T extends AnyFunction>(
 
 function updateMemo<T>(create: () => T, deps: readonly unknown[]): T {
   const hook = updateWorkInProgressHook(HookTag.Memo);
-  const payload = hook.payload as NanoMemoHookPayload<T>;
+  const payload = hook.payload as MemoHookPayload<T>;
   if (!arrayEquals(payload.deps, deps)) {
     const newPayload = createMemoPayload(create, deps);
     hook.payload = newPayload;
@@ -473,58 +472,58 @@ function updateMemo<T>(create: () => T, deps: readonly unknown[]): T {
 }
 
 export function useState<T>(initialState: T): [T, (value: T) => void] {
-  return (hookDispatcher as NanoHookDispatcher).useState(initialState);
+  return (hookDispatcher as HookDispatcher).useState(initialState);
 }
 
 export function useEffect(
-  create: NanoEffectCreator,
+  create: EffectCreator,
   deps: readonly unknown[],
 ): void {
-  (hookDispatcher as NanoHookDispatcher).useEffect(create, deps);
+  (hookDispatcher as HookDispatcher).useEffect(create, deps);
 }
 
 export function useLayoutEffect(
-  create: NanoEffectCreator,
+  create: EffectCreator,
   deps: readonly unknown[],
 ): void {
-  (hookDispatcher as NanoHookDispatcher).useLayoutEffect(create, deps);
+  (hookDispatcher as HookDispatcher).useLayoutEffect(create, deps);
 }
 
 export function useContext<T>(context: Context<T>): T {
-  return (hookDispatcher as NanoHookDispatcher).useContext(context);
+  return (hookDispatcher as HookDispatcher).useContext(context);
 }
 
-export function useStyleSheet<S extends NanoStyleBundle>(
-  styleSheet: NanoStyleSheet<S>,
+export function useStyleSheet<S extends StyleBundle>(
+  styleSheet: StyleSheet<S>,
 ): Record<keyof S, string> {
-  return (hookDispatcher as NanoHookDispatcher).useStyleSheet(styleSheet);
+  return (hookDispatcher as HookDispatcher).useStyleSheet(styleSheet);
 }
 
 export function useReducer<T, A>(
-  reducer: NanoReducer<T, A>,
+  reducer: Reducer<T, A>,
   initialState: T,
 ): [T, (action: A) => void] {
-  return (hookDispatcher as NanoHookDispatcher).useReducer(
+  return (hookDispatcher as HookDispatcher).useReducer(
     reducer,
     initialState,
   );
 }
 
 export function useRef<T>(initialValue: T): Ref<T> {
-  return (hookDispatcher as NanoHookDispatcher).useRef(initialValue);
+  return (hookDispatcher as HookDispatcher).useRef(initialValue);
 }
 
 export function useCallback<T extends AnyFunction>(
   callback: T,
   deps: readonly unknown[],
 ): T {
-  return (hookDispatcher as NanoHookDispatcher).useCallback(callback, deps);
+  return (hookDispatcher as HookDispatcher).useCallback(callback, deps);
 }
 
 export function useMemo<T>(create: () => T, deps: readonly unknown[]): T {
-  return (hookDispatcher as NanoHookDispatcher).useMemo(create, deps);
+  return (hookDispatcher as HookDispatcher).useMemo(create, deps);
 }
 
 export function useEventDispatcher(): EventDispatcher {
-  return (hookDispatcher as NanoHookDispatcher).useEventDispatcher();
+  return (hookDispatcher as HookDispatcher).useEventDispatcher();
 }
