@@ -19,9 +19,9 @@ import { type HtmlProps } from '../jsx/intrinsic/html';
 import { classNames } from '../dom/element';
 
 import {
-  type NanoDomClass,
+  type DomClass,
   type DomEventProps,
-  type NanoDomStyle,
+  type DomStyle,
   NanoEvent,
   NanoClipboardEvent,
   NanoFocusEvent,
@@ -74,8 +74,8 @@ export {
   type EventDispatcher,
   StyleDecorator,
   createContext,
-  type NanoDomClass,
-  type NanoDomStyle,
+  type DomClass,
+  type DomStyle,
   type HtmlProps,
   type DomEventProps,
   classNames,

@@ -1,6 +1,6 @@
 import type { PropsWithKey } from '../../api/key';
 import type { PropsWithRef } from '../../api/ref';
-import type { NanoDomClass, NanoDomStyle } from '../../dom';
+import type { DomClass, DomStyle } from '../../dom';
 import type { AriaProps, AriaRole } from './aria';
 import type { Booleanish, CrossOrigin, DomProps } from './common';
 
@@ -10,7 +10,7 @@ export interface SvgProps<T extends EventTarget>
   extends AriaProps, DomProps<T> {
   // Attributes which also defined in HTMLAttributes
   // See comment in SVGDOMPropertyConfig.js
-  class?: NanoDomClass | undefined;
+  class?: DomClass | undefined;
   color?: string | undefined;
   height?: number | string | undefined;
   id?: string | undefined;
@@ -20,7 +20,7 @@ export interface SvgProps<T extends EventTarget>
   method?: string | undefined;
   min?: number | string | undefined;
   name?: string | undefined;
-  style?: NanoDomStyle | undefined;
+  style?: DomStyle | undefined;
   target?: string | undefined;
   type?: string | undefined;
   width?: number | string | undefined;

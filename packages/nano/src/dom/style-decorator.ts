@@ -1,10 +1,10 @@
 import type { DecoratorProps } from '../api/decorator';
 import { type DecoratorVNode } from '../api/vnode';
 import { createDecoratorVNode } from '../core/vnode';
-import { type NanoDomStyle } from './type';
+import { type DomStyle } from './type';
 
 export type StyleDecoratorProps = DecoratorProps<{
-  style?: NanoDomStyle | undefined;
+  style?: DomStyle | undefined;
 }>;
 
 export function StyleDecorator(

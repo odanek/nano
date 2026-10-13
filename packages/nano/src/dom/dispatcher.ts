@@ -4,7 +4,7 @@ import {
   NanoClipboardEvent,
   NanoEvent,
   NanoEventFilter,
-  NanoEventType,
+  EventType,
   NanoFocusEvent,
   NanoInputEvent,
   NanoKeyboardEvent,
@@ -13,18 +13,17 @@ import {
   NanoTouchEvent,
   NanoWheelEvent,
   type DomEventProps,
-  type NanoBubbleEventHandlerName,
-  type NanoCaptureEventHandlerName,
-  type NanoEventHandler,
+  type BubbleEventHandlerName,
+  type CaptureEventHandlerName,
+  type EventHandler,
 } from './event';
 import { capitalizeFirstLetter } from '../shared/string';
 
-// TODO Conflicts with NanoEventFilter
-type EventFilter = DomEventProps<EventTarget>;
+type EventProps = DomEventProps<EventTarget>;
 
 export class EventDispatcher {
   private eventHandler: (event: Event) => void;
-  private filters: EventFilter[];
+  private filters: EventProps[];
 
   constructor() {
     this.eventHandler = this.handleEvent.bind(this);
@@ -48,12 +47,12 @@ export class EventDispatcher {
     }
   }
 
-  public addFilter(filter: EventFilter): () => void {
+  public addFilter(filter: EventProps): () => void {
     this.filters.push(filter);
     return (): void => this.removeFilter(filter);
   }
 
-  public removeFilter(filter: EventFilter): void {
+  public removeFilter(filter: EventProps): void {
     const index = this.filters.indexOf(filter);
     if (index !== -1) {
       this.filters.splice(index, 1);
@@ -73,8 +72,8 @@ export class EventDispatcher {
     const bubbles = this.isBubblingEvent(event);
     const fiberChain = this.getFiberChain(target, bubbles);
     const type = capitalizeFirstLetter(event.type);
-    const captureHandler = ('onCapture' + type) as NanoCaptureEventHandlerName;
-    const bubbleHandler = ('on' + type) as NanoBubbleEventHandlerName;
+    const captureHandler = ('onCapture' + type) as CaptureEventHandlerName;
+    const bubbleHandler = ('on' + type) as BubbleEventHandlerName;
     this.runHandlerChain(fiberChain, event, captureHandler, bubbleHandler);
 
     if (event.isDefaultPrevented()) {
@@ -86,8 +85,8 @@ export class EventDispatcher {
     }
   }
 
-  private getFiberChain(target: Node, bubbles: boolean): EventFilter[] {
-    const chain: EventFilter[] = [];
+  private getFiberChain(target: Node, bubbles: boolean): EventProps[] {
+    const chain: EventProps[] = [];
     let current: Node | null = target;
     let fiber: Fiber | null = null;
     while (current !== null && fiber === null) {
@@ -100,9 +99,9 @@ export class EventDispatcher {
         fiber.kind === VNodeKind.Element &&
         (bubbles || fiber.stateNode === target)
       ) {
-        chain.push(fiber.memoizedProps as EventFilter);
+        chain.push(fiber.memoizedProps as EventProps);
       } else if (fiber.type === NanoEventFilter) {
-        chain.push(fiber.memoizedProps as EventFilter);
+        chain.push(fiber.memoizedProps as EventProps);
       }
       fiber = fiber.return;
     }
@@ -115,25 +114,25 @@ export class EventDispatcher {
   }
 
   private runHandlerChain(
-    handlers: EventFilter[],
+    handlers: EventProps[],
     event: NanoEvent,
-    captureHandlerName: NanoCaptureEventHandlerName,
-    bubbleHandlerName: NanoBubbleEventHandlerName,
+    captureHandlerName: CaptureEventHandlerName,
+    bubbleHandlerName: BubbleEventHandlerName,
   ): void {
     const length = handlers.length;
 
     for (let i = length - 1; i >= 0 && !event.isPropagationStopped(); i--) {
-      const handler = handlers[i] as EventFilter;
+      const handler = handlers[i] as EventProps;
       const captureHandler = handler[captureHandlerName] as
-        | NanoEventHandler<NanoEvent>
+        | EventHandler<NanoEvent>
         | undefined;
       captureHandler?.(event);
     }
 
     for (let i = 0; i < length && !event.isPropagationStopped(); i++) {
-      const handler = handlers[i] as EventFilter;
+      const handler = handlers[i] as EventProps;
       const bubbleHandler = handler[bubbleHandlerName] as
-        | NanoEventHandler<NanoEvent>
+        | EventHandler<NanoEvent>
         | undefined;
       bubbleHandler?.(event);
     }
@@ -222,7 +221,4 @@ const nativeEventType = [
   'touchend',
 ];
 
-const nonBubblingEvents = [
-  NanoEventType.PointerEnter,
-  NanoEventType.PointerLeave,
-];
+const nonBubblingEvents = [EventType.PointerEnter, EventType.PointerLeave];

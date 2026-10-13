@@ -1,4 +1,4 @@
-export { type NanoDomClass, type NanoDomStyle } from './type';
+export { type DomClass, type DomStyle } from './type';
 export {
   NanoEvent,
   NanoClipboardEvent,
@@ -10,7 +10,7 @@ export {
   NanoTouchEvent,
   NanoWheelEvent,
   NanoEventFilter,
-  type NanoEventHandler,
+  type EventHandler,
   type DomCaptureEventProps,
   type DomBubbleEventProps,
   type DomEventProps,

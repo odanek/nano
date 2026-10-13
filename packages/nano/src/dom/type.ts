@@ -1,4 +1,4 @@
 import type { Properties as CSSProperties } from 'csstype';
 
-export type NanoDomClass = string | string[];
-export type NanoDomStyle = CSSProperties<string | number>;
+export type DomClass = string | string[];
+export type DomStyle = CSSProperties<string | number>;

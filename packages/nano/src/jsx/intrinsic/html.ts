@@ -1,11 +1,6 @@
 import type { PropsWithKey } from '../../api/key';
 import type { PropsWithRef } from '../../api/ref';
-import type {
-  NanoDomClass,
-  NanoDomStyle,
-  NanoEvent,
-  NanoEventHandler,
-} from '../../dom';
+import type { DomClass, DomStyle, NanoEvent, EventHandler } from '../../dom';
 import type { AriaProps, AriaRole } from './aria';
 import type { Booleanish, CrossOrigin, DomProps } from './common';
 
@@ -25,7 +20,7 @@ export interface HtmlProps<T extends HTMLElement>
     | undefined
     | (string & {});
   autoFocus?: boolean | undefined;
-  class?: NanoDomClass | undefined;
+  class?: DomClass | undefined;
   contentEditable?: Booleanish | 'inherit' | 'plaintext-only' | undefined;
   contextMenu?: string | undefined;
   dir?: string | undefined;
@@ -45,7 +40,7 @@ export interface HtmlProps<T extends HTMLElement>
   nonce?: string | undefined;
   slot?: string | undefined;
   spellCheck?: Booleanish | undefined;
-  style?: NanoDomStyle | undefined;
+  style?: DomStyle | undefined;
   tabIndex?: number | undefined;
   title?: string | undefined;
   translate?: 'yes' | 'no' | undefined;
@@ -188,16 +183,16 @@ interface NanoHtmlDelProps extends HtmlProps<HTMLModElement> {
 interface NanoHtmlDetailsProps extends HtmlProps<HTMLDetailsElement> {
   open?: boolean | undefined;
   name?: string | undefined;
-  onToggle?: NanoEventHandler<NanoEvent<HTMLDetailsElement>> | undefined;
-  onCaptureToggle?: NanoEventHandler<NanoEvent<HTMLDetailsElement>> | undefined;
+  onToggle?: EventHandler<NanoEvent<HTMLDetailsElement>> | undefined;
+  onCaptureToggle?: EventHandler<NanoEvent<HTMLDetailsElement>> | undefined;
 }
 
 interface NanoHtmlDialogProps extends HtmlProps<HTMLDialogElement> {
   open?: boolean | undefined;
-  onCancel?: NanoEventHandler<NanoEvent<HTMLDialogElement>> | undefined;
-  onCaptureCancel?: NanoEventHandler<NanoEvent<HTMLDialogElement>> | undefined;
-  onClose?: NanoEventHandler<NanoEvent<HTMLDialogElement>> | undefined;
-  onCaptureClose?: NanoEventHandler<NanoEvent<HTMLDialogElement>> | undefined;
+  onCancel?: EventHandler<NanoEvent<HTMLDialogElement>> | undefined;
+  onCaptureCancel?: EventHandler<NanoEvent<HTMLDialogElement>> | undefined;
+  onClose?: EventHandler<NanoEvent<HTMLDialogElement>> | undefined;
+  onCaptureClose?: EventHandler<NanoEvent<HTMLDialogElement>> | undefined;
 }
 
 interface NanoHtmlEmbedProps extends HtmlProps<HTMLEmbedElement> {
@@ -384,8 +379,8 @@ interface NanoHtmlInputProps extends HtmlProps<HTMLInputElement> {
   type?: NanoHtmlInputTypeAttribute | undefined;
   value?: string | readonly string[] | number | undefined;
   width?: number | string | undefined;
-  onChange?: NanoEventHandler<NanoEvent<HTMLInputElement>> | undefined;
-  onCaptureChange?: NanoEventHandler<NanoEvent<HTMLInputElement>> | undefined;
+  onChange?: EventHandler<NanoEvent<HTMLInputElement>> | undefined;
+  onCaptureChange?: EventHandler<NanoEvent<HTMLInputElement>> | undefined;
 }
 
 interface NanoHtmlInsProps extends HtmlProps<HTMLModElement> {
@@ -542,8 +537,8 @@ interface NanoHtmlSelectProps extends HtmlProps<HTMLSelectElement> {
   required?: boolean | undefined;
   size?: number | undefined;
   value?: string | readonly string[] | number | undefined;
-  onChange?: NanoEventHandler<NanoEvent<HTMLSelectElement>> | undefined;
-  onCaptureChange?: NanoEventHandler<NanoEvent<HTMLSelectElement>> | undefined;
+  onChange?: EventHandler<NanoEvent<HTMLSelectElement>> | undefined;
+  onCaptureChange?: EventHandler<NanoEvent<HTMLSelectElement>> | undefined;
 }
 
 interface NanoHtmlSourceProps extends HtmlProps<HTMLSourceElement> {
@@ -589,10 +584,8 @@ interface NanoHtmlTextareaProps extends HtmlProps<HTMLTextAreaElement> {
   rows?: number | undefined;
   value?: string | readonly string[] | number | undefined;
   wrap?: string | undefined;
-  onChange?: NanoEventHandler<NanoEvent<HTMLTextAreaElement>> | undefined;
-  onCaptureChange?:
-    | NanoEventHandler<NanoEvent<HTMLTextAreaElement>>
-    | undefined;
+  onChange?: EventHandler<NanoEvent<HTMLTextAreaElement>> | undefined;
+  onCaptureChange?: EventHandler<NanoEvent<HTMLTextAreaElement>> | undefined;
 }
 
 interface NanoHtmlTdProps extends HtmlProps<HTMLTableCellElement> {
