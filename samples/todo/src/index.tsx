@@ -1,8 +1,6 @@
 import { render } from '@nano-ui/nano';
 import { TodoApp } from './app';
 
-function run(): void {
+window.addEventListener('DOMContentLoaded', () => {
   render(<TodoApp />, document.body);
-}
-
-window.addEventListener('DOMContentLoaded', run);
+});

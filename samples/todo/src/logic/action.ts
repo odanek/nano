@@ -1,5 +1,5 @@
 import { createContext } from '@nano-ui/nano';
-import { TodoFilterType } from './reducer';
+import { TodoFilterType } from './state';
 
 export interface TodoAddItemAction {
   type: 'addItem';

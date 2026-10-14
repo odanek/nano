@@ -3,12 +3,11 @@ import {
   createStyleSheet,
   css,
   PropsWithKey,
-  useContext,
   useStyleSheet,
 } from '@nano-ui/nano';
-import { TodoItemState } from './reducer';
-import { DispatchContext } from './action';
+import { TodoItemState } from './logic/state';
 import { CheckBox } from './check-box';
+import { useActionDispatch } from './hooks/useActionDispatch';
 
 type Props = PropsWithKey<{
   item: TodoItemState;
@@ -17,7 +16,7 @@ type Props = PropsWithKey<{
 export function TodoItem({ item }: Props): JSX.Element {
   const { done, label } = item;
   const css = useStyleSheet(styleSheet);
-  const dispatch = useContext(DispatchContext);
+  const dispatch = useActionDispatch();
 
   return (
     <li class={css.root}>

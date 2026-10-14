@@ -1,6 +1,5 @@
 - Mouse events
 - Drag & Drop events
-- Todo sample cleanup
 - Add unit tests
 - Address the problems found by Sol
 - Create a Nano skill for AI

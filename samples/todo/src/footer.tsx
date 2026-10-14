@@ -2,12 +2,11 @@ import {
   classNames,
   createStyleSheet,
   css,
-  useContext,
   useMemo,
   useStyleSheet,
 } from '@nano-ui/nano';
-import { TodoFilterType, TodoItemState } from './reducer';
-import { DispatchContext } from './action';
+import { TodoFilterType, TodoItemState } from './logic/state';
+import { useActionDispatch } from './hooks/useActionDispatch';
 
 interface Props {
   items: TodoItemState[];
@@ -21,7 +20,7 @@ export function TodoFooter({
   filter: activeFilter,
 }: Props): JSX.Element {
   const css = useStyleSheet(styleSheet);
-  const dispatch = useContext(DispatchContext);
+  const dispatch = useActionDispatch();
   const remaining = useMemo(() => countDone(false, items), [items]);
   const done = useMemo(() => countDone(true, items), [items]);
 

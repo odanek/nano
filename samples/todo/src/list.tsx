@@ -1,5 +1,5 @@
 import { createStyleSheet, css, useMemo, useStyleSheet } from '@nano-ui/nano';
-import { TodoFilterType, TodoItemState } from './reducer';
+import { TodoFilterType, TodoItemState } from './logic/state';
 import { TodoFooter } from './footer';
 import { TodoHeader } from './header';
 import { TodoItem } from './item';

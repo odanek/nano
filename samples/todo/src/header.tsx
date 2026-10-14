@@ -2,15 +2,14 @@ import {
   createStyleSheet,
   css,
   KeyboardEvent,
-  useContext,
   useRef,
   useStyleSheet,
 } from '@nano-ui/nano';
-import { DispatchContext } from './action';
+import { useActionDispatch } from './hooks/useActionDispatch';
 
 export function TodoHeader(): JSX.Element {
   const css = useStyleSheet(styleSheet);
-  const dispatch = useContext(DispatchContext);
+  const dispatch = useActionDispatch();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const submit = (event: KeyboardEvent<HTMLInputElement>): void => {
     const input = inputRef.current;
