@@ -1,6 +1,17 @@
 import type { PropsWithChildren, Renderable } from '../api/renderable';
 import type { ValueOf } from '../shared/type';
 
+export type DomEvent = globalThis.Event;
+export type DomUiEvent = globalThis.UIEvent;
+export type DomClipboardEvent = globalThis.ClipboardEvent;
+export type DomFocusEvent = globalThis.FocusEvent;
+export type DomInputEvent = globalThis.InputEvent;
+export type DomKeyboardEvent = globalThis.KeyboardEvent;
+export type DomMouseEvent = globalThis.MouseEvent;
+export type DomPointerEvent = globalThis.PointerEvent;
+export type DomTouchEvent = globalThis.TouchEvent;
+export type DomWheelEvent = globalThis.WheelEvent;
+
 export const EventType = {
   // Pointer events
   AuxClick: 'auxClick',
@@ -68,9 +79,9 @@ export type ModifierKey =
 
 export type PointerType = 'mouse' | 'pen' | 'touch';
 
-export class NanoEvent<
+export class Event<
   T extends EventTarget = EventTarget,
-  E extends Event = Event,
+  E extends DomEvent = DomEvent,
 > {
   public readonly nativeEvent: E;
   public readonly type: EventTypeValue;
@@ -178,10 +189,10 @@ function getType(type: string): EventTypeValue {
   }
 }
 
-export class NanoUiEvent<
+export class UiEvent<
   T extends EventTarget = EventTarget,
-  E extends UIEvent = UIEvent,
-> extends NanoEvent<T, E> {
+  E extends DomUiEvent = DomUiEvent,
+> extends Event<T, E> {
   public readonly detail: number;
   public readonly view: Window | null;
 
@@ -192,37 +203,40 @@ export class NanoUiEvent<
   }
 }
 
-export class NanoClipboardEvent<
-  T extends EventTarget = EventTarget,
-> extends NanoEvent<T, ClipboardEvent> {
+export class ClipboardEvent<T extends EventTarget = EventTarget> extends Event<
+  T,
+  DomClipboardEvent
+> {
   public readonly clipboardData: DataTransfer | null;
 
-  constructor(event: ClipboardEvent) {
+  constructor(event: DomClipboardEvent) {
     super(event);
     this.clipboardData = event.clipboardData;
   }
 }
 
-export class NanoFocusEvent<
-  T extends EventTarget = EventTarget,
-> extends NanoEvent<T, FocusEvent> {
+export class FocusEvent<T extends EventTarget = EventTarget> extends Event<
+  T,
+  DomFocusEvent
+> {
   public readonly relatedTarget: EventTarget | null;
 
-  constructor(event: FocusEvent) {
+  constructor(event: DomFocusEvent) {
     super(event);
     this.relatedTarget = event.relatedTarget;
   }
 }
 
-export class NanoInputEvent<
-  T extends EventTarget = EventTarget,
-> extends NanoEvent<T, InputEvent> {
+export class InputEvent<T extends EventTarget = EventTarget> extends Event<
+  T,
+  DomInputEvent
+> {
   public readonly data: string | null;
   public readonly dataTransfer: DataTransfer | null;
   public readonly inputType: string;
   public readonly isComposing: boolean;
 
-  constructor(event: InputEvent) {
+  constructor(event: DomInputEvent) {
     super(event);
     this.data = event.data;
     this.dataTransfer = event.dataTransfer;
@@ -235,9 +249,10 @@ export class NanoInputEvent<
   }
 }
 
-export class NanoKeyboardEvent<
-  T extends EventTarget = EventTarget,
-> extends NanoUiEvent<T, KeyboardEvent> {
+export class KeyboardEvent<T extends EventTarget = EventTarget> extends UiEvent<
+  T,
+  DomKeyboardEvent
+> {
   public readonly altKey: boolean;
   /** @deprecated */
   public readonly charCode: number;
@@ -253,7 +268,7 @@ export class NanoKeyboardEvent<
   /** @deprecated */
   public readonly which: number;
 
-  constructor(event: KeyboardEvent) {
+  constructor(event: DomKeyboardEvent) {
     super(event);
     this.altKey = event.altKey;
     this.charCode = event.charCode;
@@ -273,10 +288,10 @@ export class NanoKeyboardEvent<
   }
 }
 
-export class NanoMouseEvent<
+export class MouseEvent<
   T extends EventTarget = EventTarget,
-  E extends MouseEvent = MouseEvent,
-> extends NanoUiEvent<T, E> {
+  E extends DomMouseEvent = DomMouseEvent,
+> extends UiEvent<T, E> {
   public readonly altKey: boolean;
   public readonly button: number;
   public readonly buttons: number;
@@ -321,9 +336,9 @@ export class NanoMouseEvent<
   }
 }
 
-export class NanoPointerEvent<
+export class PointerEvent<
   T extends EventTarget = EventTarget,
-> extends NanoMouseEvent<T, PointerEvent> {
+> extends MouseEvent<T, DomPointerEvent> {
   public readonly pointerId: number;
   public readonly pressure: number;
   public readonly tangentialPressure: number;
@@ -335,7 +350,7 @@ export class NanoPointerEvent<
   public readonly pointerType: PointerType;
   public readonly isPrimary: boolean;
 
-  constructor(event: PointerEvent) {
+  constructor(event: DomPointerEvent) {
     super(event);
     this.pointerId = event.pointerId;
     this.pressure = event.pressure;
@@ -350,9 +365,10 @@ export class NanoPointerEvent<
   }
 }
 
-export class NanoTouchEvent<
-  T extends EventTarget = EventTarget,
-> extends NanoUiEvent<T, TouchEvent> {
+export class TouchEvent<T extends EventTarget = EventTarget> extends UiEvent<
+  T,
+  DomTouchEvent
+> {
   public readonly altKey: boolean;
   public readonly changedTouches: TouchList;
   public readonly ctrlKey: boolean;
@@ -361,7 +377,7 @@ export class NanoTouchEvent<
   public readonly targetTouches: TouchList;
   public readonly touches: TouchList;
 
-  constructor(event: TouchEvent) {
+  constructor(event: DomTouchEvent) {
     super(event);
     this.altKey = event.altKey;
     this.changedTouches = event.changedTouches;
@@ -373,15 +389,16 @@ export class NanoTouchEvent<
   }
 }
 
-export class NanoWheelEvent<
-  T extends EventTarget = EventTarget,
-> extends NanoMouseEvent<T, WheelEvent> {
+export class WheelEvent<T extends EventTarget = EventTarget> extends MouseEvent<
+  T,
+  DomWheelEvent
+> {
   public readonly deltaMode: number;
   public readonly deltaX: number;
   public readonly deltaY: number;
   public readonly deltaZ: number;
 
-  constructor(event: WheelEvent) {
+  constructor(event: DomWheelEvent) {
     super(event);
     this.deltaMode = event.deltaMode;
     this.deltaX = event.deltaX;
@@ -390,95 +407,95 @@ export class NanoWheelEvent<
   }
 }
 
-type NanoEventFilterProps = PropsWithChildren<DomEventProps<Element>>;
+type EventFilterProps = PropsWithChildren<DomEventProps<Element>>;
 
-export function NanoEventFilter(props: NanoEventFilterProps): Renderable {
+export function EventFilter(props: EventFilterProps): Renderable {
   return props.children ?? null;
 }
 
 export type DomCaptureEventProps<T extends EventTarget> = {
   // Pointer
-  onCaptureAuxClick?: EventHandler<NanoPointerEvent<T>> | undefined;
-  onCapturePointerCancel?: EventHandler<NanoPointerEvent<T>> | undefined;
-  onCapturePointerDown?: EventHandler<NanoPointerEvent<T>> | undefined;
-  onCapturePointerUp?: EventHandler<NanoPointerEvent<T>> | undefined;
-  onCapturePointerEnter?: EventHandler<NanoPointerEvent<T>> | undefined;
-  onCapturePointerLeave?: EventHandler<NanoPointerEvent<T>> | undefined;
-  onCapturePointerOver?: EventHandler<NanoPointerEvent<T>> | undefined;
-  onCapturePointerOut?: EventHandler<NanoPointerEvent<T>> | undefined;
-  onCapturePointerMove?: EventHandler<NanoPointerEvent<T>> | undefined;
-  onCaptureClick?: EventHandler<NanoPointerEvent<T>> | undefined;
-  onCaptureContextMenu?: EventHandler<NanoPointerEvent<T>> | undefined;
+  onCaptureAuxClick?: EventHandler<PointerEvent<T>> | undefined;
+  onCapturePointerCancel?: EventHandler<PointerEvent<T>> | undefined;
+  onCapturePointerDown?: EventHandler<PointerEvent<T>> | undefined;
+  onCapturePointerUp?: EventHandler<PointerEvent<T>> | undefined;
+  onCapturePointerEnter?: EventHandler<PointerEvent<T>> | undefined;
+  onCapturePointerLeave?: EventHandler<PointerEvent<T>> | undefined;
+  onCapturePointerOver?: EventHandler<PointerEvent<T>> | undefined;
+  onCapturePointerOut?: EventHandler<PointerEvent<T>> | undefined;
+  onCapturePointerMove?: EventHandler<PointerEvent<T>> | undefined;
+  onCaptureClick?: EventHandler<PointerEvent<T>> | undefined;
+  onCaptureContextMenu?: EventHandler<PointerEvent<T>> | undefined;
   // Mouse
-  onCaptureDblClick?: EventHandler<NanoMouseEvent<T>> | undefined;
+  onCaptureDblClick?: EventHandler<MouseEvent<T>> | undefined;
   // Wheel
-  onCaptureWheel?: EventHandler<NanoWheelEvent<T>> | undefined;
+  onCaptureWheel?: EventHandler<WheelEvent<T>> | undefined;
   // Focus
-  onCaptureFocusIn?: EventHandler<NanoFocusEvent<T>> | undefined;
-  onCaptureFocusOut?: EventHandler<NanoFocusEvent<T>> | undefined;
+  onCaptureFocusIn?: EventHandler<FocusEvent<T>> | undefined;
+  onCaptureFocusOut?: EventHandler<FocusEvent<T>> | undefined;
   // Clipboard
-  onCaptureCut?: EventHandler<NanoClipboardEvent<T>> | undefined;
-  onCaptureCopy?: EventHandler<NanoClipboardEvent<T>> | undefined;
-  onCapturePaste?: EventHandler<NanoClipboardEvent<T>> | undefined;
+  onCaptureCut?: EventHandler<ClipboardEvent<T>> | undefined;
+  onCaptureCopy?: EventHandler<ClipboardEvent<T>> | undefined;
+  onCapturePaste?: EventHandler<ClipboardEvent<T>> | undefined;
   // Keyboard
-  onCaptureKeyDown?: EventHandler<NanoKeyboardEvent<T>> | undefined;
-  onCaptureKeyUp?: EventHandler<NanoKeyboardEvent<T>> | undefined;
-  onCaptureKeyPress?: EventHandler<NanoKeyboardEvent<T>> | undefined;
+  onCaptureKeyDown?: EventHandler<KeyboardEvent<T>> | undefined;
+  onCaptureKeyUp?: EventHandler<KeyboardEvent<T>> | undefined;
+  onCaptureKeyPress?: EventHandler<KeyboardEvent<T>> | undefined;
   // Input
-  onCaptureInput?: EventHandler<NanoInputEvent<T>> | undefined;
-  onCaptureBeforeInput?: EventHandler<NanoInputEvent<T>> | undefined;
+  onCaptureInput?: EventHandler<InputEvent<T>> | undefined;
+  onCaptureBeforeInput?: EventHandler<InputEvent<T>> | undefined;
   // Generic
-  onCaptureChange?: EventHandler<NanoEvent<T>> | undefined;
-  onCaptureSelect?: EventHandler<NanoEvent<T>> | undefined;
-  onCaptureScroll?: EventHandler<NanoEvent<T>> | undefined;
+  onCaptureChange?: EventHandler<Event<T>> | undefined;
+  onCaptureSelect?: EventHandler<Event<T>> | undefined;
+  onCaptureScroll?: EventHandler<Event<T>> | undefined;
   // Touch
-  onCaptureTouchCancel?: EventHandler<NanoTouchEvent<T>> | undefined;
-  onCaptureTouchStart?: EventHandler<NanoTouchEvent<T>> | undefined;
-  onCaptureTouchMove?: EventHandler<NanoTouchEvent<T>> | undefined;
-  onCaptureTouchEnd?: EventHandler<NanoTouchEvent<T>> | undefined;
+  onCaptureTouchCancel?: EventHandler<TouchEvent<T>> | undefined;
+  onCaptureTouchStart?: EventHandler<TouchEvent<T>> | undefined;
+  onCaptureTouchMove?: EventHandler<TouchEvent<T>> | undefined;
+  onCaptureTouchEnd?: EventHandler<TouchEvent<T>> | undefined;
   // TODO Add missing events
 };
 
 export type DomBubbleEventProps<T extends EventTarget> = {
   // Pointer
-  onAuxClick?: EventHandler<NanoPointerEvent<T>> | undefined;
-  onPointerCancel?: EventHandler<NanoPointerEvent<T>> | undefined;
-  onPointerDown?: EventHandler<NanoPointerEvent<T>> | undefined;
-  onPointerUp?: EventHandler<NanoPointerEvent<T>> | undefined;
-  onPointerEnter?: EventHandler<NanoPointerEvent<T>> | undefined;
-  onPointerLeave?: EventHandler<NanoPointerEvent<T>> | undefined;
-  onPointerOver?: EventHandler<NanoPointerEvent<T>> | undefined;
-  onPointerOut?: EventHandler<NanoPointerEvent<T>> | undefined;
-  onPointerMove?: EventHandler<NanoPointerEvent<T>> | undefined;
-  onClick?: EventHandler<NanoPointerEvent<T>> | undefined;
-  onContextMenu?: EventHandler<NanoPointerEvent<T>> | undefined;
+  onAuxClick?: EventHandler<PointerEvent<T>> | undefined;
+  onPointerCancel?: EventHandler<PointerEvent<T>> | undefined;
+  onPointerDown?: EventHandler<PointerEvent<T>> | undefined;
+  onPointerUp?: EventHandler<PointerEvent<T>> | undefined;
+  onPointerEnter?: EventHandler<PointerEvent<T>> | undefined;
+  onPointerLeave?: EventHandler<PointerEvent<T>> | undefined;
+  onPointerOver?: EventHandler<PointerEvent<T>> | undefined;
+  onPointerOut?: EventHandler<PointerEvent<T>> | undefined;
+  onPointerMove?: EventHandler<PointerEvent<T>> | undefined;
+  onClick?: EventHandler<PointerEvent<T>> | undefined;
+  onContextMenu?: EventHandler<PointerEvent<T>> | undefined;
   // Mouse
-  onDblClick?: EventHandler<NanoMouseEvent<T>> | undefined;
+  onDblClick?: EventHandler<MouseEvent<T>> | undefined;
   // Wheel
-  onWheel?: EventHandler<NanoWheelEvent<T>> | undefined;
+  onWheel?: EventHandler<WheelEvent<T>> | undefined;
   // Focus
-  onFocusIn?: EventHandler<NanoFocusEvent<T>> | undefined;
-  onFocusOut?: EventHandler<NanoFocusEvent<T>> | undefined;
+  onFocusIn?: EventHandler<FocusEvent<T>> | undefined;
+  onFocusOut?: EventHandler<FocusEvent<T>> | undefined;
   // Clipboard
-  onCut?: EventHandler<NanoClipboardEvent<T>> | undefined;
-  onCopy?: EventHandler<NanoClipboardEvent<T>> | undefined;
-  onPaste?: EventHandler<NanoClipboardEvent<T>> | undefined;
+  onCut?: EventHandler<ClipboardEvent<T>> | undefined;
+  onCopy?: EventHandler<ClipboardEvent<T>> | undefined;
+  onPaste?: EventHandler<ClipboardEvent<T>> | undefined;
   // Keyboard
-  onKeyDown?: EventHandler<NanoKeyboardEvent<T>> | undefined;
-  onKeyUp?: EventHandler<NanoKeyboardEvent<T>> | undefined;
-  onKeyPress?: EventHandler<NanoKeyboardEvent<T>> | undefined;
+  onKeyDown?: EventHandler<KeyboardEvent<T>> | undefined;
+  onKeyUp?: EventHandler<KeyboardEvent<T>> | undefined;
+  onKeyPress?: EventHandler<KeyboardEvent<T>> | undefined;
   // Input
-  onInput?: EventHandler<NanoInputEvent<T>> | undefined;
-  onBeforeInput?: EventHandler<NanoInputEvent<T>> | undefined;
+  onInput?: EventHandler<InputEvent<T>> | undefined;
+  onBeforeInput?: EventHandler<InputEvent<T>> | undefined;
   // Generic
-  onChange?: EventHandler<NanoEvent<T>> | undefined;
-  onSelect?: EventHandler<NanoEvent<T>> | undefined;
-  onScroll?: EventHandler<NanoEvent<T>> | undefined;
+  onChange?: EventHandler<Event<T>> | undefined;
+  onSelect?: EventHandler<Event<T>> | undefined;
+  onScroll?: EventHandler<Event<T>> | undefined;
   // Touch
-  onTouchCancel?: EventHandler<NanoTouchEvent<T>> | undefined;
-  onTouchStart?: EventHandler<NanoTouchEvent<T>> | undefined;
-  onTouchMove?: EventHandler<NanoTouchEvent<T>> | undefined;
-  onTouchEnd?: EventHandler<NanoTouchEvent<T>> | undefined;
+  onTouchCancel?: EventHandler<TouchEvent<T>> | undefined;
+  onTouchStart?: EventHandler<TouchEvent<T>> | undefined;
+  onTouchMove?: EventHandler<TouchEvent<T>> | undefined;
+  onTouchEnd?: EventHandler<TouchEvent<T>> | undefined;
   // TODO Add missing events
 };
 

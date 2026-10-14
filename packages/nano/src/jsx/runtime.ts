@@ -1,4 +1,4 @@
-import type { PropsWithKey } from '../api';
+import type { PropsWithKey } from '../api/key';
 import type { Empty, Primitive, PropsWithChildren } from '../api/renderable';
 import type { FragmentVNode, VNode } from '../api/vnode';
 import { Fragment as NanoFragment } from '../api/fragment';

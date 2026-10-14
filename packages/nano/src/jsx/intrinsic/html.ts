@@ -1,6 +1,7 @@
 import type { PropsWithKey } from '../../api/key';
 import type { PropsWithRef } from '../../api/ref';
-import type { DomClass, DomStyle, NanoEvent, EventHandler } from '../../dom';
+import type { DomClass, DomStyle } from '../../dom/type';
+import type { Event, EventHandler } from '../../dom/event';
 import type { AriaProps, AriaRole } from './aria';
 import type { Booleanish, CrossOrigin, DomProps } from './common';
 
@@ -183,16 +184,16 @@ interface HtmlDelProps extends HtmlProps<HTMLModElement> {
 interface HtmlDetailsProps extends HtmlProps<HTMLDetailsElement> {
   open?: boolean | undefined;
   name?: string | undefined;
-  onToggle?: EventHandler<NanoEvent<HTMLDetailsElement>> | undefined;
-  onCaptureToggle?: EventHandler<NanoEvent<HTMLDetailsElement>> | undefined;
+  onToggle?: EventHandler<Event<HTMLDetailsElement>> | undefined;
+  onCaptureToggle?: EventHandler<Event<HTMLDetailsElement>> | undefined;
 }
 
 interface HtmlDialogProps extends HtmlProps<HTMLDialogElement> {
   open?: boolean | undefined;
-  onCancel?: EventHandler<NanoEvent<HTMLDialogElement>> | undefined;
-  onCaptureCancel?: EventHandler<NanoEvent<HTMLDialogElement>> | undefined;
-  onClose?: EventHandler<NanoEvent<HTMLDialogElement>> | undefined;
-  onCaptureClose?: EventHandler<NanoEvent<HTMLDialogElement>> | undefined;
+  onCancel?: EventHandler<Event<HTMLDialogElement>> | undefined;
+  onCaptureCancel?: EventHandler<Event<HTMLDialogElement>> | undefined;
+  onClose?: EventHandler<Event<HTMLDialogElement>> | undefined;
+  onCaptureClose?: EventHandler<Event<HTMLDialogElement>> | undefined;
 }
 
 interface HtmlEmbedProps extends HtmlProps<HTMLEmbedElement> {
@@ -379,8 +380,8 @@ interface HtmlInputProps extends HtmlProps<HTMLInputElement> {
   type?: HtmlInputTypeAttribute | undefined;
   value?: string | readonly string[] | number | undefined;
   width?: number | string | undefined;
-  onChange?: EventHandler<NanoEvent<HTMLInputElement>> | undefined;
-  onCaptureChange?: EventHandler<NanoEvent<HTMLInputElement>> | undefined;
+  onChange?: EventHandler<Event<HTMLInputElement>> | undefined;
+  onCaptureChange?: EventHandler<Event<HTMLInputElement>> | undefined;
 }
 
 interface HtmlInsProps extends HtmlProps<HTMLModElement> {
@@ -537,8 +538,8 @@ interface HtmlSelectProps extends HtmlProps<HTMLSelectElement> {
   required?: boolean | undefined;
   size?: number | undefined;
   value?: string | readonly string[] | number | undefined;
-  onChange?: EventHandler<NanoEvent<HTMLSelectElement>> | undefined;
-  onCaptureChange?: EventHandler<NanoEvent<HTMLSelectElement>> | undefined;
+  onChange?: EventHandler<Event<HTMLSelectElement>> | undefined;
+  onCaptureChange?: EventHandler<Event<HTMLSelectElement>> | undefined;
 }
 
 interface HtmlSourceProps extends HtmlProps<HTMLSourceElement> {
@@ -584,8 +585,8 @@ interface HtmlTextareaProps extends HtmlProps<HTMLTextAreaElement> {
   rows?: number | undefined;
   value?: string | readonly string[] | number | undefined;
   wrap?: string | undefined;
-  onChange?: EventHandler<NanoEvent<HTMLTextAreaElement>> | undefined;
-  onCaptureChange?: EventHandler<NanoEvent<HTMLTextAreaElement>> | undefined;
+  onChange?: EventHandler<Event<HTMLTextAreaElement>> | undefined;
+  onCaptureChange?: EventHandler<Event<HTMLTextAreaElement>> | undefined;
 }
 
 interface HtmlTdProps extends HtmlProps<HTMLTableCellElement> {

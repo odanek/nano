@@ -18,6 +18,7 @@
     "@nano-ui/nano": "file:../../packages/nano"
   },
   "scripts": {
+    "clean": "tsc --build --clean",
     "dev": "vite",
     "build": "tsc && vite build",
     "typecheck": "tsc --noEmit"

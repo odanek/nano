@@ -1,28 +1,37 @@
 import { getInstanceFiber, Fiber } from '../reconciler/fiber';
 import { VNodeKind } from '../api/vnode';
 import {
-  NanoClipboardEvent,
-  NanoEvent,
-  NanoEventFilter,
+  ClipboardEvent,
+  Event,
+  EventFilter,
   EventType,
-  NanoFocusEvent,
-  NanoInputEvent,
-  NanoKeyboardEvent,
-  NanoMouseEvent,
-  NanoPointerEvent,
-  NanoTouchEvent,
-  NanoWheelEvent,
+  FocusEvent,
+  InputEvent,
+  KeyboardEvent,
+  MouseEvent,
+  PointerEvent,
+  TouchEvent,
+  WheelEvent,
   type DomEventProps,
   type BubbleEventHandlerName,
   type CaptureEventHandlerName,
   type EventHandler,
+  type DomFocusEvent,
+  type DomPointerEvent,
+  type DomMouseEvent,
+  type DomKeyboardEvent,
+  type DomWheelEvent,
+  type DomEvent,
+  type DomInputEvent,
+  type DomClipboardEvent,
+  type DomTouchEvent,
 } from './event';
 import { capitalizeFirstLetter } from '../shared/string';
 
 type EventProps = DomEventProps<EventTarget>;
 
 export class EventDispatcher {
-  private eventHandler: (event: Event) => void;
+  private eventHandler: (event: DomEvent) => void;
   private filters: EventProps[];
 
   constructor() {
@@ -59,7 +68,7 @@ export class EventDispatcher {
     }
   }
 
-  private handleEvent(nativeEvent: Event): void {
+  private handleEvent(nativeEvent: DomEvent): void {
     const event = this.createEvent(nativeEvent);
     if (event === null) {
       return;
@@ -100,7 +109,7 @@ export class EventDispatcher {
         (bubbles || fiber.stateNode === target)
       ) {
         chain.push(fiber.memoizedProps as EventProps);
-      } else if (fiber.type === NanoEventFilter) {
+      } else if (fiber.type === EventFilter) {
         chain.push(fiber.memoizedProps as EventProps);
       }
       fiber = fiber.return;
@@ -115,7 +124,7 @@ export class EventDispatcher {
 
   private runHandlerChain(
     handlers: EventProps[],
-    event: NanoEvent,
+    event: Event,
     captureHandlerName: CaptureEventHandlerName,
     bubbleHandlerName: BubbleEventHandlerName,
   ): void {
@@ -124,7 +133,7 @@ export class EventDispatcher {
     for (let i = length - 1; i >= 0 && !event.isPropagationStopped(); i--) {
       const handler = handlers[i] as EventProps;
       const captureHandler = handler[captureHandlerName] as
-        | EventHandler<NanoEvent>
+        | EventHandler<Event>
         | undefined;
       captureHandler?.(event);
     }
@@ -132,17 +141,17 @@ export class EventDispatcher {
     for (let i = 0; i < length && !event.isPropagationStopped(); i++) {
       const handler = handlers[i] as EventProps;
       const bubbleHandler = handler[bubbleHandlerName] as
-        | EventHandler<NanoEvent>
+        | EventHandler<Event>
         | undefined;
       bubbleHandler?.(event);
     }
   }
 
-  private createEvent(nativeEvent: Event): NanoEvent | null {
+  private createEvent(nativeEvent: DomEvent): Event | null {
     switch (nativeEvent.type) {
       case 'focusin':
       case 'focusout':
-        return new NanoFocusEvent(nativeEvent as FocusEvent);
+        return new FocusEvent(nativeEvent as DomFocusEvent);
       case 'auxclick':
       case 'pointercancel':
       case 'pointerenter':
@@ -154,37 +163,37 @@ export class EventDispatcher {
       case 'pointermove':
       case 'click':
       case 'contextmenu':
-        return new NanoPointerEvent(nativeEvent as PointerEvent);
+        return new PointerEvent(nativeEvent as DomPointerEvent);
       case 'dblclick':
-        return new NanoMouseEvent(nativeEvent as MouseEvent);
+        return new MouseEvent(nativeEvent as DomMouseEvent);
       case 'keydown':
       case 'keyup':
       case 'keypress':
-        return new NanoKeyboardEvent(nativeEvent as KeyboardEvent);
+        return new KeyboardEvent(nativeEvent as DomKeyboardEvent);
       case 'wheel':
-        return new NanoWheelEvent(nativeEvent as WheelEvent);
+        return new WheelEvent(nativeEvent as DomWheelEvent);
       case 'input':
       case 'beforeinput':
-        return new NanoInputEvent(nativeEvent as InputEvent);
+        return new InputEvent(nativeEvent as DomInputEvent);
       case 'cut':
       case 'copy':
       case 'paste':
-        return new NanoClipboardEvent(nativeEvent as ClipboardEvent);
+        return new ClipboardEvent(nativeEvent as DomClipboardEvent);
       case 'change':
       case 'select':
       case 'scroll':
-        return new NanoEvent(nativeEvent);
+        return new Event(nativeEvent);
       case 'touchcancel':
       case 'touchstart':
       case 'touchmove':
       case 'touchend':
-        return new NanoTouchEvent(nativeEvent as TouchEvent);
+        return new TouchEvent(nativeEvent as DomTouchEvent);
       default:
         return null;
     }
   }
 
-  private isBubblingEvent(event: NanoEvent): boolean {
+  private isBubblingEvent(event: Event): boolean {
     return !nonBubblingEvents.includes(event.type);
   }
 }

@@ -1,6 +1,6 @@
 import type { PropsWithKey } from '../../api/key';
 import type { PropsWithRef } from '../../api/ref';
-import type { DomClass, DomStyle } from '../../dom';
+import type { DomClass, DomStyle } from '../../dom/type';
 import type { AriaProps, AriaRole } from './aria';
 import type { Booleanish, CrossOrigin, DomProps } from './common';
 

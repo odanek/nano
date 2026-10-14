@@ -1,7 +1,7 @@
 import {
   createStyleSheet,
   css,
-  NanoKeyboardEvent,
+  KeyboardEvent,
   useContext,
   useRef,
   useStyleSheet,
@@ -12,7 +12,7 @@ export function TodoHeader(): JSX.Element {
   const css = useStyleSheet(styleSheet);
   const dispatch = useContext(DispatchContext);
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const submit = (event: NanoKeyboardEvent<HTMLInputElement>): void => {
+  const submit = (event: KeyboardEvent<HTMLInputElement>): void => {
     const input = inputRef.current;
     if (input !== null && event.key === 'Enter') {
       const label = input.value;
