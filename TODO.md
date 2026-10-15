@@ -1,5 +1,3 @@
-- Mouse events
-- Drag & Drop events
 - Update readme, add examples
 - Add unit tests
 - Address the problems found by Sol

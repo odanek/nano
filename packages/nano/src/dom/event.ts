@@ -8,6 +8,7 @@ export type DomFocusEvent = globalThis.FocusEvent;
 export type DomInputEvent = globalThis.InputEvent;
 export type DomKeyboardEvent = globalThis.KeyboardEvent;
 export type DomMouseEvent = globalThis.MouseEvent;
+export type DomDragEvent = globalThis.DragEvent;
 export type DomPointerEvent = globalThis.PointerEvent;
 export type DomTouchEvent = globalThis.TouchEvent;
 export type DomWheelEvent = globalThis.WheelEvent;
@@ -27,6 +28,21 @@ export const EventType = {
   ContextMenu: 'contextMenu',
   // Mouse events
   DblClick: 'dblClick',
+  MouseDown: 'mouseDown',
+  MouseUp: 'mouseUp',
+  MouseEnter: 'mouseEnter',
+  MouseLeave: 'mouseLeave',
+  MouseOver: 'mouseOver',
+  MouseOut: 'mouseOut',
+  MouseMove: 'mouseMove',
+  // Drag and drop events
+  Drag: 'drag',
+  DragStart: 'dragStart',
+  DragEnd: 'dragEnd',
+  DragEnter: 'dragEnter',
+  DragLeave: 'dragLeave',
+  DragOver: 'dragOver',
+  Drop: 'drop',
   // Wheel events
   Wheel: 'wheel',
   // Keyboard events
@@ -154,6 +170,34 @@ function getType(type: string): EventTypeValue {
       return EventType.KeyPress;
     case 'dblclick':
       return EventType.DblClick;
+    case 'mousedown':
+      return EventType.MouseDown;
+    case 'mouseup':
+      return EventType.MouseUp;
+    case 'mouseenter':
+      return EventType.MouseEnter;
+    case 'mouseleave':
+      return EventType.MouseLeave;
+    case 'mouseover':
+      return EventType.MouseOver;
+    case 'mouseout':
+      return EventType.MouseOut;
+    case 'mousemove':
+      return EventType.MouseMove;
+    case 'drag':
+      return EventType.Drag;
+    case 'dragstart':
+      return EventType.DragStart;
+    case 'dragend':
+      return EventType.DragEnd;
+    case 'dragenter':
+      return EventType.DragEnter;
+    case 'dragleave':
+      return EventType.DragLeave;
+    case 'dragover':
+      return EventType.DragOver;
+    case 'drop':
+      return EventType.Drop;
     case 'pointercancel':
       return EventType.PointerCancel;
     case 'pointerdown':
@@ -336,6 +380,18 @@ export class MouseEvent<
   }
 }
 
+export class DragEvent<T extends EventTarget = EventTarget> extends MouseEvent<
+  T,
+  DomDragEvent
+> {
+  public readonly dataTransfer: DataTransfer | null;
+
+  constructor(event: DomDragEvent) {
+    super(event);
+    this.dataTransfer = event.dataTransfer;
+  }
+}
+
 export class PointerEvent<
   T extends EventTarget = EventTarget,
 > extends MouseEvent<T, DomPointerEvent> {
@@ -428,6 +484,21 @@ export type DomCaptureEventProps<T extends EventTarget> = {
   onCaptureContextMenu?: EventHandler<PointerEvent<T>> | undefined;
   // Mouse
   onCaptureDblClick?: EventHandler<MouseEvent<T>> | undefined;
+  onCaptureMouseDown?: EventHandler<MouseEvent<T>> | undefined;
+  onCaptureMouseUp?: EventHandler<MouseEvent<T>> | undefined;
+  onCaptureMouseEnter?: EventHandler<MouseEvent<T>> | undefined;
+  onCaptureMouseLeave?: EventHandler<MouseEvent<T>> | undefined;
+  onCaptureMouseOver?: EventHandler<MouseEvent<T>> | undefined;
+  onCaptureMouseOut?: EventHandler<MouseEvent<T>> | undefined;
+  onCaptureMouseMove?: EventHandler<MouseEvent<T>> | undefined;
+  // Drag and drop
+  onCaptureDrag?: EventHandler<DragEvent<T>> | undefined;
+  onCaptureDragStart?: EventHandler<DragEvent<T>> | undefined;
+  onCaptureDragEnd?: EventHandler<DragEvent<T>> | undefined;
+  onCaptureDragEnter?: EventHandler<DragEvent<T>> | undefined;
+  onCaptureDragLeave?: EventHandler<DragEvent<T>> | undefined;
+  onCaptureDragOver?: EventHandler<DragEvent<T>> | undefined;
+  onCaptureDrop?: EventHandler<DragEvent<T>> | undefined;
   // Wheel
   onCaptureWheel?: EventHandler<WheelEvent<T>> | undefined;
   // Focus
@@ -471,6 +542,21 @@ export type DomBubbleEventProps<T extends EventTarget> = {
   onContextMenu?: EventHandler<PointerEvent<T>> | undefined;
   // Mouse
   onDblClick?: EventHandler<MouseEvent<T>> | undefined;
+  onMouseDown?: EventHandler<MouseEvent<T>> | undefined;
+  onMouseUp?: EventHandler<MouseEvent<T>> | undefined;
+  onMouseEnter?: EventHandler<MouseEvent<T>> | undefined;
+  onMouseLeave?: EventHandler<MouseEvent<T>> | undefined;
+  onMouseOver?: EventHandler<MouseEvent<T>> | undefined;
+  onMouseOut?: EventHandler<MouseEvent<T>> | undefined;
+  onMouseMove?: EventHandler<MouseEvent<T>> | undefined;
+  // Drag and drop
+  onDrag?: EventHandler<DragEvent<T>> | undefined;
+  onDragStart?: EventHandler<DragEvent<T>> | undefined;
+  onDragEnd?: EventHandler<DragEvent<T>> | undefined;
+  onDragEnter?: EventHandler<DragEvent<T>> | undefined;
+  onDragLeave?: EventHandler<DragEvent<T>> | undefined;
+  onDragOver?: EventHandler<DragEvent<T>> | undefined;
+  onDrop?: EventHandler<DragEvent<T>> | undefined;
   // Wheel
   onWheel?: EventHandler<WheelEvent<T>> | undefined;
   // Focus

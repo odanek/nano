@@ -2,6 +2,7 @@ import { getInstanceFiber, Fiber } from '../reconciler/fiber';
 import { VNodeKind } from '../api/vnode';
 import {
   ClipboardEvent,
+  DragEvent,
   Event,
   EventFilter,
   EventType,
@@ -19,6 +20,7 @@ import {
   type DomFocusEvent,
   type DomPointerEvent,
   type DomMouseEvent,
+  type DomDragEvent,
   type DomKeyboardEvent,
   type DomWheelEvent,
   type DomEvent,
@@ -52,7 +54,7 @@ export class EventDispatcher {
 
   public disconnect(root: EventTarget): void {
     for (const event of nativeEventType) {
-      root.removeEventListener(event, this.eventHandler);
+      root.removeEventListener(event, this.eventHandler, { capture: true });
     }
   }
 
@@ -165,7 +167,22 @@ export class EventDispatcher {
       case 'contextmenu':
         return new PointerEvent(nativeEvent as DomPointerEvent);
       case 'dblclick':
+      case 'mousedown':
+      case 'mouseup':
+      case 'mouseenter':
+      case 'mouseleave':
+      case 'mouseover':
+      case 'mouseout':
+      case 'mousemove':
         return new MouseEvent(nativeEvent as DomMouseEvent);
+      case 'drag':
+      case 'dragstart':
+      case 'dragend':
+      case 'dragenter':
+      case 'dragleave':
+      case 'dragover':
+      case 'drop':
+        return new DragEvent(nativeEvent as DomDragEvent);
       case 'keydown':
       case 'keyup':
       case 'keypress':
@@ -209,6 +226,20 @@ const nativeEventType = [
   'auxclick',
   'click',
   'dblclick',
+  'mousedown',
+  'mouseup',
+  'mouseenter',
+  'mouseleave',
+  'mouseover',
+  'mouseout',
+  'mousemove',
+  'drag',
+  'dragstart',
+  'dragend',
+  'dragenter',
+  'dragleave',
+  'dragover',
+  'drop',
   'wheel',
   'scroll',
   'contextmenu',
@@ -230,4 +261,9 @@ const nativeEventType = [
   'touchend',
 ];
 
-const nonBubblingEvents = [EventType.PointerEnter, EventType.PointerLeave];
+const nonBubblingEvents = [
+  EventType.PointerEnter,
+  EventType.PointerLeave,
+  EventType.MouseEnter,
+  EventType.MouseLeave,
+];

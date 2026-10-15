@@ -22,6 +22,7 @@ import {
   type DomEventProps,
   Event,
   ClipboardEvent,
+  DragEvent,
   FocusEvent,
   InputEvent,
   KeyboardEvent,
@@ -81,6 +82,7 @@ export {
   // Events
   Event,
   ClipboardEvent,
+  DragEvent,
   FocusEvent,
   InputEvent,
   KeyboardEvent,
