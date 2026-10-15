@@ -1,4 +1,3 @@
-- Update readme, add examples
 - Add unit tests
 - Address the problems found by Sol
 - Create a Nano skill for AI
