@@ -1,4 +1,9 @@
-- Add unit tests
-- Address the problems found by Sol
+- Unit tests
+- Architecture
+  - Proper handling of SVG namespace
+  - Rendering and effects are global and not transactional
+  - Styling is global
+  - Rendering twice into the same container creates independent fiber trees and installs multiple event dispatchers
+  - Single declarative event registry  
 - Create a Nano skill for AI
 - Vite plugin for css-in-js minification
