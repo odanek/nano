@@ -1,6 +1,6 @@
 import { RootImpl } from '../core/root';
-import { type ElementStateNode } from '../dom/element';
-import { type TextStateNode } from '../dom/text';
+import type { ElementStateNode } from '../dom/element';
+import type { TextStateNode } from '../dom/text';
 import { EffectTag, type EffectTagValue } from '../hooks/effect';
 import { emptyObject } from '../shared/object';
 import { emptyArray } from '../shared/array';

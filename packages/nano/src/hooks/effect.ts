@@ -1,7 +1,7 @@
 import { Hook, HookTag } from './hook';
 import { Fiber } from '../reconciler/fiber';
 import { isFunction, isValue } from '../shared/predicate';
-import { type ValueOf } from '../shared/type';
+import type { ValueOf } from '../shared/type';
 import { isFlag } from '../shared/flags';
 import type { EffectHookPayload, StyleSheetHookPayload } from './payload';
 import { connectBundle, disconnectBundle } from '../style/manager';

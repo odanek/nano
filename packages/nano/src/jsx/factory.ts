@@ -2,11 +2,7 @@ import { isFunction, isString } from '../shared/predicate';
 import { emptyObject } from '../shared/object';
 import type { Component } from '../api/renderable';
 import type { Key } from '../api/key';
-import {
-  type ComponentVNode,
-  type ElementVNode,
-  type VNode,
-} from '../api/vnode';
+import type { ComponentVNode, ElementVNode, VNode } from '../api/vnode';
 import { createComponentVNode, createElementVNode } from '../core/vnode';
 import type { PropsWithRef } from '../api/ref';
 

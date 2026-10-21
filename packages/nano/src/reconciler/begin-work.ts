@@ -1,7 +1,7 @@
 import { markInstanceFiber, Fiber } from './fiber';
 import { createElementInstance } from '../dom/element';
 import { createTextInstance } from '../dom/text';
-import { type RootState } from '../core/root';
+import type { RootState } from '../core/root';
 import {
   cloneChildFibers,
   mountChildFibers,
@@ -13,7 +13,7 @@ import {
 } from '../core/component';
 import { EffectTag } from '../hooks/effect';
 import { isNumber, isString } from '../shared/predicate';
-import { type Context, type ContextProps } from '../api/context';
+import type { Context, ContextProps } from '../api/context';
 import { emptyContext, getContextKey } from '../core/context';
 import { VNodeKind } from '../api/vnode';
 import type { PropsWithChildren, Renderable } from '../api/renderable';

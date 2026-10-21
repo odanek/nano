@@ -12,9 +12,9 @@ import type {
   StyleSheetHook,
 } from '../api/hook';
 import type { ValueOf } from '../shared/type';
-import { type StyleBundle, type StyleSheet } from '../api/style';
-import { type Context } from '../api/context';
-import { type Ref } from '../api/ref';
+import type { StyleBundle, StyleSheet } from '../api/style';
+import type { Context } from '../api/context';
+import type { Ref } from '../api/ref';
 import { Fiber } from '../reconciler/fiber';
 import { RootImpl } from '../core/root';
 import {

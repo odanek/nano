@@ -26,9 +26,28 @@
     }
   },
   "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "keywords": [
+    "ui",
+    "jsx",
+    "virtual-dom",
+    "hooks",
+    "css-in-js"
+  ],
+  "homepage": "https://github.com/odanek/nano#readme",
+  "bugs": {
+    "url": "https://github.com/odanek/nano/issues"
+  },
   "repository": {
     "type": "git",
-    "url": "git:https://github.com/odanek/nano.git"
+    "url": "git+https://github.com/odanek/nano.git",
+    "directory": "packages/nano"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "dependencies": {
     "csstype": "^3.2.0"
@@ -37,8 +56,9 @@
     "typescript": "^6.0.0"
   },
   "scripts": {
-    "clean": "tsc --build --clean",
+    "clean": "rm -rf dist",
     "build": "tsc",
-    "typecheck": "tsc --noEmit && tsc --project tsconfig.test.json"
+    "typecheck": "tsc --noEmit && tsc --project tsconfig.test.json",
+    "prepack": "npm run clean && npm run build"
   }
 }

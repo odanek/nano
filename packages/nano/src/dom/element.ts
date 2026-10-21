@@ -1,8 +1,8 @@
 import { setTextContent } from './text';
 import { Fiber } from '../reconciler/fiber';
-import { type DomClass, type DomStyle } from './type';
+import type { DomClass, DomStyle } from './type';
 import { isNumber, isString } from '../shared/predicate';
-import { type PlainObject } from '../shared/type';
+import type { PlainObject } from '../shared/type';
 import type { PropsWithChildren } from '../api/renderable';
 
 export type ElementStateNode = HTMLElement | SVGElement;

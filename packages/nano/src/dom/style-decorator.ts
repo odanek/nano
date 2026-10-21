@@ -1,7 +1,7 @@
 import type { DecoratorProps } from '../api/decorator';
-import { type DecoratorVNode } from '../api/vnode';
+import type { DecoratorVNode } from '../api/vnode';
 import { createDecoratorVNode } from '../core/vnode';
-import { type DomStyle } from './type';
+import type { DomStyle } from './type';
 
 export type StyleDecoratorProps = DecoratorProps<{
   style?: DomStyle | undefined;

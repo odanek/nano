@@ -1,6 +1,6 @@
 import { Fiber } from '../reconciler/fiber';
 import { beginHooks, endHooks, Hook, HookTag } from '../hooks/hook';
-import { type ReducerHookPayload } from '../hooks/payload';
+import type { ReducerHookPayload } from '../hooks/payload';
 import { objectEquals } from '../shared/object';
 import type { Component, Renderable } from '../api/renderable';
 import { compareContext } from './context';

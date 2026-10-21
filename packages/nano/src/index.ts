@@ -1,22 +1,22 @@
-import {
-  type Component,
-  type Empty,
-  type Primitive,
-  type Renderable,
-  type PropsWithChildren,
+import type {
+  Component,
+  Empty,
+  Primitive,
+  Renderable,
+  PropsWithChildren,
 } from './api/renderable';
-import { type Ref, type PropsWithRef } from './api/ref';
-import { type Key, type PropsWithKey } from './api/key';
-import { type Context } from './api/context';
+import type { Ref, PropsWithRef } from './api/ref';
+import type { Key, PropsWithKey } from './api/key';
+import type { Context } from './api/context';
 import { Fragment } from './api/fragment';
 import { Portal } from './api/portal';
-import { type VNode } from './api/vnode';
-import { type Style, type StyleSheet } from './api/style';
+import type { VNode } from './api/vnode';
+import type { Style, StyleSheet } from './api/style';
 
 import { createContext } from './core/context';
 import { render } from './core/render';
 
-import { type DomClass, type DomStyle } from './dom/type';
+import type { DomClass, DomStyle } from './dom/type';
 
 import {
   type DomEventProps,
@@ -52,7 +52,7 @@ import {
 import { css, keyframes, createStyleSheet } from './style/style';
 
 import * as JSX from './jsx/runtime';
-import { type HtmlProps } from './jsx/intrinsic/html';
+import type { HtmlProps } from './jsx/intrinsic/html';
 
 export {
   render,

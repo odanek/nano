@@ -22,6 +22,7 @@ export default defineConfig([
     rules: {
       eqeqeq: 2,
       '@typescript-eslint/explicit-function-return-type': 2,
+      '@typescript-eslint/no-import-type-side-effects': 2,
     },
   },
 ]);
