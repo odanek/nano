@@ -135,16 +135,14 @@ export class EventDispatcher {
     for (let i = length - 1; i >= 0 && !event.isPropagationStopped(); i--) {
       const handler = handlers[i] as EventProps;
       const captureHandler = handler[captureHandlerName] as
-        | EventHandler<Event>
-        | undefined;
+        EventHandler<Event> | undefined;
       captureHandler?.(event);
     }
 
     for (let i = 0; i < length && !event.isPropagationStopped(); i++) {
       const handler = handlers[i] as EventProps;
       const bubbleHandler = handler[bubbleHandlerName] as
-        | EventHandler<Event>
-        | undefined;
+        EventHandler<Event> | undefined;
       bubbleHandler?.(event);
     }
   }

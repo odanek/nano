@@ -104,11 +104,7 @@ type HTMLAttributeReferrerPolicy =
   | 'unsafe-url';
 
 type HTMLAttributeAnchorTarget =
-  | '_self'
-  | '_blank'
-  | '_parent'
-  | '_top'
-  | (string & {});
+  '_self' | '_blank' | '_parent' | '_top' | (string & {});
 
 export interface HtmlAnchorProps extends HtmlProps<HTMLAnchorElement> {
   download?: unknown;

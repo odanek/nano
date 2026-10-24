@@ -73,11 +73,7 @@ export interface SvgProps<T extends EventTarget>
   clipRule?: number | string | undefined;
   colorInterpolation?: number | string | undefined;
   colorInterpolationFilters?:
-    | 'auto'
-    | 'sRGB'
-    | 'linearRGB'
-    | 'inherit'
-    | undefined;
+    'auto' | 'sRGB' | 'linearRGB' | 'inherit' | undefined;
   colorProfile?: number | string | undefined;
   colorRendering?: number | string | undefined;
   contentScriptType?: number | string | undefined;

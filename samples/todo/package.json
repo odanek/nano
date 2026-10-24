@@ -12,7 +12,7 @@
   },
   "devDependencies": {
     "typescript": "^6.0.0",
-    "vite": "^8.0.0"
+    "vite": "^8.3.0"
   },
   "dependencies": {
     "@nano-ui/nano": "file:../../packages/nano"

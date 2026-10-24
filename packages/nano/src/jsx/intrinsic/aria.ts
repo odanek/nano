@@ -28,13 +28,7 @@ export type AriaProps = {
   'aria-details'?: string | undefined;
   'aria-disabled'?: Booleanish | undefined;
   'aria-dropeffect'?:
-    | 'none'
-    | 'copy'
-    | 'execute'
-    | 'link'
-    | 'move'
-    | 'popup'
-    | undefined;
+    'none' | 'copy' | 'execute' | 'link' | 'move' | 'popup' | undefined;
   'aria-errormessage'?: string | undefined;
   'aria-expanded'?: Booleanish | undefined;
   'aria-flowto'?: string | undefined;
@@ -51,12 +45,7 @@ export type AriaProps = {
     | undefined;
   'aria-hidden'?: Booleanish | undefined;
   'aria-invalid'?:
-    | boolean
-    | 'false'
-    | 'true'
-    | 'grammar'
-    | 'spelling'
-    | undefined;
+    boolean | 'false' | 'true' | 'grammar' | 'spelling' | undefined;
   'aria-keyshortcuts'?: string | undefined;
   'aria-label'?: string | undefined;
   'aria-labelledby'?: string | undefined;
