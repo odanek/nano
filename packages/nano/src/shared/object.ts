@@ -57,5 +57,5 @@ export function objectHasOwnProperty(
   object: object,
   property: string | number,
 ): boolean {
-  return Object.prototype.hasOwnProperty.call(object, property);
+  return Object.hasOwn(object, property);
 }
