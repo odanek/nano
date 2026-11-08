@@ -1,6 +1,6 @@
-# Nano
+# Nano UI
 
-**A small, dependency-light UI library for the browser.** Nano pairs familiar
+**A small, dependency-light UI library for the browser.** Nano UI pairs familiar
 functional components and hooks with a typed JSX runtime, virtual DOM, and
 built-in CSS-in-JS—without making the fundamentals feel heavy.
 
