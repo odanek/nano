@@ -252,7 +252,7 @@ function mountMemo<T>(create: () => T, deps: readonly unknown[]): T {
 
 function mountEventDispatcher(): EventDispatcher {
   const rootFiber = findFiberRoot(workInProgressFiber as Fiber);
-  const root = rootFiber.stateNode as RootImpl;
+  const root = rootFiber!.stateNode as RootImpl;
   return root.dispatcher;
 }
 

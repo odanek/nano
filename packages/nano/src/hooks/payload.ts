@@ -101,7 +101,7 @@ function dispatchReducer<T, A>(
 
 function scheduleUpdateOnFiber(fiber: Fiber): void {
   const rootFiber = findFiberRoot(fiber);
-  if (!rootFiber) {
+  if (rootFiber === null) {
     return;
   }
 

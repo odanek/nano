@@ -6,10 +6,10 @@ import type { RootImpl } from './root';
 
 type TraversalCallback = (fiber: Fiber) => void;
 
-export function findFiberRoot(fiber: Fiber): Fiber {
-  let current = fiber;
-  while (current.kind !== VNodeKind.Root) {
-    current = current.return as Fiber;
+export function findFiberRoot(fiber: Fiber): Fiber | null {
+  let current: Fiber | null = fiber;
+  while (current !== null && current.kind !== VNodeKind.Root) {
+    current = current.return;
   }
   return current;
 }
