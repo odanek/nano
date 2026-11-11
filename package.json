@@ -24,8 +24,10 @@
     "vitest": "^5.1.0"
   },
   "scripts": {
-    "lint": "eslint . && prettier --check .",
-    "lint:fix": "eslint --fix . && prettier --write --list-different .",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "format": "prettier --write --list-different .",
+    "format:check": "prettier --check .",
     "clean": "npm run clean -w packages/nano",
     "build": "npm run build -w packages/nano",
     "typecheck": "npm run typecheck -w packages/nano -w samples/todo",

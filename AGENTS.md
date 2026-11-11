@@ -35,8 +35,10 @@ provides JSX, a virtual DOM, hooks and CSS-in-JS utilities.
 Run commands from the repository root unless a package command is specified.
 
 - `npm install`: install workspace dependencies.
-- `npm run lint`: run ESLint and verify Prettier formatting across the repo.
-- `npm run lint:fix`: apply ESLint and Prettier fixes.
+- `npm run lint`: run ESLint across the repo.
+- `npm run lint:fix`: apply ESLint fixes.
+- `npm run format:check`: verify Prettier formatting across the repo.
+- `npm run format`: apply Prettier formatting and list the changed files.
 - `npm run build`: compile `packages/nano` into `packages/nano/dist`.
 - `npm run typecheck`: type-check the library, its test files, and the Todo
   sample without emitting files.
@@ -85,6 +87,7 @@ where practical and use the Todo sample as the integration check.
 
 ## Before handing off
 
-Run the narrowest relevant checks first, then run `npm run lint` for source or
-formatting changes. Report any checks that could not be run and avoid committing
-generated artifacts unless explicitly requested.
+Run the narrowest relevant checks first, then run `npm run lint` for source
+changes and `npm run format:check` for source or formatting changes. Report 
+any checks that could not be run and avoid committing generated artifacts unless 
+explicitly requested.
